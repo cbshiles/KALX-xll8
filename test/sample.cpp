@@ -1,5 +1,5 @@
 #include <cmath> // for sqrt
-#include "xll/xll.h"
+#include "../xll/xll.h"
 
 using namespace xll;
 

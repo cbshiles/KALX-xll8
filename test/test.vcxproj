@@ -168,12 +168,12 @@
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xll.vcxproj">
-      <Project>{8b15c18c-4c25-476c-abbd-88be05c35a3e}</Project>
-    </ProjectReference>
+    <ClInclude Include="test.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="test.h" />
+    <ProjectReference Include="..\xll\xll.vcxproj">
+      <Project>{8b15c18c-4c25-476c-abbd-88be05c35a3e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
