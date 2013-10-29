@@ -30,10 +30,10 @@ void xll_test_array_wrapper(void)
 void xll_test_number(void)
 {
 	number<std::vector<double>> a(std::vector<double>(3));
-	number<std::vector<double>> b = {1,2,3};
+//	number<std::vector<double>> b = {1,2,3};
 
-	ensure (b.size() == 3);
-	a += b;
+//	ensure (b.size() == 3);
+//	a += b;
 
 }
 
