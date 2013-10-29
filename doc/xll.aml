@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="2caaad8a-aada-4863-b318-4a77177320a6" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+      <para>Extending Excel</para>
+    </introduction>
+    <!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+    <section address="Intro">
+      <title>Is this library for you?</title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>
+          If you want to use VBA or C# to extend Excel you don't need this library.
+          If you think wedging R, or Matlab, or python, or any other procedural language
+          du jour into Excel is a good idea this is definitely not the library for you.
+          If you know C++ and want a simple way to get the highest possible performance from Excel,
+          this is the library for you.
+        </para>
+        <para>
+          The
+          <externalLink>
+            <linkText>Microsoft Excel C SDK</linkText>
+            <linkUri>http://www.microsoft.com/en-us/download/details.aspx?id=35567</linkUri>
+            <linkTarget>_blank</linkTarget>
+          </externalLink>
+          makes it possible for you extend Excel with
+          functions and macros written in native code. The xll library
+          provides C++ classes that make using their Software Development 
+          Kit much easier.
+          Just create an
+          <link xlink:href="26d5677f-2e60-4c43-affc-fa9e2da39c1a">AddIn</link>
+          object that specifies
+          how to map your code to what Excel needs.
+        </para>
+        <para>
+          The xll library works with all versions of Windows since XP and
+          all versions of Excel since 97. You can write single source add-ins to
+          also run in Excel 2007 and above that take advantage of the big grid,
+          wide character strings, thread safe, cluster safe, and asynchronous functions.
+        </para>
+        <para>
+          You can also generate documentation integrated
+          with Excel help using the same tool Microsoft uses. If you want
+          someone else to benefit from your handiwork, just give them the add-in,
+          help file, and workbooks you put together for a portable and professional
+          solution.
+        </para>
+        <para>
+            <link xlink:href="d7e05719-f06e-4480-8f4a-e3ce3aeef4e0">Get started</link>!
+        </para>
+      </content>
+    </section>
+    <relatedTopics>
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
