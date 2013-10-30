@@ -16,7 +16,7 @@ xlAutoOpen(void)
 
 		if (XLCallVer() >= 0x0C00) {
 			ensure (Auto<Open12>::Call());
-//			ensure (AddIn12::RegisterAll());
+			ensure (AddIn12::RegisterAll());
 			ensure (Auto<OpenAfter12>::Call());
 		}
 

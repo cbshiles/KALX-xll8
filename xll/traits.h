@@ -18,8 +18,10 @@ namespace xll {
 		typedef std::basic_string<xchar> xstring;
 		typedef xrw xword; // use for array indices
 		typedef short int xint;
+		typedef _FP xfp;
 
 		static const int strmax = 0xFF; // maximum number of characters in a str
+		static xcstr null() { return ""; }
 		static int strnicmp(xcstr a, xcstr b, size_t n) { return ::_strnicmp(a, b, n); }
 		static xchar strlen(xcstr s) 
 		{ 
@@ -61,8 +63,10 @@ namespace xll {
 		typedef std::basic_string<xchar> xstring;
 		typedef xrw xword; // use for array indices
 		typedef int xint;
+		typedef _FP12 xfp;
 
 		static const int strmax = 0x7FFF;
+		static xcstr null() { return L""; }
 		static int strnicmp(xcstr s, xcstr t, size_t n) { return ::_wcsnicmp(s, t, n); }
 		static xchar strlen(xcstr s) 
 		{

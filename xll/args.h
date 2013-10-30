@@ -44,17 +44,17 @@ namespace xll {
 			Arg(RegisterArg::Procedure) = proc;
 			Arg(RegisterArg::FunctionText) = text;
 		}
-		XArgs(xcstr proc, xcstr type, xcstr func, xcstr args, xcstr cat = nullptr)
+		XArgs(xcstr proc, xcstr type, xcstr func, xcstr args,
+			xcstr cat = nullptr, xcstr help = nullptr)
 			: XOPER<X>((xword)RegisterArg::Max, 1)
 		{
 			Arg(RegisterArg::MacroType) = 1; // worksheet function
 			Arg(RegisterArg::Procedure) = proc;
 			Arg(RegisterArg::TypeText) = type;
 			Arg(RegisterArg::FunctionText) = func;
-			if (args)
-				Arg(RegisterArg::ArgumentText) = args;
-			if (cat)
-				Arg(RegisterArg::Category) = cat;
+			Arg(RegisterArg::ArgumentText) = args;
+			Arg(RegisterArg::Category) = cat ? cat : traits<X>::null();
+			Arg(RegisterArg::FunctionHelp) = help ? help : traits<X>::null();
 		}
 		XArgs(xcstr type, xcstr proc, xcstr func)
 			: XOPER<X>((xword)RegisterArg::Max, 1)

@@ -1,7 +1,7 @@
 // xll.h - Top level header file for xll library.
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 // #define EXCEL12 for Excel 2007 and later.
-#pragma once
+//#pragma once
 #include <ctime>
 
 #ifdef EXCEL12

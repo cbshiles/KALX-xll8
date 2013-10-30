@@ -212,10 +212,10 @@ public:
 		}
 		else if (xltype == xltypeStr) {
 			if (n == 0)
-				n = static_cast<xchar>(_tcslen(str));
+				n = static_cast<xchar>(xll::traits<X>::strlen(str));
 			val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(val.str[0] + n + 1)));
 			ensure (val.str);
-			_tcsncpy(val.str + val.str[0] + 1, str, n);
+			xll::traits<X>::strncpy(val.str + val.str[0] + 1, str, n);
 			val.str[0] += static_cast<xchar>(n);
 		}
 		else {
@@ -399,14 +399,14 @@ private:
 		ensure (xltype == xltypeStr);
 
 		if (str0 == 0) {
-			size_t n = _tcslen(str);
+			size_t n = xll::traits<X>::strlen(str);
 			ensure (n < xll::traits<X>::strmax);
 			str0 = static_cast<xchar>(n);
 		}
 
 		val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(1 + str0)));
 		ensure (val.str);
-		_tcsncpy(val.str + 1, str, str0);
+		xll::traits<X>::strncpy(val.str + 1, str, str0);
 		val.str[0] = str0;
 	}
 

@@ -126,6 +126,9 @@ namespace dual {
 			}
 		}
 		number_base& operator/=(const number_base& A)
+		{
+			return *this;
+		}
 	private:
 		// override these in derived class
 		virtual _size() const = 0;

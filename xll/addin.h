@@ -44,29 +44,34 @@ namespace xll {
 
 		XOPER<X> Register(void)
 		{
-			std::vector<X*> pargs(args_.size());
+			static X* pargs[256];
+//			std::vector<X*> pargs(args_.size());
 
 			// ModuleText
 			args_[0] = Excel<X>(xlGetName);
 
-			for (xword i = 0; i < pargs.size(); ++i)
+			for (xword i = 0; i < args_.size(); ++i)
 				pargs[i] = &args_[i];
 
 			// add a space to last arg description
-			if (pargs.size() >= static_cast<size_t>(RegisterArg::Max)) {
+/*			if (pargs.size() > static_cast<size_t>(RegisterArg::Max)) {
 				XOPER<X>* pa = static_cast<XOPER<X>*>(pargs.back());
 				if (pa->xltype == xltypeStr && *(pa->val.str + pa->val.str[0]) != ' ') {
 					xchar sp(' ');
 					pa->append(&sp, 1);
 				}
 			}
-
+*/
 			// check for aliases!!!
 			LXOPER<X> x;
-			int ret = traits<X>::Excelv(xlfRegister, &x, args_.size(), &pargs[0]);
+			int ret = traits<X>::Excelv(xlfRegister, &x, args_.size(), pargs);
 			if (ret != xlretSuccess) {
-				// detect stdcall by matching '.*@\d+' ???
 				MessageBox(xll_GetHwnd(), _T("Failed to register function."), _T("Error"), MB_OK);
+			}
+			else if (!x) {
+				MessageBox(xll_GetHwnd(), 
+					_T("You forgot to use #pragma XLLEXPORT or told Excel the wrong name for your function"), 
+					_T("Error"), MB_OK);
 			}
 
 			return x;

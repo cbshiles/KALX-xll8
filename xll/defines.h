@@ -3,6 +3,8 @@
 // included by xll.h
 
 /// Use #pragma XLLEXPORT in function body instead of DEF file.
+/// !!! use constexpr and static_assert to detect if decorated name is stdcall !!!
+// constexpr bool is_stdcall(const char* f) { return strchr(f, "@"); } ???
 #define XLLEXPORT comment(linker, "/export:" __FUNCDNAME__ "=" __FUNCTION__)
 
 // 64-bit uses different name decoration
