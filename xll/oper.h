@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <utility>
 
-using namespace std::rel_ops;
+using namespace std::rel_ops; //??? bad idea???
 
 // in global namespace, just like XLOPER
 template<class X>

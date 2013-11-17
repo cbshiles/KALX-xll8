@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- save into •%USERPROFILE%\My Documents\Visual Studio 2013\Visualizers\ -->
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-  <Type Name="xll::OPER">
-    <DisplayString>val {val}</DisplayString>
+  <Type Name="XOPER&lt;*&gt;">
+    <DisplayString>xltype = {xltype}</DisplayString>
   </Type>
 </AutoVisualizer>

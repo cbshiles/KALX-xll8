@@ -1,0 +1,1 @@
+Should use AddIn class for enumerations. That's what they are.

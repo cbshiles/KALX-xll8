@@ -4,48 +4,48 @@
 
 // scoped and strongly typed enums
 enum class xltype {
-	Num = xltypeNum,
-	Str = xltypeStr,
-	Bool = xltypeBool,
-	Ref = xltypeRef,
-	Err = xltypeErr,
-	Flow = xltypeFlow,
-	Multi = xltypeMulti,
-	Missing = xltypeMissing,
-	Nil = xltypeNil,
-	SRef = xltypeSRef,
-	Int = xltypeInt,
-	BigData = xltypeBigData,
+	Num = xltypeNum,// IEEE 64-bit floating point
+	Str = xltypeStr,// Counted string
+	Bool = xltypeBool,// Boolean value
+	Ref = xltypeRef,// Reference to multiple ranges
+	Err = xltypeErr,// Excel error type
+	Flow = xltypeFlow,// not used
+	Multi = xltypeMulti,// A range of OPERs
+	Missing = xltypeMissing,// Argument not specified
+	Nil = xltypeNil,// Empty data type
+	SRef = xltypeSRef,// Single reference to a range
+	Int = xltypeInt,// Integer type that never occurs
+	BigData = xltypeBigData,// Binary data
 };
 
 enum class xlbit {
-	XLFree = xlbitXLFree,
-	DLLFree = xlbitDLLFree,
+	XLFree = xlbitXLFree,// Excel calls xlFree
+	DLLFree = xlbitDLLFree,// Excel calls xlAutoFree
 };
 
 enum class xlerr {
-	Null = xlerrNull,
-	Div0 = xlerrDiv0,
-	Value = xlerrValue,
-	Ref = xlerrRef,
-	Name = xlerrName,
-	Num = xlerrNum,
-	NA = xlerrNA,
+	Null = xlerrNull,  // Intersection of ranges is empty
+	Div0 = xlerrDiv0,  // Division by 0
+	Value = xlerrValue,// Problem with add-in argument
+	Ref = xlerrRef,    // Invalid reference
+	Name = xlerrName,  // Defined name not found
+	Num = xlerrNum,    // Invalid numeric type
+	NA = xlerrNA,      // General not available error
 	GettingData = xlerrGettingData,
 };
 
 enum class xlret {
 	Success = xlretSuccess,
-	Abort = xlretAbort,
-	InvXlfn = xlretInvXlfn,
-	InvCount = xlretInvCount,
-	InvXloper = xlretInvXloper,
-	StackOvfl = xlretStackOvfl,
-	Failed = xlretFailed,
-	Uncalced = xlretUncalced,
-	NotThreadSafe = xlretNotThreadSafe,
-	InvAsynchronousContext = xlretInvAsynchronousContext,
-	NotClusterSafe = xlretNotClusterSafe,
+	Abort = xlretAbort,// macro halted
+	InvXlfn = xlretInvXlfn,// invalid function number
+	InvCount = xlretInvCount,// invalid number of arguments
+	InvXloper = xlretInvXloper,// invalid OPER structure
+	StackOvfl = xlretStackOvfl,// stack overflow
+	Failed = xlretFailed,// command failed
+	Uncalced = xlretUncalced,// uncalced cell
+	NotThreadSafe = xlretNotThreadSafe,// not allowed during multi-threaded calc
+	InvAsynchronousContext = xlretInvAsynchronousContext,// invalid asynchronous function handle"
+	NotClusterSafe = xlretNotClusterSafe,// not supported on cluster
 };
 
 template<class X>

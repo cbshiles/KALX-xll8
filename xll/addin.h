@@ -29,8 +29,8 @@ namespace xll {
 			List().push_back(this);
 		}
 		// function
-		XAddIn(xcstr proc, xcstr type, xcstr func, xcstr args = nullptr, xcstr cat = nullptr)
-			: args_(XArgs<X>(proc, type, func, args, cat))
+		XAddIn(xcstr proc, xcstr type, xcstr func, xcstr args = nullptr, xcstr cat = nullptr, xcstr doc = nullptr)
+			: args_(XArgs<X>(proc, type, func, args, cat, doc))
 		{
 			List().push_back(this);
 		}
@@ -74,7 +74,7 @@ namespace xll {
 				std::string err("Failed to register function: ");
 				err.append(xll::traits<X>::string(args_.FunctionText()));
 				err.append("\nPerhaps you forgot to use #pragma XLLEXPORT or told Excel the wrong name for your function?"); 
-				MessageBoxA(xll_GetHwnd(), err.c_str(), "Error", MB_OK);
+				MessageBoxA(xll_GetHwnd(), err.c_str(), "Warning", MB_OK);
 			}
 
 			return x;
@@ -124,6 +124,27 @@ namespace xll {
 	typedef XAddIn<XLOPERX>  AddInX;
 
 } // namespace xll
+
+// Enumerated type XLL_ENUM(C_VALUE, ExcelName, _T("Category"), _T("Description"))
+#define XLL_ENUM(value, name, cat, desc) static xll::AddInX xai_##name(   \
+    _T(ENSURE_STRZ_(xll_##name)), XLL_LPOPERX, _T(#name), _T(""), cat, desc _T(" ")); \
+    extern "C" __declspec(dllexport) LPOPERX WINAPI xll_##name(void)      \
+	{ static OPERX o(value); return &o; }
+
+#define XLL_ENUM_DOC(value, name, cat, desc, doc) static xll::AddInX xai_##name(   \
+    FunctionX(XLL_LPOPERX, _T(ENSURE_STRZ_(xll_##name)), _T(#name)) \
+	.Category(cat).FunctionHelp(desc _T(" ")).Documentation(doc)); \
+    extern "C" __declspec(dllexport) LPOPERX WINAPI xll_##name(void)      \
+	{ static OPERX o(value); return &o; }
+/*
+#define XLL_ENUM_SORT(group, value, name, cat, desc, doc) static xll::AddInX xai_##name(   \
+    FunctionX(XLL_LPOPERX, _T(ENSURE_STRZ_(xll_##name)), _T(#name)) \
+	.Category(cat).FunctionHelp(desc _T(" ")).Documentation(doc) \
+	.Sort(_T(#group), OPERX(value))); \
+    extern "C" __declspec(dllexport) LPOPERX WINAPI xll_##name(void)      \
+	{ static OPERX o(value); return &o; }
+*/
+
 
 #ifdef _DEBUG
 //#include "utility/random.h"

@@ -53,7 +53,7 @@ namespace xll {
 			Arg(RegisterArg::FunctionText) = text;
 		}
 		XArgs(xcstr proc, xcstr type, xcstr func, xcstr args,
-			xcstr cat = nullptr, xcstr help = nullptr)
+			xcstr cat = nullptr, xcstr help = nullptr, xcstr doc = nullptr)
 			: XOPER<X>((xword)RegisterArg::Max, 1)
 		{
 			Arg(RegisterArg::MacroType) = 1; // worksheet function
@@ -63,6 +63,8 @@ namespace xll {
 			Arg(RegisterArg::ArgumentText) = args;
 			Arg(RegisterArg::Category) = cat ? cat : traits<X>::null();
 			Arg(RegisterArg::FunctionHelp) = help ? help : traits<X>::null();
+			if (doc)
+				doc_ = doc;
 		}
 		XArgs(xcstr type, xcstr proc, xcstr func)
 			: XOPER<X>((xword)RegisterArg::Max, 1)
