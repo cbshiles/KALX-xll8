@@ -1,10 +1,13 @@
 // handle.h - lightweight C++ object embedding
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 // Handles must be in their own cell for garbage collection to work.
+#pragma once
 #include <vector>
 
 namespace xll {
 
+	// Using a double for a handle in 64-bits is problematic.
+	// Could be a denormalized double. Swap 32-bits might fix it?
 	typedef double HANDLEX;
 
 	// HANDLEX that returns an error to Excel
@@ -18,9 +21,12 @@ namespace xll {
 		{
 			return h_;
 		}
+		HANDLEX operator=(HANDLEX h)
+		{
+			return h_ = h;
+		}
 	};
 
-	// handle denormalized numbers???
 	template<class T>
 	inline HANDLEX p2h(T* p)
 	{
@@ -30,6 +36,7 @@ namespace xll {
 		} u;
 
 		u.p = p;
+		// if u.h denormal ...
 
 		return u.h;
 	}
@@ -92,6 +99,7 @@ namespace xll {
 		}
 		T* p_;
 	public:
+		// constructor: handle<T> h(new T(...));
 		handle(T* p)
 			: p_(p)
 		{
@@ -102,6 +110,7 @@ namespace xll {
 				handles().remove(h2p<T>(o.val.num));
 			}
 		}
+		// lookup: handle<T> h_(h);
 		handle(HANDLEX h, bool check = true)
 			: p_(handles().find(h2p<T>(h)))
 		{
@@ -118,6 +127,14 @@ namespace xll {
 		operator HANDLEX()
 		{
 			return get();
+		}
+		T* ptr() const
+		{
+			return p_;
+		}
+		operator T*()
+		{
+			return ptr();
 		}
 		T& operator*()
 		{

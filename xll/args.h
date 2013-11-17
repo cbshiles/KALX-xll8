@@ -23,8 +23,16 @@ namespace xll {
 		typedef typename traits<X>::xchar xchar;
 		typedef typename traits<X>::xcstr xcstr;
 		typedef typename traits<X>::xword xword;
+		typedef typename traits<X>::xstring xstring;
+
+		XOPER<X> default_;
+		std::string doc_, see_; // documentation, see also
 
 		XOPER<X>& Arg(RegisterArg ra)
+		{
+			return operator[](static_cast<xword>(ra));
+		}
+		const XOPER<X>& Arg(RegisterArg ra) const
 		{
 			return operator[](static_cast<xword>(ra));
 		}
@@ -133,6 +141,20 @@ namespace xll {
 				Append(RegisterArg::ArgumentText, _T(", "));
 			Append(RegisterArg::ArgumentText, name);
 			push_back(XOPER<X>(help)); // individual argument help
+			default_.push_back(XOPER<X>(xltype::Nil));
+
+			return *this;
+		}
+
+		template<class T>
+		XArgs& Arg(xcstr type, xcstr name, xcstr help, const T& t)
+		{
+			Append(RegisterArg::TypeText, type);
+			if (Arg(RegisterArg::ArgumentText))
+				Append(RegisterArg::ArgumentText, _T(", "));
+			Append(RegisterArg::ArgumentText, name);
+			push_back(XOPER<X>(help)); // individual argument help
+			default_.push_back(XOPER<X>(t));
 
 			return *this;
 		}
@@ -140,9 +162,9 @@ namespace xll {
 #pragma region OPER_types
 
 		// (double) 64-bit IEEE floating point number.
-		XArgs& Num(xcstr name = Num<X>::name(), xcstr help = Num<X>::help())
+		XArgs& Num(xcstr name, xcstr help)
 		{
-			return Arg(XLL_DOUBLEX /*Num<X>::code()*/, name, help);
+			return Arg(XLL_DOUBLEX, name, help);
 		}
 		// (double) Excel Julian date.
 		XArgs& Date(xcstr name, xcstr help)
@@ -155,7 +177,7 @@ namespace xll {
 			return Arg(XLL_CSTRINGX, name, help);
 		}
 		// (traits<XLOPERX>::xcstr) Pascal counted string.
-		XArgs& PascalStr(xcstr name, xcstr help)
+		XArgs& PStr(xcstr name, xcstr help)
 		{
 			return Arg(XLL_PSTRINGX, name, help);
 		}
@@ -324,6 +346,27 @@ namespace xll {
 			ensure (9 + i < arg_.size());
 
 			return Arg(9 + i);
+		}
+
+		// Note documentation always uses chars to support string literals
+		XArgs& Documentation(const char* doc = nullptr, const char* see = nullptr)
+		{
+			if (doc)
+				doc_ = doc;
+			if (see)
+				see_ = see;
+
+			return *this;
+		}
+		XArgs& Documentation(const std::string& doc)
+		{
+			doc_ = doc;
+
+			return *this;
+		}
+		const xstring& Documentation() const
+		{
+			return doc_;
 		}
 	};
 

@@ -11,8 +11,7 @@ inline bool in_function_wizard(void)
 }
 */
 
-extern unsigned long xll_get_alert_level(void);
-extern void xll_set_alert_level(unsigned long);
+extern Reg::Object<char, DWORD> xll_alert_level;
 
 #ifndef _LIB
 
@@ -32,9 +31,3 @@ int XLL_ERROR(const char* e, bool force = false);
 int XLL_WARNING(const char* e, bool force = false);
 int XLL_INFO(const char* e, bool force = false);
 inline int XLL_INFORMATION(const char* e, bool force = false) { return XLL_INFO(e, force); }
-
-#ifdef EXCEL12
-#define xll_alert_levelx xll_alert_level12
-#else
-#define xll_alert_levelx xll_alert_level
-#endif

@@ -76,8 +76,8 @@ inline typename xll::traits<X>::xword rows(const X& x)
 	case xltypeMulti:
 		return x.val.array.rows;
 		break;
-	case xltypeNil:
 	case xltypeMissing:
+	case xltypeNil:
 		return 0;
 		break;
 	default:
@@ -91,8 +91,8 @@ inline typename xll::traits<X>::xword columns(const X& x)
 	case xltypeMulti:
 		return x.val.array.columns;
 		break;
-	case xltypeNil:
 	case xltypeMissing:
+	case xltypeNil:
 		return 0;
 		break;
 	default:

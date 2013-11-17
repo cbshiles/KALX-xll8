@@ -206,8 +206,7 @@ public:
 	}
 	XOPER& append(xcstr str, xchar n = 0)
 	{
-		if (size() == 0) {
-			free();
+		if (xltype == xltypeMissing || xltype == xltypeNil) {
 			alloc(str);
 		}
 		else if (xltype == xltypeStr) {

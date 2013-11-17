@@ -45,8 +45,8 @@ int test_auto(void)
 void test_error(void)
 {
 	DWORD xal;
-	xal = xll_get_alert_level();
-	xll_set_alert_level(7);
+	xal = xll_alert_level;
+	xll_alert_level = 7;
 
 	XLL_ERROR("(Not really an) Error", true);
 	XLL_WARNING("Warning (about nothting)", true);
@@ -54,7 +54,7 @@ void test_error(void)
 	_itoa(xal, buf + strlen(buf), 16);
 	XLL_INFO(buf, true);
 
-	xll_set_alert_level(xal);
+	xll_alert_level = xal;
 
 	HWND hw;
 	hw = xll_GetHwnd();
@@ -335,7 +335,7 @@ int xll_test(void)
 //		_crtBreakAlloc = 102;
 		OPERX ab = Excel<XLOPERX>(xlfConcatenate, OPERX(_T("a")), OPERX(_T("b")));
 		ensure (ab == _T("ab"));
-		xll_set_alert_level(7);
+		xll_alert_level = 7;
 //		test_error();
 		test_oper();
 		test_push_back();

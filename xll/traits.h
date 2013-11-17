@@ -1,6 +1,7 @@
 // traits.h - parameterize based on XLOPER and XLOPER12 from the Microsoft SDK.
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 // included by defines.h
+// Permit a single xll to use either old or new types.
 
 namespace xll {
 
@@ -22,7 +23,20 @@ namespace xll {
 
 		static const int strmax = 0xFF; // maximum number of characters in a str
 		static xcstr null() { return ""; }
-		static int strnicmp(xcstr a, xcstr b, size_t n) { return ::_strnicmp(a, b, n); }
+		static std::string string(xcstr s, xchar n = 0)
+		{
+			return std::string(s, s + (n ? n : strlen(s)));
+		}
+		static std::string string(const XLOPER& s)
+		{
+			ensure (s.xltype == xltypeStr);
+			
+			return string(s.val.str + 1, s.val.str[0]);
+		}
+		static int strnicmp(xcstr a, xcstr b, size_t n) 
+		{ 
+			return ::_strnicmp(a, b, n); 
+		}
 		static xchar strlen(xcstr s) 
 		{ 
 			size_t n = ::strlen(s);
@@ -30,7 +44,10 @@ namespace xll {
 
 			return static_cast<xchar>(n); 
 		}
-		static xstr strncpy(xstr s, xcstr t, size_t n) { return ::strncpy(s, t, n); }
+		static xstr strncpy(xstr s, xcstr t, size_t n) 
+		{
+			return ::strncpy(s, t, n); 
+		}
 		static int Excelv(int f, LPXLOPER res, int n, LPXLOPER args[])
 		{
 			return ::Excel4v(f, res, n, args);
@@ -67,7 +84,27 @@ namespace xll {
 
 		static const int strmax = 0x7FFF;
 		static xcstr null() { return L""; }
-		static int strnicmp(xcstr s, xcstr t, size_t n) { return ::_wcsnicmp(s, t, n); }
+		static std::string string(xcstr s, int n = 0)
+		{
+			if (n == 0)
+				n = static_cast<int>(wcslen(s));
+		
+			int n_ = WideCharToMultiByte(CP_ACP, 0, s, n, 0, 0, 0, 0);
+			std::string s_(n_, 0);
+			WideCharToMultiByte(CP_ACP, 0, s, n, &s_[0], n_, 0, 0);
+
+			return s_;
+		}
+		static std::string string(const XLOPER12& s)
+		{
+			ensure (s.xltype == xltypeStr);
+			
+			return string(s.val.str + 1, s.val.str[0]);
+		}
+		static int strnicmp(xcstr s, xcstr t, size_t n) 
+		{ 
+			return ::_wcsnicmp(s, t, n); 
+		}
 		static xchar strlen(xcstr s) 
 		{
 			size_t n = ::wcslen(s); 
@@ -75,7 +112,10 @@ namespace xll {
 
 			return static_cast<xchar>(n);
 		}
-		static xstr strncpy(xstr s, xcstr t, size_t n) { return wcsncpy(s, t, n); }
+		static xstr strncpy(xstr s, xcstr t, size_t n) 
+		{ 
+			return wcsncpy(s, t, n); 
+		}
 		static int Excelv(int f, LPXLOPER12 res, int n, LPXLOPER12 args[])
 		{
 			return ::Excel12v(f, res, n, args);
@@ -100,38 +140,30 @@ namespace xll {
 	WideCharToMultiByte();
 	MultiByteToWideChar();
 */
-	// construct with char* but convertable to wchar_t*
-	class string {
-		const char* s_;
-		int n_;
-		string(const string&);
-		string& operator=(const string&);
-	public:
-		string(const char* s, int n = -1)
-			: s_(s), n_(n)
-		{ }
-		~string()
-		{ }
-		operator traits<XLOPER>::xstring()
-		{
-			return n_ > 0 ? traits<XLOPER>::xstring(s_, n_) : traits<XLOPER>::xstring(s_);
-		}
-		operator traits<XLOPER12>::xstring()
-		{
-			int n(n_);
+//	template<class X>
+//	inline std::string to_string(xll::traits<X>::xcstr s);
+	// convert from wchar_t to char strings
+//	template<class X>
+//	inline std::string as_string(traits<X>::xcstr s, size_t n = 0);
+/*
+	template<>
+	inline std::string to_string<XLOPER>(traits<XLOPER>::xcstr s, size_t n)
+	{
+		return std::string(s, s + (n ? n : traits<XLOPER>::strlen(s)));
+	}
+	template<>
+	inline std::string to_string<XLOPER12>(traits<XLOPER12>::xcstr s, size_t n)
+	{
+		if (n == 0)
+			n = wcslen(s);
+		
+		size_t n_ = WideCharToMultiByte(CP_ACP, 0, s, n, 0, 0, 0, 0);
+		std::string s_(n_);
+		size_t n_ = WideCharToMultiByte(CP_ACP, 0, s, n, &s_[0], n_, 0, 0);
 
-			if (n <= 0) {
-				n = -1;
-				n = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, s_, -1, nullptr, 0);
-			}
-
-			traits<XLOPER12>::xstring s;
-			s.reserve(n);
-			ensure (MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, s_, n_, &s[0], n));
-
-			return s;
-		}
-	};
+		return s_;
+	}
+	*/
 }
 
 #include "types.h"

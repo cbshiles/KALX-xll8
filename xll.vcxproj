@@ -182,9 +182,11 @@
     <ClInclude Include="xll\auto.h" />
     <ClInclude Include="xll\defines.h" />
     <ClInclude Include="xll\ensure.h" />
+    <ClInclude Include="xll\entities.h" />
     <ClInclude Include="xll\enum.h" />
     <ClInclude Include="xll\error.h" />
     <ClInclude Include="xll\excel.h" />
+    <ClInclude Include="xll\fp.h" />
     <ClInclude Include="xll\handle.h" />
     <ClInclude Include="xll\loper.h" />
     <ClInclude Include="xll\on.h" />
@@ -194,6 +196,7 @@
     <ClInclude Include="xll\types.h" />
     <ClInclude Include="xll\utility\random.h" />
     <ClInclude Include="xll\utility\registry.h" />
+    <ClInclude Include="xll\utility\sendkeys.h" />
     <ClInclude Include="xll\XLCALL.H" />
     <ClInclude Include="xll\xll.h" />
     <ClInclude Include="xll\xloper.h" />
@@ -205,6 +208,14 @@
     <ClCompile Include="xll\error.cpp" />
     <ClCompile Include="xll\hwnd.cpp" />
     <ClCompile Include="xll\XLCALL.CPP" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="xll\oper.natvis">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="todo.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

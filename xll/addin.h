@@ -14,6 +14,7 @@ namespace xll {
 		typedef typename traits<X>::xstring xstring;
 
 		XArgs<X> args_;
+		xstring doc_; // documentation
 
 		XAddIn(const XAddIn&);
 		XAddIn& operator=(const XAddIn&);
@@ -65,12 +66,15 @@ namespace xll {
 			LXOPER<X> x;
 			int ret = traits<X>::Excelv(xlfRegister, &x, args_.size(), &pargs[0]);
 			if (ret != xlretSuccess) {
-				MessageBox(xll_GetHwnd(), _T("Failed to register function."), _T("Error"), MB_OK);
+				std::string err("Failed to register function: ");
+				err.append(xll::traits<X>::string(args_.FunctionText()));
+				MessageBoxA(xll_GetHwnd(), err.c_str(), "Error", MB_OK);
 			}
 			else if (!x) {
-				MessageBox(xll_GetHwnd(), 
-					_T("You forgot to use #pragma XLLEXPORT or told Excel the wrong name for your function"), 
-					_T("Error"), MB_OK);
+				std::string err("Failed to register function: ");
+				err.append(xll::traits<X>::string(args_.FunctionText()));
+				err.append("\nPerhaps you forgot to use #pragma XLLEXPORT or told Excel the wrong name for your function?"); 
+				MessageBoxA(xll_GetHwnd(), err.c_str(), "Error", MB_OK);
 			}
 
 			return x;

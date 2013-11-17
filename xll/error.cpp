@@ -8,19 +8,6 @@ Reg::Object<char, DWORD> xll_alert_level(
 	HKEY_CURRENT_USER, "Software\\KALX\\xll", "xll_alert_level", 
 	XLL_ALERT_ERROR|XLL_ALERT_WARNING|XLL_ALERT_INFO
 );
-Reg::Object<wchar_t, DWORD> xll_alert_level12(
-	HKEY_CURRENT_USER, L"Software\\KALX\\xll", L"xll_alert_level12", 
-	XLL_ALERT_ERROR|XLL_ALERT_WARNING|XLL_ALERT_INFO
-);
-
-DWORD xll_get_alert_level(void)
-{
-	return xll_alert_level;
-}
-void xll_set_alert_level(DWORD xal)
-{
-	xll_alert_level = xal;
-}
 
 extern "C" int 
 XLL_ALERT(const char* text, const char* caption, int level, UINT type, bool force)

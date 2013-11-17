@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?define ProductVersion="3.11.3"?>
+	<Product Id="*" 
+           Name="xll" 
+           Language="1033" 
+           Version="$(var.ProductVersion)" 
+           Manufacturer="KALX, LLC" 
+           UpgradeCode="6a64f6bf-dfeb-43ba-9284-dd8db72d0c42">
+		<Package Id="*" 
+             InstallerVersion="200" 
+             Description="A library for creating Excel xll add-ins."
+             Comments="Installs source code, libraries...."
+             Compressed="yes"
+             Manufacturer="KALX"
+             ReadOnly="yes"
+             InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of the xll library is already installed." />
+    <Upgrade Id="7F550062-AD60-49F4-B9DF-9BFD4960B1C3">
+      <UpgradeVersion OnlyDetect="yes" Minimum="$(var.ProductVersion)" Property="NEWERVERSIONDETECTED" IncludeMinimum="no" />
+      <UpgradeVersion OnlyDetect="no" Maximum="$(var.ProductVersion)" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
+    </Upgrade>
+<!--
+    <InstallExecuteSequence>
+      <RemoveExistingProducts After="InstallFinalize" />
+    </InstallExecuteSequence>
+-->
+    <MediaTemplate />
+
+    <Property Id='ARPCOMMENTS'>Library for creating Excel xll add-ins</Property>
+    <Property Id='ARPCONTACT'>info@kalx.net</Property>
+    <Property Id='ARPHELPLINK'>http://xll.codeplex.com</Property>
+    <Property Id='ARPURLINFOABOUT'>http://xll.codeplex.com</Property>
+    <Property Id='ARPURLUPDATEINFO'>http://kalx.net/dnload/setup.zip</Property>
+    <Property Id='ARPREADME'>appreadme</Property>
+    <Property Id='ARPSIZE'>4</Property>
+
+    <Feature Id="ProductFeature" Title="wix" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="xll" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+		</ComponentGroup>
+	</Fragment>
+
+  <Fragment>
+    <Feature Id="xll" />
+  </Fragment>
+</Wix>

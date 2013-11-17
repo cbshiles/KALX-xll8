@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="TARGETDIR">
+            <Directory Id="dirDFD9A99E49D8AB680CE8977C783F4AEB" Name="xll">
+                <Component Id="cmp04C2B2490A3165700DA9A11D9312FDBE" Guid="{6472DCE3-34F0-4302-9E45-0BD78B0D9AF0}">
+                    <File Id="fil491CDDDAB2B82692DB0E865789AEDEF1" KeyPath="yes" Source="SourceDir\addin.h" />
+                </Component>
+                <Component Id="cmp4E14CE286395D2BA6C508AC2AB6BC04D" Guid="{156E325A-C176-4D6D-ABE7-D260C8C1B366}">
+                    <File Id="fil1BE60D2A017A2A5190FCC1BC2F2622E5" KeyPath="yes" Source="SourceDir\args.h" />
+                </Component>
+                <Component Id="cmp202B2ADBD22DC424F6021F5F8527E267" Guid="{C60F9E0D-9830-4965-B1F8-C4D933545232}">
+                    <File Id="filB46120D679B375C78DC68059E84F1382" KeyPath="yes" Source="SourceDir\auto.cpp" />
+                </Component>
+                <Component Id="cmp4A1E70E655475B91BF3F42CE0A39AC45" Guid="{D8CE8A8B-EE8B-4332-95BB-A6CF80EAF7B0}">
+                    <File Id="fil6BD5930A35B865A67C05D5990EE949DD" KeyPath="yes" Source="SourceDir\auto.h" />
+                </Component>
+                <Component Id="cmp75D2E3002B6C458BAF1B42ADF18CD993" Guid="{7899F3AF-6405-41AF-8C0D-FA935A365035}">
+                    <File Id="filAB6A12653C887DF914A1725238A7C8B1" KeyPath="yes" Source="SourceDir\debug.cpp" />
+                </Component>
+                <Component Id="cmp51F5E25ADCA7B2D0894D5FEDAE15DBBD" Guid="{923DBF3A-ABF3-4C3D-88A2-04C30D7C4303}">
+                    <File Id="fil83C7A38FDACA85532E6493747EC4FF8C" KeyPath="yes" Source="SourceDir\defines.h" />
+                </Component>
+                <Component Id="cmp64C06076EBAB8BB0BCF5F16FD671A606" Guid="{D1DF76E9-31C7-4B1E-AB11-32BA0176659C}">
+                    <File Id="filA66410056E93C7EA2FFA76BDFEFD1170" KeyPath="yes" Source="SourceDir\dllmain.cpp" />
+                </Component>
+                <Component Id="cmp46EA7C42F12E6ACBCA979622C20D617B" Guid="{AF169AA3-947A-410F-BA4C-40BF20B1D825}">
+                    <File Id="fil8DE528929C7F4B1CB8ACBD722A1416B8" KeyPath="yes" Source="SourceDir\dt.h" />
+                </Component>
+                <Component Id="cmp93FCBE423656A2FD76B3B5EC39834B8E" Guid="{B2F4093B-4500-48FA-A0BD-0EA4990BDDDF}">
+                    <File Id="fil0B335ECC5D911FA6417530B50A8A2863" KeyPath="yes" Source="SourceDir\ensure.h" />
+                </Component>
+                <Component Id="cmp358B75706CEC1FC97B5A5C1EA5297D46" Guid="{FBD89399-2DC4-42F9-9AB8-C29AD8B999E5}">
+                    <File Id="filBF156B2359E4286428CED9CBB685A4FC" KeyPath="yes" Source="SourceDir\enum.h" />
+                </Component>
+                <Component Id="cmpD1A521A5F2B7BB48B40AB5B92065FDFB" Guid="{9708ADB0-C679-47E8-8B5B-21E91D4CD3DC}">
+                    <File Id="filEE95E133E5355D7CEEB70FCC46B0A0F5" KeyPath="yes" Source="SourceDir\error.cpp" />
+                </Component>
+                <Component Id="cmp7F7DCE51A73F168F5EF568933FA93622" Guid="{379ED1A4-E253-4C88-885C-51CA0776BC69}">
+                    <File Id="filD6AF93576CA274CB8539528023FE8F71" KeyPath="yes" Source="SourceDir\error.h" />
+                </Component>
+                <Component Id="cmp112D3A1D34C30516A3F9C8D51CEFA82A" Guid="{E0B5C6AE-FDA6-43DF-A838-F509C1623927}">
+                    <File Id="fil0D27CF2EFAB3661F1E389404F0448F9D" KeyPath="yes" Source="SourceDir\excel.h" />
+                </Component>
+                <Component Id="cmp67D20C1A1DCB41F9D475CB8C5487F2F3" Guid="{9E1906C1-1DD2-4921-AF4C-DD993F7CCF7F}">
+                    <File Id="filA7A6F775193CCD9B60986C2251A760B8" KeyPath="yes" Source="SourceDir\handle.h" />
+                </Component>
+                <Component Id="cmp171986F4810111C0867E02D09BE72D76" Guid="{75ACD339-4715-4A3D-89DF-F9BEFD06BAEA}">
+                    <File Id="fil4CA1B08B2DB99B5370B79D7C2EB23EB3" KeyPath="yes" Source="SourceDir\hwnd.cpp" />
+                </Component>
+                <Component Id="cmp6FE4407FEBD5EB16D33754FC0399A38E" Guid="{B4037CF8-F132-4FA3-B3B1-D9A0D2766D46}">
+                    <File Id="fil22CDCAEC667AE26A1507C984C0C4870F" KeyPath="yes" Source="SourceDir\loper.h" />
+                </Component>
+                <Component Id="cmp8B0E76B547601E5035324E2B2B07CEDD" Guid="{7260D78D-C723-4352-B6F4-2DA2A71D977D}">
+                    <File Id="fil384A372158D61E7B3793CBECC935F362" KeyPath="yes" Source="SourceDir\on.h" />
+                </Component>
+                <Component Id="cmpB26A2164D57CEDA99E88B256E215A747" Guid="{F2E5D5E6-1F2E-40FE-A4A1-926355BADA9E}">
+                    <File Id="filDE4A889EBE8803F8EC98201EF4BD51C8" KeyPath="yes" Source="SourceDir\oper.h" />
+                </Component>
+                <Component Id="cmp475A08C6402DC7A11C575DFB9ECF98DC" Guid="{FB9F2D98-6DF1-4529-842C-5884E258B31C}">
+                    <File Id="fil36EDC4550334DDEAB6E80BCAB7D123AB" KeyPath="yes" Source="SourceDir\oper.natvis" />
+                </Component>
+                <Component Id="cmpFE0C7EEBAEDCACF61B7BD22D53682A7F" Guid="{051469B3-F9F4-4636-B82D-100379C39A86}">
+                    <File Id="fil07A2B8993EE50F3BCA4D4CA34CEC0A97" KeyPath="yes" Source="SourceDir\struct.h" />
+                </Component>
+                <Component Id="cmp79EA34B561AB69AF86B09038604C9114" Guid="{D2CB7B6A-82A7-4B2F-BA65-956A1A9EC1D7}">
+                    <File Id="filCBF533BBDCB7283E72E7BF5F2785EA00" KeyPath="yes" Source="SourceDir\traits.h" />
+                </Component>
+                <Component Id="cmp07C64127AB87C557BCA7FD556B6A554B" Guid="{96274223-78BA-40AE-9E0D-9E087690295A}">
+                    <File Id="filBAD7A885ACC023C983430AB7576D8EDA" KeyPath="yes" Source="SourceDir\types.h" />
+                </Component>
+                <Component Id="cmp381F3045599BD4404F5A879B3C462BAE" Guid="{F8E63E65-B529-4BF3-82FE-EBCD06CE96B1}">
+                    <File Id="fil21E6BF47EA17CFE149F1F8171795E587" KeyPath="yes" Source="SourceDir\XLCALL.CPP" />
+                </Component>
+                <Component Id="cmpCB2099729601798DB434D56D834DC7F6" Guid="{804034F8-53A1-49E8-99A2-D58AC8587D19}">
+                    <File Id="fil7FC393EFE9FF936E5806A8656DF001A3" KeyPath="yes" Source="SourceDir\XLCALL.H" />
+                </Component>
+                <Component Id="cmp8695B5BE29F32814985F4CA4615793DF" Guid="{A68C12A5-823E-4094-910F-8E51332210F9}">
+                    <File Id="fil7CAA3ED3D191E34CD2A1E0E850BA1DDA" KeyPath="yes" Source="SourceDir\XLCALL32.LIB" />
+                </Component>
+                <Component Id="cmp77BC575F1C93812F0A3F7B5FFDDF2381" Guid="{FD58F642-E12A-47CC-BA8A-7EF10A623BE5}">
+                    <File Id="filA4E29D576AB6E9C8E705786C079093FD" KeyPath="yes" Source="SourceDir\xll.h" />
+                </Component>
+                <Component Id="cmp9F9B48B157481B29EA9CDB350DBDCE6F" Guid="{1F1E2E62-9582-4413-B6EB-9F6874F8B11A}">
+                    <File Id="filD38979E35681B3BEE193E0451955B31C" KeyPath="yes" Source="SourceDir\xloper.h" />
+                </Component>
+                <Directory Id="dir14C58A166A6B825B0BC8CC896CCEB378" Name="utility">
+                    <Component Id="cmp4456153A336ABB42E0F2C8621779F3A8" Guid="{7C337FDA-8649-4582-9739-21966F3A0181}">
+                        <File Id="fil30AB2466F20DE26BAA495C1143C35598" KeyPath="yes" Source="SourceDir\utility\random.h" />
+                    </Component>
+                    <Component Id="cmp93D9C8A4F3F884316E5A5ACB227EC907" Guid="{A3C5016D-3A31-4B9E-8947-17EAB936FCC4}">
+                        <File Id="filF839A5CB1043FDE6A77A21ED3A9EEE67" KeyPath="yes" Source="SourceDir\utility\registry.h" />
+                    </Component>
+                    <Component Id="cmp141309670BD1794585ADB269935F1F17" Guid="{E50A81A9-6C8F-4D61-B38A-3C7A02F0EC79}">
+                        <File Id="fil009B29E9404CA01A52CA6F186BFDE97E" KeyPath="yes" Source="SourceDir\utility\timer.h" />
+                    </Component>
+                </Directory>
+                <Directory Id="dirB7E64B700D5B2FEA511CA7FCA8EDE3A0" Name="x64">
+                    <Component Id="cmpC7696747FBBCE6FD93B08B0834451BD1" Guid="{F9AB238B-0DF4-43CB-9BCB-00B58469FC00}">
+                        <File Id="fil09B35D47A5014425E3C40D8714FBEA4F" KeyPath="yes" Source="SourceDir\x64\XLCALL32.LIB" />
+                    </Component>
+                </Directory>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+</Wix>

@@ -52,4 +52,8 @@ HWND xll_GetHwnd(void);
 
 // extras
 #include "dt.h"
+#include "entities.h"
+#include "enum.h"
+#include "fp.h"
+#include "handle.h"
 #include "on.h"

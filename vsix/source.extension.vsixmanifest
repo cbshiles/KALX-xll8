@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="vsix..a6dc07c5-4a87-4967-a558-460e5d980eaa" Version="1.0" Language="en-US" Publisher="Keith A. Lewis" />
+    <DisplayName>vsix</DisplayName>
+    <Description xml:space="preserve">Excel Add-In SDK</Description>
+    <MoreInfo>http://xll8.codeplex.com</MoreInfo>
+  </Metadata>
+  <Installation InstalledByMsi="true">
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="11.0" />
+  </Installation>
+  <Dependencies>
+    <Dependency d:Source="Project" d:ProjectName="xll" d:InstallSource="Embed" d:VsixSubPath="xll" Location="|xll;VSIXContainerProjectOutputGroup|" DisplayName="|xll;VSIXNameProjectOutputGroup|" Id="|xll;VSIXIdentifierProjectOutputGroup|" />
+  </Dependencies>
+</PackageManifest>
