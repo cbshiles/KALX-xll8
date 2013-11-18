@@ -1,6 +1,6 @@
 // test.h - global header for testing
 #pragma once
-//#define EXCEL12
+#define EXCEL12
 #include "../xll/xll.h"
 
 typedef xll::traits<XLOPERX>::xchar xchar;

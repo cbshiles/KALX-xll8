@@ -53,7 +53,7 @@ namespace xll {
 			Arg(RegisterArg::FunctionText) = text;
 		}
 		XArgs(xcstr proc, xcstr type, xcstr func, xcstr args,
-			xcstr cat = nullptr, xcstr help = nullptr, xcstr doc = nullptr)
+			xcstr cat = nullptr, xcstr help = nullptr, const char* doc = nullptr)
 			: XOPER<X>((xword)RegisterArg::Max, 1)
 		{
 			Arg(RegisterArg::MacroType) = 1; // worksheet function
@@ -151,12 +151,8 @@ namespace xll {
 		template<class T>
 		XArgs& Arg(xcstr type, xcstr name, xcstr help, const T& t)
 		{
-			Append(RegisterArg::TypeText, type);
-			if (Arg(RegisterArg::ArgumentText))
-				Append(RegisterArg::ArgumentText, _T(", "));
-			Append(RegisterArg::ArgumentText, name);
-			push_back(XOPER<X>(help)); // individual argument help
-			default_.push_back(XOPER<X>(t));
+			Arg(type, name, help);
+			default_[default_.size() - 1] = XOPER<X>(t);
 
 			return *this;
 		}

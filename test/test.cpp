@@ -156,21 +156,32 @@ void test_oper(void)
 void test_push_back()
 {
 	OPERX n;
-	ensure(n.size() == 0);
+	ensure (n.size() == 0);
+	ensure (n == OPERX(xltype::Nil));
+	n.push_back(n);
+	ensure (n.rows() == 1 && n.columns() == 1);
+	ensure (n[0] == OPERX());
 
 	OPERX m(xltype::Missing);
 	ensure (m.size() == 0);
 
-	n.push_back(n);
-	ensure (n == n);
 	m.push_back(m);
+	ensure (m.rows() == 2 && m.columns() == 1);
 	ensure (m == m);
+	ensure (m[0] == OPERX(xltype::Missing));
+	ensure (m[1] == OPERX(xltype::Missing));
 	m.push_back(n);
-	ensure (m == n);
+	ensure (m.rows() == 3 && m.columns() == 1);
+	ensure (m[0] == OPERX(xltype::Missing));
+	ensure (m[1] == OPERX(xltype::Missing));
+	ensure (m[2] == OPERX());
+
+	m.resize(0,0);
 
 	m.push_back(OPERX(1.23));
-	ensure (m.xltype == xltypeNum);
-	ensure (m == 1.23);
+	ensure (m.rows() == 1 && m.columns() == 1);
+	ensure (m[0].xltype == xltypeNum);
+	ensure (m[0] == 1.23);
 
 	m.push_back(OPERX(_T("foo")));
 	ensure (m.rows() == 2);
