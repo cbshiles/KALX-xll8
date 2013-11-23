@@ -20,30 +20,30 @@ public:
 	}
 	XOPER(const XOPER& o)
 	{
-		alloc(xltype::Nil);
 		alloc(o);
 	}
-/*	XOPER(XOPER&& o)
+	XOPER(XOPER&& o)
 	{
 		xltype = o.xltype;
 		val = o.val;
 
 		o.xltype = xltypeNil;
 	}
-*/	XOPER& operator=(const XOPER& o)
+	XOPER& operator=(const XOPER& o)
 	{
 		if (this != &o) {
 			if (xltype == o.xltype) {
 				realloc(o);
 			}
 			else {
+				free();
 				alloc(o);
 			}
 		}
 
 		return *this;
 	}
-/*	XOPER& operator=(XOPER&& o)
+	XOPER& operator=(XOPER&& o)
 	{
 		xltype = o.xltype;
 		val = o.val;
@@ -52,7 +52,7 @@ public:
 
 		return *this;
 	}
-*/	~XOPER()
+	~XOPER()
 	{
 		free();
 	}
@@ -63,6 +63,7 @@ public:
 	}
 	XOPER& operator=(const X& x)
 	{
+		free();
 		alloc(x);
 
 		return *this;
@@ -153,8 +154,8 @@ public:
 	}
 	XOPER& operator+=(const XOPER& o)
 	{
-		if (xltype != xltypeNum)
-			*this = to_double(*this);
+		ensure (xltype == xltypeNum);
+		ensure (o.xltype == xltypeNum);
 
 		val.num += to_double(o);
 
@@ -182,12 +183,10 @@ public:
 	// Str
 	XOPER(xcstr str, xchar str0 = 0)
 	{
-		alloc(xltype::Nil);
 		alloc(str, str0);
 	}
 	XOPER(const xstring& s)
 	{
-		alloc(xltype::Nil);
 		alloc(s.c_str(), static_cast<xchar>(s.length()));
 	}
 	XOPER& operator=(xcstr str)
@@ -237,7 +236,7 @@ public:
 		// Get/Set name converts "str" to "=\"str\""
 		// lock to make thread safe???
 		Excel<X>(xlfSetName, Name, x);
-		XOPER<X> o = Excel<X>(xlfGetName, Name);
+		XOPER<X> o = Excel<X>(xlfGetName, Name); // too clever?
 		Excel<X>(xlfSetName, Name);
 
 		ensure (o.xltype == xltypeStr);
@@ -295,49 +294,52 @@ public:
 	// Multi
 	XOPER(xword r, xword c)
 	{
-		alloc(xltype::Nil);
 		alloc(r, c);
 	}
 	XOPER& resize(xword r, xword c)
 	{
-		if (xltype == xltypeMulti) {
+		if (r*c == 0) {
+			free();
+		}
+		else if (xltype == xltypeMulti) {
 			realloc(r, c);
 		}
 		else {
 			XOPER tmp(*this);
 			alloc(r, c);
-			if (r*c != 0)
-				operator[](0) = tmp;
+			operator[](0) = tmp;
 		}
 
 		return *this;
 	}
-	XOPER& push_back(const X& x)
+	template<class T>
+	XOPER& push_back(const T& t)
 	{
-		xword r = (std::max<xword>)(1, ::rows(x));
-		xword c = (std::max<xword>)(1, ::columns(x));
+		XOPER<X> x(t);
 
-		if (xltype == xltypeNil) {
-			operator=(x);
+		// nil is nil
+		if (x.xltype == xltypeNil)
+			return *this;
 
-			return resize(r, c);
-		}
-
-		if (xltype != xltypeMulti)
+		if (xltype == xltypeNil)
+			return operator=(x);
+	
+		if (xltype != xltypeMulti) {
 			resize(1,1);
-
-		if (c == 1) { // favor columns
-			resize(rows() + r, 1);
-			std::copy(::begin(x), ::end(x), end() - r);
 		}
-		else if (r == 1) {
-			resize(1, columns() + c);
-			std::copy(::begin(x), ::end(x), end() - c);
+
+		if (x.columns() == 1) { // favor columns
+			resize(rows() + x.rows(), 1);
+			std::copy(x.begin(), x.end(), end() - x.rows());
+		}
+		else if (x.rows() == 1) {
+			resize(1, columns() + x.columns());
+			std::copy(x.begin(), x.end(), end() - x.columns());
 		}
 		else {
-			ensure (columns() == c);
-			resize(rows() + r, c);
-			std::copy(::begin(x), ::end(x), end() - r*c);
+			ensure (columns() == x.columns());
+			resize(rows() + x.rows(), x.columns());
+			std::copy(x.begin(), x.end(), end() - x.size());
 		}
 
 		return *this;
@@ -379,11 +381,8 @@ private:
 		xltype = static_cast<WORD>(type);
 	}
 
-
 	void alloc(const X& x)
 	{
-		free();
-
 		xltype = x.xltype;
 
 		if (xltype == xltypeStr) {
@@ -422,8 +421,6 @@ private:
 	// Str
 	void alloc(xcstr str, xchar str0 = 0)
 	{
-		free();
-
 		xltype = xltypeStr;
 		val.str = nullptr;
 
@@ -448,8 +445,6 @@ private:
 	// Multi
 	void alloc(xword r, xword c)
 	{
-		free();
-
 		xltype = xltypeMulti;
 		val.array.rows = 0;
 		val.array.columns = 0;
@@ -472,7 +467,7 @@ private:
 
 		if (r*c != size()) { // r*c == 0 calls ::free
 			val.array.lparray = static_cast<X*>(::realloc(val.array.lparray, r*c*sizeof(X)));
-			ensure (r*c == 0 || val.array.lparray);
+			ensure (val.array.lparray);
 		}
 
 		val.array.rows = r;

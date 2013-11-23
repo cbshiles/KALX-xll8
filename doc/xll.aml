@@ -24,10 +24,10 @@
         <autoOutline /> -->
         <para>
           If you want to use VBA or C# to extend Excel you don't need this library.
-          If you think wedging R, or Matlab, or python, or any other procedural language
-          du jour into Excel is a good idea this is definitely not the library for you.
-          If you know C++ and want a simple way to get the highest possible performance from Excel,
-          this is the library for you.
+          If you think wedging other procedural languages into Excel is a good 
+          idea this is definitely not the library for you.
+          If you know C++ and want a simple way to get the highest possible 
+          performance from Excel, this is the library for you.
         </para>
         <para>
           The

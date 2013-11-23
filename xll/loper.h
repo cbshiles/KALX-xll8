@@ -8,34 +8,37 @@ class LXOPER : public X {
 	LXOPER& operator=(const LXOPER&);
 	LXOPER(const X& x);
 	LXOPER& operator=(const X& x);
+	bool owner_;
 public:
 	LXOPER()
+		: owner_(true)
 	{
 		ZeroMemory(this, sizeof(*this));
 		xltype = xltypeNil;
 	}
 	LXOPER(LXOPER&& o)
 	{
+		owner_ = true;
 		xltype = o.xltype;
 		val = o.val;
 
-//		ZeroMemory(&o, sizeof(o));
-		o.xltype = xltypeMissing;
+		o.owner_ = false;
+
 	}
 	LXOPER& operator=(LXOPER&& o)
 	{
+		owner_ = true;
 		xltype = o.xltype;
 		val = o.val;
 
-//		ZeroMemory(&o, sizeof(o));
-		o.xltype = xltypeMissing;
+		o.owner_ = false;
 
 		return *this;
 	}
 	~LXOPER()
 	{
-		if (!(xltype&xlbitXLFree))
-			ExcelX(xlFree, 0, 1, this);
+		if (owner_)
+			xll::traits<X>::Excel(xlFree, 0, 1, this);
 	}
 
 	// Return xlret types if not xlretSuccess

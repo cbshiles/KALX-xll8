@@ -63,7 +63,7 @@ namespace xll {
 			callbacks().push_back(x);
 		}
 		On(const XOPER<X>& time, xcstr macro, 
-			const XOPER<X>& tolerance = MissingX(), bool insert = true)
+			const XOPER<X>& tolerance = OPERX(xltype::Missing), bool insert = true)
 		{
 			XOPER<X> x(5,1);
 

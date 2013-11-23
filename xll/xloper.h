@@ -76,7 +76,9 @@ inline typename xll::traits<X>::xword rows(const X& x)
 	case xltypeMulti:
 		return x.val.array.rows;
 		break;
-	case xltypeMissing:
+	case xltypeSRef:
+		return x.val.sref.ref.rwLast - x.val.sref.ref.rwFirst + 1;
+		break;
 	case xltypeNil:
 		return 0;
 		break;
@@ -91,7 +93,9 @@ inline typename xll::traits<X>::xword columns(const X& x)
 	case xltypeMulti:
 		return x.val.array.columns;
 		break;
-	case xltypeMissing:
+	case xltypeSRef:
+		return x.val.sref.ref.colLast - x.val.sref.ref.colFirst + 1;
+		break;
 	case xltypeNil:
 		return 0;
 		break;

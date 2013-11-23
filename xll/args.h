@@ -19,55 +19,57 @@ namespace xll {
 	};
 
 	template<class X>
-	class XArgs : public XOPER<X> {
+	class XArgs {
 		typedef typename traits<X>::xchar xchar;
 		typedef typename traits<X>::xcstr xcstr;
 		typedef typename traits<X>::xword xword;
 		typedef typename traits<X>::xstring xstring;
 
+		XOPER<X> args_;
 		XOPER<X> default_;
-		std::string doc_, see_; // documentation, see also
+		xstring doc_, see_; // documentation, see also
 
 		XOPER<X>& Arg(RegisterArg ra)
 		{
-			return operator[](static_cast<xword>(ra));
+			return args_[static_cast<xword>(ra)];
 		}
 		const XOPER<X>& Arg(RegisterArg ra) const
 		{
-			return operator[](static_cast<xword>(ra));
+			return args_[static_cast<xword>(ra)];
 		}
 		XOPER<X>& Append(RegisterArg ra, xcstr str)
 		{
 			return Arg(ra).append(str);
 		}
 	public:
-		using XOPER<X>::operator[];
-		XArgs()
-//			: XOPER<X>((xword)RegisterArg::Max, 1)
-		{ }
+//		XArgs()
+//			: args_((xword)RegisterArg::Max, 1)
+//		{ }
 		XArgs(xcstr proc, xcstr text)
-			: XOPER<X>(6, 1)
+			: args_(6, 1)
 		{
 			Arg(RegisterArg::MacroType) = 2; // macro command
 			Arg(RegisterArg::Procedure) = proc;
 			Arg(RegisterArg::FunctionText) = text;
 		}
 		XArgs(xcstr proc, xcstr type, xcstr func, xcstr args,
-			xcstr cat = nullptr, xcstr help = nullptr, const char* doc = nullptr)
-			: XOPER<X>((xword)RegisterArg::Max, 1)
+			xcstr cat = nullptr, xcstr help = nullptr, xcstr doc = nullptr)
+			: args_((xword)RegisterArg::Max, 1)
 		{
 			Arg(RegisterArg::MacroType) = 1; // worksheet function
 			Arg(RegisterArg::Procedure) = proc;
 			Arg(RegisterArg::TypeText) = type;
 			Arg(RegisterArg::FunctionText) = func;
 			Arg(RegisterArg::ArgumentText) = args;
-			Arg(RegisterArg::Category) = cat ? cat : traits<X>::null();
-			Arg(RegisterArg::FunctionHelp) = help ? help : traits<X>::null();
+			if (cat)
+				Arg(RegisterArg::Category) = cat;
+			if (help)
+				Arg(RegisterArg::FunctionHelp) = help;
 			if (doc)
 				doc_ = doc;
 		}
 		XArgs(xcstr type, xcstr proc, xcstr func)
-			: XOPER<X>((xword)RegisterArg::Max, 1)
+			: args_((xword)RegisterArg::Max, 1)
 		{
 			Arg(RegisterArg::MacroType) = 1; // worksheet function
 			Arg(RegisterArg::Procedure) = proc;
@@ -75,13 +77,29 @@ namespace xll {
 			Arg(RegisterArg::FunctionText) = func;
 		}
 
-		XArgs(XArgs&& args)
-			: XOPER<X>(args)
+		XArgs(const XArgs&) = default;
+		XArgs& operator=(const XArgs&) = default;
+
+/*		XArgs(XArgs&& args)
+			: args_(args)
 		{
-			this->resize(0,0);
+			// ???
 		}
-		~XArgs()
+*/		~XArgs()
 		{ }
+
+		xword size() const
+		{
+			return args_.size();
+		}
+		XOPER<X>& operator[](xword i)
+		{
+			return args_[i];
+		}
+		const XOPER<X>& operator[](xword i) const
+		{
+			return args_[i];
+		}
 
 		bool isHidden(void) const
 		{
@@ -142,8 +160,8 @@ namespace xll {
 			if (Arg(RegisterArg::ArgumentText))
 				Append(RegisterArg::ArgumentText, _T(", "));
 			Append(RegisterArg::ArgumentText, name);
-			push_back(XOPER<X>(help)); // individual argument help
-			default_.push_back(XOPER<X>(xltype::Nil));
+			args_.push_back(help); // individual argument help
+			default_.push_back(xltype::Missing);
 
 			return *this;
 		}
@@ -347,7 +365,7 @@ namespace xll {
 		}
 
 		// Note documentation always uses chars to support string literals
-		XArgs& Documentation(const char* doc = nullptr, const char* see = nullptr)
+		XArgs& Documentation(xcstr doc = nullptr, xcstr see = nullptr)
 		{
 			if (doc)
 				doc_ = doc;
@@ -356,7 +374,7 @@ namespace xll {
 
 			return *this;
 		}
-		XArgs& Documentation(const std::string& doc)
+		XArgs& Documentation(const xstring& doc)
 		{
 			doc_ = doc;
 

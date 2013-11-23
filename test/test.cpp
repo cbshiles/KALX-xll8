@@ -158,12 +158,12 @@ void test_push_back()
 	OPERX n;
 	ensure (n.size() == 0);
 	ensure (n == OPERX(xltype::Nil));
+	// nil is nil
 	n.push_back(n);
-	ensure (n.rows() == 1 && n.columns() == 1);
-	ensure (n[0] == OPERX());
+	ensure (n == OPERX());
 
 	OPERX m(xltype::Missing);
-	ensure (m.size() == 0);
+	ensure (m.size() == 1);
 
 	m.push_back(m);
 	ensure (m.rows() == 2 && m.columns() == 1);
@@ -171,14 +171,17 @@ void test_push_back()
 	ensure (m[0] == OPERX(xltype::Missing));
 	ensure (m[1] == OPERX(xltype::Missing));
 	m.push_back(n);
-	ensure (m.rows() == 3 && m.columns() == 1);
+	ensure (m.rows() == 2 && m.columns() == 1);
 	ensure (m[0] == OPERX(xltype::Missing));
 	ensure (m[1] == OPERX(xltype::Missing));
-	ensure (m[2] == OPERX());
 
 	m.resize(0,0);
 
 	m.push_back(OPERX(1.23));
+	ensure (m.size() == 1);
+	ensure (m.xltype == xltypeNum);
+	ensure (m.val.num == 1.23);
+	// but it also looks like a 1x1 range
 	ensure (m.rows() == 1 && m.columns() == 1);
 	ensure (m[0].xltype == xltypeNum);
 	ensure (m[0] == 1.23);
@@ -189,7 +192,9 @@ void test_push_back()
 	ensure (m[0] == 1.23);
 	ensure (m[1] == _T("fOo"));
 
+	LPXLOPERX pa = m.val.array.lparray;
 	m.resize(1, 2);
+	ensure (pa == m.val.array.lparray);
 	m.push_back(OPERX(2,2));
 	ensure (m.rows() == 3);
 	ensure (m.columns() == 2);
@@ -228,6 +233,7 @@ static AddInX xai_bad_macro(_T("?xll_bad_macro"), _T("BAD.MACRO"));
 int WINAPI xll_bad_macro(void)
 {
 #pragma XLLEXPORT
+
 	XLL_XLC(Alert, OPERX(_T("BAD.MACRO called")));
 
 	return 1;
@@ -319,6 +325,10 @@ double WINAPI xll_foo(double x)
 	return 2*x;
 }
 
+#ifndef _DEBUG
+#pragma warning(disable: 4127)
+#endif
+
 int xll_test(void)
 {
 	try {
@@ -347,13 +357,23 @@ int xll_test(void)
 		OPERX ab = Excel<XLOPERX>(xlfConcatenate, OPERX(_T("a")), OPERX(_T("b")));
 		ensure (ab == _T("ab"));
 		xll_alert_level = 7;
+		int flag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
+		flag |= _CRTDBG_CHECK_ALWAYS_DF;
+		_CrtSetDbgFlag(flag);
 //		test_error();
+		ensure (_CrtCheckMemory());
 		test_oper();
+		ensure (_CrtCheckMemory());
 		test_push_back();
+		ensure (_CrtCheckMemory());
 		test_excel();
+		ensure (_CrtCheckMemory());
 		test_on();
+		ensure (_CrtCheckMemory());
 		test_name();
+		ensure (_CrtCheckMemory());
 		test_to_string();
+		ensure (_CrtCheckMemory());
 	}
 	catch (const std::exception& ex) {
 		MessageBoxA(0, ex.what(), "Error", MB_OK);
@@ -374,6 +394,9 @@ static Auto<OpenAfterX> xao_test(xll_test);
 static AddInX xai_bar(
 	FunctionX(XLL_LPOPERX, _T("?xll_bar"), _T("XLL.BAR"))
 	.Arg(XLL_DOUBLEX, _T("Arg"), _T("is an arg"))
+	.Documentation(R"xyz(
+	This is some documentation.
+	)xyz")
 );
 LPOPERX WINAPI
 xll_bar(double arg)

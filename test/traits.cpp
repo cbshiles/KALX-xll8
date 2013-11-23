@@ -18,4 +18,4 @@ int xll_test_traits(void)
 
 	return 1;
 }
-static Auto<OpenX> xao_test_traits(xll_test_traits);
+static Auto<Open> xao_test_traits(xll_test_traits);

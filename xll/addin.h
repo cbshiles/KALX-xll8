@@ -14,14 +14,9 @@ namespace xll {
 		typedef typename traits<X>::xstring xstring;
 
 		XArgs<X> args_;
-		xstring doc_; // documentation
 
-		XAddIn(const XAddIn&);
 		XAddIn& operator=(const XAddIn&);
 	public:
-		XAddIn(XArgs<X>&& args)
-			: args_(args)
-		{ }
 		// macro
 		XAddIn(xcstr proc, xcstr text)
 			: args_(XArgs<X>(proc, text))

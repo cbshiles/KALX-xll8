@@ -22,7 +22,6 @@ namespace xll {
 		typedef _FP xfp;
 
 		static const int strmax = 0xFF; // maximum number of characters in a str
-		static xcstr null() { return ""; }
 		static std::string string(xcstr s, xchar n = 0)
 		{
 			return std::string(s, s + (n ? n : strlen(s)));
@@ -83,7 +82,6 @@ namespace xll {
 		typedef _FP12 xfp;
 
 		static const int strmax = 0x7FFF;
-		static xcstr null() { return L""; }
 		static std::string string(xcstr s, int n = 0)
 		{
 			if (n == 0)
