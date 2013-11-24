@@ -22,12 +22,14 @@
 #ifdef EXCEL12
 #define X_(f) f##12
 #define TX_(s) _T(s) _T("12")
+#define R_(...) L ## #__VA_ARGS__
 #define ExcelX Excel12
 #define ExcelXv Excel12v
 #else
 #define X_(f) f
 #define TX_(s) s
-#define ExcelX Excel4
+// poor man's raw string literal (no commas or parens allowed)
+#define R_(...) #__VA_ARGS__
 #define ExcelXv Excel4v
 #endif
 

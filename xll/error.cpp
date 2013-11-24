@@ -1,7 +1,5 @@
 #pragma warning(disable: 4996)
-#include "utility/registry.h"
-
-#include "error.h"
+#include "xll.h"
 
 // All addins coordinate through the registry.
 Reg::Object<char, DWORD> xll_alert_level(
@@ -39,6 +37,40 @@ XLL_INFO(const char* e, bool force)
 	return XLL_ALERT(e, "Information", XLL_ALERT_INFO, MB_ICONINFORMATION, force);
 }
 
+using namespace xll;
+
+static AddIn xai_alert_level(
+	Function(XLL_LPOPER, "_xll_alert_level_@4", "XLL.ALERT.LEVEL")
+	.Arg(XLL_LPOPER, "Level", "is a bit mask of alert levels to set.")
+	.Category("XLL")
+	.FunctionHelp(
+		"Return old alert level and set to new level if Level is specified. "
+		"The levels are Error (0x1), Warning (0x2), and Information (0x4)"
+	)
+);
+extern "C" LPOPER __declspec(dllexport) WINAPI 
+xll_alert_level_(LPOPER po)
+{
+	static OPER o;
+
+	try {
+		o = static_cast<double>(xll_alert_level);
+
+		if (po->xltype != xltypeMissing) {
+			ensure (po->xltype == xltypeNum);
+			DWORD xal = static_cast<DWORD>(po->val.num);
+			ensure (xal < 0x8);
+			xll_alert_level = xal;
+		}
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+
+		o = OPER(xlerr::NA);
+	}
+
+	return &o;
+}
 /*
 static AddIn xai_alert_filter(XLL_DECORATE("xll_alert_filter", 0), "ALERT.FILTER");
 extern "C" int __declspec(dllexport) WINAPI

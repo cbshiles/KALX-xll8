@@ -320,9 +320,12 @@ namespace xll {
 		void realloc(xword r, xword c)
 		{
 			if (!buf || size() != r*c) {
-				buf = (char*)::realloc(buf, sizeof(xfp) + r*c*sizeof(double));
-				if (!buf)
-					throw std::runtime_error("FP::realloc");
+				void* p = ::realloc(buf, sizeof(xfp) + r*c*sizeof(double));
+				ensure (p != nullptr);
+				if (p == nullptr)
+					::free(buf);
+				else
+					buf = (char*)p;
 				pf = reinterpret_cast<xfp*>(new (buf) xfp);
 			}
 			//!!! check size

@@ -20,6 +20,7 @@ public:
 static AddInX xai_base(
 	FunctionX(XLL_HANDLEX, _T("?xll_base"), _T("XLL.BASE"))
 	.Arg(XLL_LONGX, _T("Value"), _T("is an integer value."))
+	.FunctionHelp(_T("Return a handle to a Base object."))
 	.Uncalced()
 	.Category(_T("XLL"))
 );
@@ -82,6 +83,7 @@ static AddInX xai_derived(
 	.Arg(XLL_LONGX, _T("Value2"), _T("is an integer value for the derived class."))
 	.Uncalced()
 	.Category(_T("XLL"))
+	.FunctionHelp(_T("Return a handle to a Derived object."))
 );
 HANDLEX WINAPI xll_derived(LONG v, LONG v2)
 {
@@ -116,7 +118,7 @@ LONG WINAPI xll_derived_value2(HANDLEX h)
 	try {
 		handle<Base> h_(h);
 		Derived *pd = dynamic_cast<Derived*>(h_.ptr());
-		ensure (pd);
+		ensure (pd != 0);
 
 		v = pd->value2();
 	}

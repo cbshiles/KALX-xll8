@@ -2,6 +2,7 @@
 // Copyright (c) 2006 KALX, LLC. All rights reserved. No warranty is made.
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
+//#define _CRTDBG_MAP_ALLOC_NEW 
 #include <stdlib.h>
 #include <crtdbg.h>
 
@@ -9,7 +10,7 @@ struct CrtDbg {
 	CrtDbg(int flags = _CRTDBG_ALLOC_MEM_DF)
 	{
 		_CrtSetDbgFlag (_CrtSetDbgFlag( _CRTDBG_REPORT_FLAG )|flags);
-//		_crtBreakAlloc = 620;
+//		_crtBreakAlloc = 1266;
 	}
 	// When information about a memory block is reported by one of the debug 
 	// dump functions, this number is enclosed in braces, such as {36}.
@@ -42,7 +43,7 @@ struct CrtDbg {
 // need to construct this before user segment
 #pragma warning(disable: 4073)
 #pragma init_seg(lib)
-CrtDbg crtDbg;
+CrtDbg crtDbg(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
 
 #include <typeinfo>
 

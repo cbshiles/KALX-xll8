@@ -325,6 +325,19 @@ double WINAPI xll_foo(double x)
 	return 2*x;
 }
 
+void test_loper(void)
+{
+	LOPERX o;
+	ensure (o.xltype == OPERX().xltype);
+
+	o = XLL_XLF(Concatenate, 
+			OPERX(_T("a")),
+			XLL_XLF(Concatenate, OPERX(_T("b")), OPERX(_T("c")))
+			);
+	ensure (o == _T("abc"));
+
+}
+
 #ifndef _DEBUG
 #pragma warning(disable: 4127)
 #endif
@@ -357,9 +370,6 @@ int xll_test(void)
 		OPERX ab = Excel<XLOPERX>(xlfConcatenate, OPERX(_T("a")), OPERX(_T("b")));
 		ensure (ab == _T("ab"));
 		xll_alert_level = 7;
-		int flag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-		flag |= _CRTDBG_CHECK_ALWAYS_DF;
-		_CrtSetDbgFlag(flag);
 //		test_error();
 		ensure (_CrtCheckMemory());
 		test_oper();
@@ -374,6 +384,7 @@ int xll_test(void)
 		ensure (_CrtCheckMemory());
 		test_to_string();
 		ensure (_CrtCheckMemory());
+		test_loper();
 	}
 	catch (const std::exception& ex) {
 		MessageBoxA(0, ex.what(), "Error", MB_OK);
@@ -394,9 +405,14 @@ static Auto<OpenAfterX> xao_test(xll_test);
 static AddInX xai_bar(
 	FunctionX(XLL_LPOPERX, _T("?xll_bar"), _T("XLL.BAR"))
 	.Arg(XLL_DOUBLEX, _T("Arg"), _T("is an arg"))
-	.Documentation(R"xyz(
-	This is some documentation.
-	)xyz")
+	.Documentation(R_(
+		This is some 
+		documentation.
+		It can use commas, 
+		but not parentheses.
+		Also,			white       space 
+		gets     compressed.
+	))
 );
 LPOPERX WINAPI
 xll_bar(double arg)

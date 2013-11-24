@@ -203,7 +203,7 @@ public:
 	}
 	XOPER& append(xcstr str, xchar n = 0)
 	{
-		if (xltype == xltypeMissing || xltype == xltypeNil) {
+		if (xltype == xltypeNil) {
 			alloc(str);
 		}
 		else if (xltype == xltypeStr) {
@@ -211,8 +211,10 @@ public:
 				n = static_cast<xchar>(xll::traits<X>::strlen(str));
 			val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(val.str[0] + n + 1)));
 			ensure (val.str);
-			xll::traits<X>::strncpy(val.str + val.str[0] + 1, str, n);
-			val.str[0] += static_cast<xchar>(n);
+			if (val.str != nullptr) {
+				xll::traits<X>::strncpy(val.str + val.str[0] + 1, str, n);
+				val.str[0] += static_cast<xchar>(n);
+			}
 		}
 		else {
 			throw std::runtime_error("XOPER::append must be str or empty");
@@ -437,9 +439,11 @@ private:
 		}
 
 		val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(1 + str0)));
-		ensure (val.str);
-		xll::traits<X>::strncpy(val.str + 1, str, str0);
-		val.str[0] = str0;
+		ensure (val.str != 0);
+		if (val.str != 0) {
+			xll::traits<X>::strncpy(val.str + 1, str, str0);
+			val.str[0] = str0;
+		}
 	}
 
 	// Multi
@@ -512,6 +516,7 @@ inline bool operator<(const XLOPER12& x, const OPER12& y)
 {
 	return xll::operator_less<XLOPER12>(x, y);
 }
+// more specializations??? XLOPER == double
 inline bool operator==(const XLOPER& x, const OPER& y)
 {
 	return xll::operator_equal<XLOPER>(x, y);

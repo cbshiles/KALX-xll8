@@ -140,6 +140,7 @@ namespace xll {
 	{ static OPERX o(value); return &o; }
 */
 
+//#include "error.h"
 
 #ifdef _DEBUG
 //#include "utility/random.h"

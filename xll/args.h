@@ -46,7 +46,7 @@ namespace xll {
 //			: args_((xword)RegisterArg::Max, 1)
 //		{ }
 		XArgs(xcstr proc, xcstr text)
-			: args_(6, 1)
+			: args_((xword)RegisterArg::Max, 1)
 		{
 			Arg(RegisterArg::MacroType) = 2; // macro command
 			Arg(RegisterArg::Procedure) = proc;
