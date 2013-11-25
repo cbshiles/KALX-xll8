@@ -170,7 +170,7 @@ namespace xll {
 		XArgs& Arg(xcstr type, xcstr name, xcstr help, const T& t)
 		{
 			Arg(type, name, help);
-			default_[default_.size() - 1] = XOPER<X>(t);
+			default_.back() = XOPER<X>(t);
 
 			return *this;
 		}
@@ -349,8 +349,12 @@ namespace xll {
 		}
 		XArgs& FunctionHelp(xcstr function_help)
 		{
-			// trim???
-			Arg(RegisterArg::FunctionHelp) = function_help;
+			// trim
+			xstring s(function_help);
+			s.erase(0, s.find_first_not_of(' '));
+			s.erase(s.find_last_not_of(' ') + 1);
+
+			Arg(RegisterArg::FunctionHelp) = s.c_str();
 
 			return *this;
 		}

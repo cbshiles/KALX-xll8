@@ -38,7 +38,7 @@ public:
 	~LXOPER()
 	{
 		if (owner_)
-			xll::traits<X>::Excel(xlFree, 0, 1, this);
+			ensure (xlretSuccess == xll::traits<X>::Excel(xlFree, 0, 1, this));
 	}
 
 	// Return xlret types if not xlretSuccess
@@ -60,6 +60,7 @@ public:
 	// LPXLOPERX WINAPI foo(...) { static LOPERX o; ... ; return o.XLFree() }
 	X* XLFree()
 	{
+		owner_ = false;
 		xltype |= xlbitXLFree;
 
 		return static_cast<X*>(this);

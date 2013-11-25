@@ -43,7 +43,7 @@ struct CrtDbg {
 // need to construct this before user segment
 #pragma warning(disable: 4073)
 #pragma init_seg(lib)
-CrtDbg crtDbg(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
+CrtDbg crtDbg;
 
 #include <typeinfo>
 

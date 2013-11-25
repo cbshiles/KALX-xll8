@@ -88,7 +88,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;_USRDLL;XLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;XLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
@@ -194,6 +194,7 @@
     <ClInclude Include="xll\struct.h" />
     <ClInclude Include="xll\traits.h" />
     <ClInclude Include="xll\types.h" />
+    <ClInclude Include="xll\utility\log.h" />
     <ClInclude Include="xll\utility\random.h" />
     <ClInclude Include="xll\utility\registry.h" />
     <ClInclude Include="xll\utility\sendkeys.h" />

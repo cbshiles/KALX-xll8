@@ -314,6 +314,26 @@ public:
 
 		return *this;
 	}
+	XOPER& front()
+	{
+		return operator[](0);
+	}
+	XOPER front() const
+	{
+		return operator[](0);
+	}
+	XOPER& back()
+	{
+		ensure (size() != 0);
+
+		return operator[](size() - 1);
+	}
+	XOPER back() const
+	{
+		ensure (size() != 0);
+
+		return operator[](size() - 1);
+	}
 	template<class T>
 	XOPER& push_back(const T& t)
 	{
@@ -332,16 +352,16 @@ public:
 
 		if (x.columns() == 1) { // favor columns
 			resize(rows() + x.rows(), 1);
-			std::copy(x.begin(), x.end(), end() - x.rows());
+			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.rows(), x.rows()));
 		}
 		else if (x.rows() == 1) {
 			resize(1, columns() + x.columns());
-			std::copy(x.begin(), x.end(), end() - x.columns());
+			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.columns(), x.columns()));
 		}
 		else {
 			ensure (columns() == x.columns());
 			resize(rows() + x.rows(), x.columns());
-			std::copy(x.begin(), x.end(), end() - x.size());
+			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.size(), x.size()));
 		}
 
 		return *this;
@@ -398,7 +418,7 @@ private:
 			val.array.lparray = nullptr;
 
 			realloc(::rows(x), ::columns(x));
-			std::copy(::begin(x), ::end(x), begin());
+			std::copy(::begin(x), ::end(x), stdext::checked_array_iterator<XOPER<X>*>(begin(), size()));
 		}
 		else {
 			val = x.val;
@@ -413,7 +433,7 @@ private:
 		}
 		else if (xltype == xltypeMulti) {
 			realloc(o.rows(), o.columns());
-			std::copy(o.begin(), o.end(), begin());
+			std::copy(o.begin(), o.end(), stdext::checked_array_iterator<XOPER<X>*>(begin(), size()));
 		}
 		else {
 			val = o.val;
@@ -434,7 +454,6 @@ private:
 
 		if (str0 == 0) {
 			size_t n = xll::traits<X>::strlen(str);
-			ensure (n < xll::traits<X>::strmax);
 			str0 = static_cast<xchar>(n);
 		}
 
@@ -478,7 +497,7 @@ private:
 		val.array.columns = c;
 
 		for (xword i = n; i < r*c; ++i) {
-			operator[](i) = XOPER<X>();
+			operator[](i).alloc(xltype::Nil);
 		}
 	}
 };

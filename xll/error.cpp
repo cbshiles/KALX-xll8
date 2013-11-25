@@ -1,21 +1,30 @@
 #pragma warning(disable: 4996)
 #include "xll.h"
+#include "utility/log.h"
 
 // All addins coordinate through the registry.
 Reg::Object<char, DWORD> xll_alert_level(
 	HKEY_CURRENT_USER, "Software\\KALX\\xll", "xll_alert_level", 
 	XLL_ALERT_ERROR|XLL_ALERT_WARNING|XLL_ALERT_INFO
 );
+Log::EventSource xll_log(_T("xll"));
+
 
 extern "C" int 
-XLL_ALERT(const char* text, const char* caption, int level, UINT type, bool force)
+XLL_ALERT(const char* text, const char* caption, WORD level, UINT type, bool force)
 {
 	int result = 0;
 
 	if ((xll_alert_level&level) || force) {
-		result = MessageBoxA(GetForegroundWindow(), text, caption, MB_OKCANCEL|type);
-		if (result == IDCANCEL)
-			xll_alert_level &= ~level;
+		if (xll::log(-1)) {
+			xll_log.ReportEvent(level, 0, text);
+		}
+		// No message box for logs
+		if (!(xll_alert_level&XLL_ALERT_LOG)) {
+			result = MessageBoxA(GetForegroundWindow(), text, caption, MB_OKCANCEL|type);
+			if (result == IDCANCEL)
+				xll_alert_level &= ~level;
+		}
 	}
 
 	return result;
