@@ -14,32 +14,43 @@ namespace xll {
 		typedef typename traits<X>::xstring xstring;
 
 		XArgs<X> args_;
+		double regid_;
 
 		XAddIn& operator=(const XAddIn&);
 	public:
 		// macro
 		XAddIn(xcstr proc, xcstr text)
-			: args_(XArgs<X>(proc, text))
+			: args_(XArgs<X>(proc, text)), regid_(0)
 		{
 			List().push_back(this);
 		}
 		// function
 		XAddIn(xcstr proc, xcstr type, xcstr func, xcstr args = nullptr, xcstr cat = nullptr, xcstr doc = nullptr)
-			: args_(XArgs<X>(proc, type, func, args, cat, doc))
+			: args_(XArgs<X>(proc, type, func, args, cat, doc)), regid_(0)
 		{
 			List().push_back(this);
 		}
 		// general
 		XAddIn(const XArgs<X>& args)
-			: args_(args)
+			: args_(args), regid_(0)
 		{
 			List().push_back(this);
 		}
 		~XAddIn()
 		{ }
 
+		const XArgs<X>& Args() const
+		{
+			return args_;
+		}
+		double RegisterId() const
+		{
+			return regid_;
+		}
+
 		XOPER<X> Register(void)
 		{
+			// use constexpr to demangle name and check argumens
 			std::vector<X*> pargs(args_.size());
 
 			// ModuleText
@@ -71,6 +82,10 @@ namespace xll {
 				err.append("\nPerhaps you forgot to use #pragma XLLEXPORT or told Excel the wrong name for your function?"); 
 				MessageBoxA(xll_GetHwnd(), err.c_str(), "Warning", MB_OK);
 			}
+			else {
+				ensure (x.xltype == xltypeNum);
+				regid_ = x.val.num;
+			}
 
 			return x;
 		}
@@ -90,6 +105,17 @@ namespace xll {
 			return 1;
 		}
 
+		static const XAddIn<X>* Find(double regid)
+		{
+			for (auto ai : List()) {
+				if (ai->regid_ == regid)
+					return ai;
+			}
+
+			return 0;
+		}
+
+/*
 		// Return the C++ declaration.
 		xstring Declaration(void)
 		{
@@ -103,7 +129,7 @@ namespace xll {
 
 			return oss.str();
 		}
-
+*/
 	private:
 		static std::vector<XAddIn<X>*>& List(void)
 		{

@@ -37,10 +37,6 @@ namespace xll {
 		{
 			return args_[static_cast<xword>(ra)];
 		}
-		XOPER<X>& Append(RegisterArg ra, xcstr str)
-		{
-			return Arg(ra).append(str);
-		}
 	public:
 //		XArgs()
 //			: args_((xword)RegisterArg::Max, 1)
@@ -80,14 +76,29 @@ namespace xll {
 		XArgs(const XArgs&) = default;
 		XArgs& operator=(const XArgs&) = default;
 
-/*		XArgs(XArgs&& args)
-			: args_(args)
+		XArgs(XArgs&& args)
 		{
-			// ???
+			args_ = args.args_;
+			default_ = args.default_;
+			see_ = args.see_;
+			doc_ = args.doc_;
 		}
-*/		~XArgs()
+		XArgs& operator=(XArgs&& args)
+		{
+			args_ = args.args_;
+			default_ = args.default_;
+			see_ = args.see_;
+			doc_ = args.doc_;
+
+			return *this;
+		}
+		~XArgs()
 		{ }
 
+		xword Arity() const
+		{
+			return size() - static_cast<xword>(RegisterArg::Max);
+		}
 		xword size() const
 		{
 			return args_.size();
@@ -118,20 +129,20 @@ namespace xll {
 
 		XArgs& Volatile(void)
 		{
-			Append(RegisterArg::TypeText, XLL_VOLATILEX);
+			Arg(RegisterArg::TypeText).append(XLL_VOLATILEX);
 
 			return *this;
 		}
 		XArgs& Uncalced(void)
 		{
-			Append(RegisterArg::TypeText,  XLL_UNCALCEDX);
+			Arg(RegisterArg::TypeText).append(XLL_UNCALCEDX);
 
 			return *this;
 		}
 		XArgs& ThreadSafe(void)
 		{
 			if (typeid(X) == typeid(XLOPER12)) {
-				Append(RegisterArg::TypeText,  XLL_THREAD_SAFE12);
+				Arg(RegisterArg::TypeText).append(XLL_THREAD_SAFE12);
 			}
 
 			return *this;
@@ -139,7 +150,7 @@ namespace xll {
 		XArgs& ClusterSafe(void)
 		{
 			if (typeid(X) == typeid(XLOPER12)) {
-				Append(RegisterArg::TypeText, XLL_CLUSTER_SAFE12);
+				Arg(RegisterArg::TypeText).append(XLL_CLUSTER_SAFE12);
 			}
 
 			return *this;
@@ -147,7 +158,7 @@ namespace xll {
 		XArgs& Asynchronous(void)
 		{
 			if (typeid(X) == typeid(XLOPER12)) {
-				Append(RegisterArg::TypeText, XLL_ASYNCHRONOUS12);
+				Arg(RegisterArg::TypeText).append(XLL_ASYNCHRONOUS12);
 			}
 
 			return *this;
@@ -156,10 +167,10 @@ namespace xll {
 		// add an argument
 		XArgs& Arg(xcstr type, xcstr name, xcstr help)
 		{
-			Append(RegisterArg::TypeText, type);
+			Arg(RegisterArg::TypeText).append(type);
 			if (Arg(RegisterArg::ArgumentText))
-				Append(RegisterArg::ArgumentText, _T(", "));
-			Append(RegisterArg::ArgumentText, name);
+				Arg(RegisterArg::ArgumentText).append(_T(", "));
+			Arg(RegisterArg::ArgumentText).append(name);
 			args_.push_back(help); // individual argument help
 			default_.push_back(xltype::Missing);
 

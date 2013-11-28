@@ -12,11 +12,8 @@
 #define ENSURE_FUNC "function: " __FUNCTION__
 #define ENSURE_LINE "line: " ENSURE_STRZ_(__LINE__)
 #define ENSURE_SPOT ENSURE_FILE "\n" ENSURE_LINE "\n" ENSURE_FUNC
-#ifdef _DEBUG
-#define ensure(e) if (!(e)) { DebugBreak(); }
-#else
-#define ensure(e) if (!(e)) {throw std::runtime_error(ENSURE_SPOT "\nensure: \"" #e "\" failed");}
-#endif
+#define ensure(e) if (!(e)) { throw std::runtime_error(ENSURE_SPOT "\nensure: \"" #e "\" failed"); }
+//#define ensure(e) if (!(e)) { DebugBreak(); throw std::runtime_error(ENSURE_SPOT "\nensure: \"" #e "\" failed"); }
 
 #endif // ensure
 // #endif
