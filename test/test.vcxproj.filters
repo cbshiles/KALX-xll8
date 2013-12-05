@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="xllutility">
-      <UniqueIdentifier>{6ff886d8-9de2-4a0b-ba3e-bd0265d1bd1b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -47,9 +44,6 @@
     </ClCompile>
     <ClCompile Include="dual.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\xllutility\huey.cpp">
-      <Filter>xllutility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

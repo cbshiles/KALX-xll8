@@ -19,6 +19,11 @@ namespace xll {
 	};
 
 	template<class X>
+	struct type_map {
+		
+	};
+
+	template<class X>
 	class XArgs {
 		typedef typename traits<X>::xchar xchar;
 		typedef typename traits<X>::xcstr xcstr;
@@ -26,6 +31,7 @@ namespace xll {
 		typedef typename traits<X>::xstring xstring;
 
 		XOPER<X> args_;
+		XOPER<X> type_; // return type followed by arg types
 		XOPER<X> default_;
 		xstring doc_, see_; // documentation, see also
 
@@ -71,6 +77,7 @@ namespace xll {
 			Arg(RegisterArg::Procedure) = proc;
 			Arg(RegisterArg::TypeText) = type;
 			Arg(RegisterArg::FunctionText) = func;
+			type_.push_back(XOPER<X>(type));
 		}
 
 		XArgs(const XArgs&) = default;
@@ -79,6 +86,7 @@ namespace xll {
 		XArgs(XArgs&& args)
 		{
 			args_ = args.args_;
+			type_ = type_;
 			default_ = args.default_;
 			see_ = args.see_;
 			doc_ = args.doc_;
@@ -86,6 +94,7 @@ namespace xll {
 		XArgs& operator=(XArgs&& args)
 		{
 			args_ = args.args_;
+			type_ = type_;
 			default_ = args.default_;
 			see_ = args.see_;
 			doc_ = args.doc_;
@@ -173,6 +182,7 @@ namespace xll {
 			Arg(RegisterArg::ArgumentText).append(name);
 			args_.push_back(help); // individual argument help
 			default_.push_back(xltype::Missing);
+			type_.push_back(XOPER<X>(type));
 
 			return *this;
 		}
@@ -197,6 +207,10 @@ namespace xll {
 		XArgs& Date(xcstr name, xcstr help)
 		{
 			return Arg(XLL_DOUBLEX, name, help);
+		}
+		XArgs& Handle(xcstr name, xcstr help)
+		{
+			return Arg(XLL_HANDLEX, name, help);
 		}
 		// (traits<XLOPERX>::xcstr) Null terminated C string.
 		XArgs& Str(xcstr name, xcstr help)
