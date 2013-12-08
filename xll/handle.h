@@ -63,8 +63,8 @@ namespace xll {
 		{ }
 		~handle_container()
 		{
-			for (auto pi : hc_)
-				delete pi;
+			for (auto p : hc_)
+				delete p;
 		}
 		void add(T* p)
 		{
@@ -87,6 +87,15 @@ namespace xll {
 				hc_.erase(pi);
 			}
 		}
+		void clear(void)
+		{
+			~handle_container();
+			hc_.clear();
+		}
+	};
+
+	// keep track of all handles
+	class handles {
 	};
 
 	template<class T>

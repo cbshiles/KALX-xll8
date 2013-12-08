@@ -10,11 +10,6 @@ template<class.. Ts> void fun(Ts... vs)
 }
 */
 
-// Convenience wrappers for Excel calls
-#define XLL_XLF(fn, ...) Excel<XLOPERX>(xlf##fn, __VA_ARGS__)
-#define XLL_XLC(fn, ...) Excel<XLOPERX>(xlc##fn, __VA_ARGS__)
-#define XLL_XL_(fn, ...) Excel<XLOPERX>(xl##fn, __VA_ARGS__)
-
 namespace xll {
 
 	// requires variadic templates and due amazement
@@ -23,9 +18,7 @@ namespace xll {
 	{
 		LXOPER<X> x;
 		
-		int ret = traits<X>::Excel(xlf, &x, sizeof...(args), &args...);
-		if (ret != xlretSuccess)
-			return LXOPER<X>(static_cast<xlret>(ret));
+		ensure (xlretSuccess == traits<X>::Excel(xlf, &x, sizeof...(args), &args...));
 
 		return x;
 	}

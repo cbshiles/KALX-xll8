@@ -36,6 +36,10 @@ public:
 				realloc(o);
 			}
 			else {
+				// can't assign multi to element of itself
+				if (o.xltype == xltypeMulti) {
+					ensure (this < o.begin() || o.end() <= this);
+				}
 				free();
 				alloc(o);
 			}
@@ -418,7 +422,9 @@ private:
 			val.array.lparray = nullptr;
 
 			realloc(::rows(x), ::columns(x));
-			std::copy(::begin(x), ::end(x), stdext::checked_array_iterator<XOPER<X>*>(begin(), size()));
+			ensure (::end<X>(x) <= begin() || end() <= ::begin<X>(x));
+			for (xword i = 0; i < size(); ++i)
+				operator[](i) = ::index(x, i);
 		}
 		else {
 			val = x.val;

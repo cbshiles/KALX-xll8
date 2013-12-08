@@ -126,4 +126,10 @@ typedef X_(XLREF)* LPXLREFX;
 #define XLL_XLC(fn, ...) Excel<XLOPERX>(xlc##fn, __VA_ARGS__)
 #define XLL_XL_(fn, ...) Excel<XLOPERX>(xl##fn, __VA_ARGS__)
 
+#ifdef XLL_EXPORTS
+#define DECLSPEC_IMPEXP //__declspec(dllexport)
+#else
+#define DECLSPEC_IMPEXP __declspec(dllimport)
+#endif
+
 #include "traits.h"

@@ -207,6 +207,7 @@
     <ClCompile Include="xll\debug.cpp" />
     <ClCompile Include="xll\dllmain.cpp" />
     <ClCompile Include="xll\error.cpp" />
+    <ClCompile Include="xll\handle.cpp" />
     <ClCompile Include="xll\hwnd.cpp" />
     <ClCompile Include="xll\XLCALL.CPP" />
   </ItemGroup>
