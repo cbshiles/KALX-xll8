@@ -1,4 +1,4 @@
-// dual.h - dual numbers X = x0 + x1 J + x2 J^2
+// dual.h - dual numbers X = x0 I + x1 J + x2 J^2 + ...
 #pragma once
 #include <algorithm>
 #include <functional>
@@ -6,6 +6,71 @@
 #include <stdexcept>
 
 namespace dual {
+	// x += a
+	template<class T>
+	inline void op_add(size_t n, T* x, const T& a)
+	{
+		std::transform(x, x + n, stdext::checked_array_iterator<T*>(x, n), [a](T x) { return x + a; });
+	}
+	// x += y
+	template<class T>
+	inline void op_add(size_t n, T* x, const T* y)
+	{
+		std::transform(x, x + n, 
+			stdext::checked_array_iterator<const T*>(y, n), 
+			stdext::checked_array_iterator<T*>(x, n), 
+			std::plus<T>());
+	}
+	template<class T>
+	inline void op_sub(size_t n, T* x, const T* y)
+	{
+		std::transform(x, x + n, 
+			stdext::checked_array_iterator<const T*>(y, n), 
+			stdext::checked_array_iterator<T*>(x, n), 
+			std::minus<T>());
+	}
+	// x *= J^k
+	template<class T>
+	inline void op_mul(size_t n, T* x, size_t k)
+	{
+		if (k == 0)
+			return;
+
+		if (k >= n)
+
+		k = std::min(k, n);
+		for (size_t i = n - 1; i >= n - k; --i) {
+			x[i] = x[i - k];
+		}
+		for (size_t i = 0; i < k; ++i) {
+			x[i] = 0;
+		}
+
+	}
+	// x *= a
+	template<class T>
+	inline void op_mul(size_t n, T* x, const T& a)
+	{
+		std::transform(x, x + n, stdext::checked_array_iterator<T*>(x, n), [a](const T& x) { return x*a; }); 
+	}
+	// x *= a J^k
+	template<class T>
+	inline void op_mul(size_t n, T* x, const T& a, size_t k)
+	{
+		op_mul(n, x, k);
+		op_mul(n, x, a);
+	}
+	// x *= y, where y[i] = 0 for i >= k
+	template<class T>
+	inline void op_mul(size_t n, T* x, const T* y, size_t k = -1)
+	{
+		if (k == -1)
+			k = n;
+
+		for (size_t i = 0; i < k; ++i)
+			op_mul(n, x, y[i], i);
+	}
+#if 0
 	template<class T>
 	struct number_base {
 		// must override _size
@@ -276,5 +341,5 @@ namespace dual {
 			a_ = std::vector<T>::begin();
 		}
 	}
-
+#endif // 0
 } // namespace dual
