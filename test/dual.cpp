@@ -58,7 +58,7 @@ int xll_test_dual(void)
 {
 	try {
 		xll_test_dual_add<double>();
-		xll_test_dual_mul<double>();
+//		xll_test_dual_mul<double>();
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());

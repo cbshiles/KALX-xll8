@@ -208,11 +208,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xll\auto.cpp" />
+    <ClCompile Include="xll\caller.cpp" />
     <ClCompile Include="xll\debug.cpp" />
     <ClCompile Include="xll\dllmain.cpp" />
     <ClCompile Include="xll\error.cpp" />
-    <ClCompile Include="xll\handle.cpp" />
     <ClCompile Include="xll\hwnd.cpp" />
+    <ClCompile Include="xll\this.cpp" />
+    <ClCompile Include="xll\throttle.cpp" />
     <ClCompile Include="xll\XLCALL.CPP" />
   </ItemGroup>
   <ItemGroup>

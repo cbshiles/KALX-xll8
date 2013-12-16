@@ -21,6 +21,10 @@ namespace xll {
 		typedef short int xint;
 		typedef _FP xfp;
 
+		static xcstr UNCALCED() { return XLL_UNCALCED; }
+		static xcstr VOLATILE() { return XLL_VOLATILE; }
+		static xcstr COMMA() { return ", "; }
+
 		static const int strmax = 0xFF; // maximum number of characters in a str
 		static std::string string(xcstr s, xchar n = 0)
 		{
@@ -80,6 +84,10 @@ namespace xll {
 		typedef xrw xword; // use for array indices
 		typedef int xint;
 		typedef _FP12 xfp;
+
+		static xcstr UNCALCED() { return XLL_UNCALCED12; }
+		static xcstr VOLATILE() { return XLL_VOLATILE12; }
+		static xcstr COMMA() { return L", "; }
 
 		static const int strmax = 0x7FFF;
 		static std::string string(xcstr s, int n = 0)

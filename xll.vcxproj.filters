@@ -113,7 +113,13 @@
     <ClCompile Include="xll\XLCALL.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xll\handle.cpp">
+    <ClCompile Include="xll\throttle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\this.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\caller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -135,16 +135,15 @@ namespace xll {
 			return Arg(RegisterArg::MacroType) == 2;
 		}
 
-
 		XArgs& Volatile(void)
 		{
-			Arg(RegisterArg::TypeText).append(XLL_VOLATILEX);
+			Arg(RegisterArg::TypeText).append(traits<X>::VOLATILE());
 
 			return *this;
 		}
 		XArgs& Uncalced(void)
 		{
-			Arg(RegisterArg::TypeText).append(XLL_UNCALCEDX);
+			Arg(RegisterArg::TypeText).append(traits<X>::UNCALCED());
 
 			return *this;
 		}
@@ -178,7 +177,7 @@ namespace xll {
 		{
 			Arg(RegisterArg::TypeText).append(type);
 			if (Arg(RegisterArg::ArgumentText))
-				Arg(RegisterArg::ArgumentText).append(_T(", "));
+				Arg(RegisterArg::ArgumentText).append(traits<X>::COMMA());
 			Arg(RegisterArg::ArgumentText).append(name);
 			args_.push_back(help); // individual argument help
 			default_.push_back(xltype::Missing);

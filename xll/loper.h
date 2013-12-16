@@ -51,9 +51,9 @@ public:
 	{
 		return !static_cast<const XOPER<X>&>(*this);
 	}
-	bool operator==(xlret type) const
+	bool operator==(double num) const
 	{
-		return xltype == xltypeInt && val.w == static_cast<xll::traits<X>::xint>(type);
+		return xltype == xltypeNum && val.num == num;
 	}
 
 	// For thread-safe functions:

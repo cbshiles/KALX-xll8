@@ -37,7 +37,7 @@ extern "C" {
 #include "ensure.h"
 
 // xll_alert_level, XLL_ERROR|WARNING|INFO
-// try { ... ensure(...); } catch (const std::exception& ex) { XLL_ERROR|WARNING|INFO(ex.what()); }
+// try { ... ensure(...); ... } catch (const std::exception& ex) { XLL_ERROR|WARNING|INFO(ex.what()); }
 #include "error.h"
 
 /// Excel instance handle from DllMain
@@ -57,3 +57,10 @@ HWND xll_GetHwnd(void);
 #include "fp.h"
 #include "handle.h"
 #include "on.h"
+
+#pragma comment(linker, "/include:_xll_caller@0")
+#pragma comment(linker, "/include:_xll_caller12@0")
+#pragma comment(linker, "/include:_xll_this@0")
+#pragma comment(linker, "/include:_xll_this12@0")
+#pragma comment(linker, "/include:_xll_throttle@4")
+#pragma comment(linker, "/include:_xll_throttle12@4")
