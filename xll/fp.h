@@ -7,6 +7,7 @@
 
 namespace xll {
 
+	// 1x1 NaN indicates empty array
 	inline bool 
 	is_empty(const _FP& fp)
 	{
@@ -37,33 +38,45 @@ namespace xll {
 	inline double
 	index(const _FP& fp, traits<XLOPER>::xword i)
 	{
+		ensure (i < size(fp));
+
 		return fp.array[i];
 	}
 	inline double
 	index(const _FP12& fp, traits<XLOPER12>::xword i)
 	{
+		ensure (i < size(fp));
+
 		return fp.array[i];
 	}
 
 	inline double&
 	index(_FP& fp, traits<XLOPER>::xword i, traits<XLOPER>::xword j)
 	{
+		ensure (i*fp.columns + j < size(fp));
+
 		return fp.array[i*fp.columns + j];
 	}
 	inline double&
 	index(_FP12& fp, traits<XLOPER12>::xword i, traits<XLOPER12>::xword j)
 	{
+		ensure (i*fp.columns + j < size(fp));
+
 		return fp.array[i*fp.columns + j];
 	}
 
 	inline double
 	index(const _FP& fp, traits<XLOPER>::xword i, traits<XLOPER>::xword j)
 	{
+		ensure (i*fp.columns + j < size(fp));
+
 		return index(fp, i*fp.columns + j);
 	}
 	inline double
 	index(const _FP12& fp, traits<XLOPER12>::xword i, traits<XLOPER12>::xword j)
 	{
+		ensure (i*fp.columns + j < size(fp));
+
 		return index(fp, i*fp.columns + j);
 	}
 /*
@@ -182,14 +195,14 @@ namespace xll {
 
 			return *this;
 		}
-		XFP& set(xword r, xword c, const double* pa)
+/*		XFP& set(xword r, xword c, const double* pa)
 		{
 			realloc(r, c);
 			copy(pa);
 
 			return *this;
 		}
-	private:
+*/	private:
 		const XFP* this_() const
 		{
 			return this;
@@ -320,14 +333,15 @@ namespace xll {
 		void realloc(xword r, xword c)
 		{
 			if (!buf || size() != r*c) {
-				void* p = ::realloc(buf, sizeof(xfp) + r*c*sizeof(double));
-				ensure (p != nullptr);
-				if (p == nullptr)
+				void* p = ::realloc(buf, 2*sizeof(xfp) + r*c*sizeof(double));
+				ensure (p != 0);
+				if (p == 0)
 					::free(buf);
 				else
 					buf = (char*)p;
 				pf = reinterpret_cast<xfp*>(new (buf) xfp);
 			}
+//			memset(buf, 0, sizeof(xfp) + r*c*sizeof(double));
 			//!!! check size
 			pf->rows = r;
 			pf->columns = c;

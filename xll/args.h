@@ -31,7 +31,7 @@ namespace xll {
 		typedef typename traits<X>::xstring xstring;
 
 		XOPER<X> args_;
-		XOPER<X> type_; // return type followed by arg types
+//		XOPER<X> type_; // return type followed by arg types
 		XOPER<X> default_;
 		xstring doc_, see_; // documentation, see also
 
@@ -55,7 +55,7 @@ namespace xll {
 			Arg(RegisterArg::FunctionText) = text;
 		}
 		XArgs(xcstr proc, xcstr type, xcstr func, xcstr args,
-			xcstr cat = nullptr, xcstr help = nullptr, xcstr doc = nullptr)
+			xcstr cat = 0, xcstr help = 0, xcstr doc = 0)
 			: args_((xword)RegisterArg::Max, 1)
 		{
 			Arg(RegisterArg::MacroType) = 1; // worksheet function
@@ -77,12 +77,12 @@ namespace xll {
 			Arg(RegisterArg::Procedure) = proc;
 			Arg(RegisterArg::TypeText) = type;
 			Arg(RegisterArg::FunctionText) = func;
-			type_.push_back(XOPER<X>(type));
+//			type_.push_back(XOPER<X>(type));
 		}
 
 		XArgs(const XArgs&) = default;
 		XArgs& operator=(const XArgs&) = default;
-
+/*
 		XArgs(XArgs&& args)
 		{
 			args_ = args.args_;
@@ -101,6 +101,7 @@ namespace xll {
 
 			return *this;
 		}
+*/
 		~XArgs()
 		{ }
 
@@ -181,7 +182,7 @@ namespace xll {
 			Arg(RegisterArg::ArgumentText).append(name);
 			args_.push_back(help); // individual argument help
 			default_.push_back(xltype::Missing);
-			type_.push_back(XOPER<X>(type));
+//			type_.push_back(XOPER<X>(type));
 
 			return *this;
 		}
@@ -201,6 +202,11 @@ namespace xll {
 		XArgs& Num(xcstr name, xcstr help)
 		{
 			return Arg(XLL_DOUBLEX, name, help);
+		}
+		template<class T>
+		XArgs& Num(xcstr name, xcstr help, const T& t)
+		{
+			return Arg(XLL_DOUBLEX, name, help, t);
 		}
 		// (double) Excel Julian date.
 		XArgs& Date(xcstr name, xcstr help)
@@ -393,7 +399,7 @@ namespace xll {
 		}
 
 		// Note documentation always uses chars to support string literals
-		XArgs& Documentation(xcstr doc = nullptr, xcstr see = nullptr)
+		XArgs& Documentation(xcstr doc = 0, xcstr see = 0)
 		{
 			if (doc)
 				doc_ = doc;

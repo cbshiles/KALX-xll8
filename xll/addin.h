@@ -25,7 +25,7 @@ namespace xll {
 			List().push_back(this);
 		}
 		// function
-		XAddIn(xcstr proc, xcstr type, xcstr func, xcstr args = nullptr, xcstr cat = nullptr, xcstr doc = nullptr)
+		XAddIn(xcstr proc, xcstr type, xcstr func, xcstr args = 0, xcstr cat = 0, xcstr doc = 0)
 			: args_(XArgs<X>(proc, type, func, args, cat, doc)), regid_(0)
 		{
 			List().push_back(this);

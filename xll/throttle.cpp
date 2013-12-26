@@ -16,7 +16,10 @@ extern "C" LPXLOPER __declspec(dllexport) WINAPI xll_throttle(LPXLOPER po)
 
 	return x == 0 ? po : x.XLFree();
 }
-static AddIn12 xai_throttle12(L"_xll_throttle12@4", XLL_LPXLOPER12 XLL_LPXLOPER12 XLL_UNCALCED12, L"THROTTLE", L"Cell", L"XLL", L"Only call Cell on F2-Enter.");
+static AddIn12 xai_throttle12(
+	L"_xll_throttle12@4", XLL_LPXLOPER12 XLL_LPXLOPER12 XLL_UNCALCED12, 
+	L"THROTTLE", L"Cell", 
+	L"XLL", L"Only call Cell on F2-Enter.");
 extern "C" LPXLOPER12 __declspec(dllexport) WINAPI xll_throttle12(LPXLOPER12 po)
 {
 	static LOPER12 x;

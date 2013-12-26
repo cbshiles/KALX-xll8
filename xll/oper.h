@@ -215,7 +215,7 @@ public:
 				n = static_cast<xchar>(xll::traits<X>::strlen(str));
 			val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(val.str[0] + n + 1)));
 			ensure (val.str);
-			if (val.str != nullptr) {
+			if (val.str != 0) {
 				xll::traits<X>::strncpy(val.str + val.str[0] + 1, str, n);
 				val.str[0] += static_cast<xchar>(n);
 			}
@@ -338,17 +338,19 @@ public:
 
 		return operator[](size() - 1);
 	}
-	template<class T>
-	XOPER& push_back(const T& t)
+	XOPER& push_back(const XOPER<X>& x)
 	{
-		XOPER<X> x(t);
-
 		// nil is nil
 		if (x.xltype == xltypeNil)
 			return *this;
 
 		if (xltype == xltypeNil)
 			return operator=(x);
+
+		// overlapping ranges
+		if (x.begin() < end() && begin() < x.end()) {
+			return push_back(XOPER<X>(x));
+		}
 	
 		if (xltype != xltypeMulti) {
 			resize(1,1);
@@ -412,14 +414,14 @@ private:
 		xltype = x.xltype;
 
 		if (xltype == xltypeStr) {
-			val.str = nullptr;
+			val.str = 0;
 
 			realloc(x.val.str + 1, x.val.str[0]);
 		}
 		else if (xltype == xltypeMulti) {
 			val.array.rows = 0;
 			val.array.columns = 0;
-			val.array.lparray = nullptr;
+			val.array.lparray = 0;
 
 			realloc(::rows(x), ::columns(x));
 			ensure (::end<X>(x) <= begin() || end() <= ::begin<X>(x));
@@ -450,7 +452,7 @@ private:
 	void alloc(xcstr str, xchar str0 = 0)
 	{
 		xltype = xltypeStr;
-		val.str = nullptr;
+		val.str = 0;
 
 		realloc(str, str0);
 	}
@@ -477,7 +479,7 @@ private:
 		xltype = xltypeMulti;
 		val.array.rows = 0;
 		val.array.columns = 0;
-		val.array.lparray = nullptr;
+		val.array.lparray = 0;
 
 		realloc(r, c);
 	}
