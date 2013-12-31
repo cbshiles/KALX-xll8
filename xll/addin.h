@@ -105,10 +105,10 @@ namespace xll {
 			return 1;
 		}
 
-		static const XAddIn<X>* Find(double regid)
+		static const XAddIn<X>* Find(const XOPER<X>& regid)
 		{
 			for (auto ai : List()) {
-				if (ai->regid_ == regid)
+				if (ai->regid_ == regid || ai->Args().FunctionText() == regid)
 					return ai;
 			}
 
