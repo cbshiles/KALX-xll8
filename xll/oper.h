@@ -356,18 +356,14 @@ public:
 			resize(1,1);
 		}
 
-		if (x.columns() == 1) { // favor columns
-			resize(rows() + x.rows(), 1);
-			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.rows(), x.rows()));
-		}
-		else if (x.rows() == 1) {
-			resize(1, columns() + x.columns());
-			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.columns(), x.columns()));
-		}
-		else {
-			ensure (columns() == x.columns());
+		if (x.columns() == 1 || (columns() == x.columns())) { // favor columns
 			resize(rows() + x.rows(), x.columns());
 			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.size(), x.size()));
+		}
+		else {
+			ensure (x.rows() == 1);
+			resize(1, columns() + x.columns());
+			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.columns(), x.columns()));
 		}
 
 		return *this;
