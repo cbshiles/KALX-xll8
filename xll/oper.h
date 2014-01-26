@@ -185,7 +185,11 @@ public:
 	}
 
 	// Str
-	XOPER(xcstr str, xchar str0 = 0)
+	XOPER(xcstr str)
+	{
+		alloc(str, xll::traits<X>::strlen(str));
+	}
+	XOPER(xcstr str, xchar str0)
 	{
 		alloc(str, str0);
 	}
@@ -196,23 +200,25 @@ public:
 	XOPER& operator=(xcstr str)
 	{
 		if (xltype == xltypeStr) {
-			realloc(str);
+			realloc(str, xll::traits<X>::strlen(str));
 		}
 		else {
 			free();
-			alloc(str);
+			alloc(str, xll::traits<X>::strlen(str));
 		}
 
 		return *this;
 	}
-	XOPER& append(xcstr str, xchar n = 0)
+	XOPER& append(xcstr str)
+	{
+		return append(str, xll::traits<X>::strlen(str));
+	}
+	XOPER& append(xcstr str, xchar n)
 	{
 		if (xltype == xltypeNil) {
-			alloc(str);
+			alloc(str, n);
 		}
 		else if (xltype == xltypeStr) {
-			if (n == 0)
-				n = static_cast<xchar>(xll::traits<X>::strlen(str));
 			val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(val.str[0] + n + 1)));
 			ensure (val.str);
 			if (val.str != 0) {
@@ -445,28 +451,20 @@ private:
 	}
 
 	// Str
-	void alloc(xcstr str, xchar str0 = 0)
+	void alloc(xcstr str, xchar str0)
 	{
 		xltype = xltypeStr;
 		val.str = 0;
 
 		realloc(str, str0);
 	}
-	void realloc(xcstr str, xchar str0 = 0)
+	void realloc(xcstr str, xchar str0)
 	{
 		ensure (xltype == xltypeStr);
 
-		if (str0 == 0) {
-			size_t n = xll::traits<X>::strlen(str);
-			str0 = static_cast<xchar>(n);
-		}
-
-		val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(1 + str0)));
-		ensure (val.str != 0);
-		if (val.str != 0) {
-			xll::traits<X>::strncpy(val.str + 1, str, str0);
-			val.str[0] = str0;
-		}
+		ensure (0 != (val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(1 + str0)))));
+		xll::traits<X>::strncpy(val.str + 1, str, str0);
+		val.str[0] = str0;
 	}
 
 	// Multi

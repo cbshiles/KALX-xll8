@@ -270,34 +270,42 @@ void test_to_string(void)
 	traits<XLOPERX>::xstring s;
 
 	s = o.to_string();
+//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=0"));
-//	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
 	o = OPERX(xltype::Missing);
 	s = o.to_string();
+//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=0"));
 
 	o = 1.23;
 	s = o.to_string();
+//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=1.23"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
 	o = _T("string");
 	s = o.to_string();
+//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=\"string\""));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
 	o = true;
 	s = o.to_string();
+//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
+	
 	ensure (s == _T("=TRUE"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
+	
 	o = false;
 	s = o.to_string();
+//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=FALSE"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
 	o = OPERX(xlerr::NA);
 	s = o.to_string();
+//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=#N/A"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
@@ -308,6 +316,7 @@ void test_to_string(void)
 	o[3] = OPERX(xltype::Missing);
 	o[4] = OPERX(xlerr::Ref);
 	s = o.to_string();
+	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("={1.23,\"string\",TRUE;#VALUE!,#REF!,#N/A}"));
 	o[3] = OPERX(xlerr::Value);
 	o[5] = OPERX(xlerr::NA);

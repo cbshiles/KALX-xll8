@@ -93,6 +93,15 @@
     <ClInclude Include="xll\utility\log.h">
       <Filter>utility</Filter>
     </ClInclude>
+    <ClInclude Include="xll\range.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\utility\string.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\shfb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xll\auto.cpp">
@@ -120,6 +129,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xll\caller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\range.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -55,6 +55,11 @@ namespace xll {
 		{
 			return ::Excel4v(f, res, n, args);
 		}
+		template<typename T>
+		static std::string to_string(T t)
+		{
+			return std::to_string(t);
+		}
 		static int Excel(int f, LPXLOPER res, int n, ...) 
 		{
 			if (n < 0 || n >= 32)
@@ -121,6 +126,11 @@ namespace xll {
 		static xstr strncpy(xstr s, xcstr t, size_t n) 
 		{ 
 			return wcsncpy(s, t, n); 
+		}
+		template<typename T>
+		static std::wstring to_string(T t)
+		{
+			return std::to_wstring(t);
 		}
 		static int Excelv(int f, LPXLOPER12 res, int n, LPXLOPER12 args[])
 		{

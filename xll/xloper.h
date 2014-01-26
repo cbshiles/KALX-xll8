@@ -68,7 +68,34 @@ inline double to_double(const X& x)
 
 	return std::numeric_limits<double>::quiet_NaN();
 }
+/*
+template<class X>
+inline typename xll::traits<X>::xstring to_string(const X& x)
+{
+	typedef xll::traits<X>::xstring xstring;
+	typedef xll::traits<X>::xword xword;
 
+	switch (x.xltype) {
+	case xltypeNum:
+		return xll::traits<X>::to_string(x.val.num);
+	case xltypeStr:
+		return xstring(x.val.str + 1, x.val.str[0]);
+	case xltypeBool:
+		return xll::traits<X>::to_string(x.val.xbool ? true : false);
+	case xltypeMulti: 
+		{
+			xstring s;
+
+			for (xword i = 0; i < size(x); ++i)
+				s.append(to_string(index(x, i)));
+
+			return s;
+		}
+	}
+
+	return xstring('?', 1);
+}
+*/
 template<class X>
 inline typename xll::traits<X>::xword rows(const X& x)
 {
@@ -180,7 +207,7 @@ inline const X& index(const X& x, typename xll::traits<X>::xword r, typename xll
 namespace xll {
 
 	template<class X>
-	inline bool operator_equal(const X& x, typename traits<X>::xcstr s, size_t n = 0)
+	inline bool operator_equal(const X& x, typename traits<X>::xcstr s, size_t n)
 	{
 		typedef xll::traits<X>::xchar xchar;
 
@@ -190,7 +217,7 @@ namespace xll {
 		return x.xltype == xltypeStr && x.val.str[0] == static_cast<xchar>(n) && xll::traits<X>::strnicmp(x.val.str + 1, s, n) == 0;
 	}
 	template<class X>
-	inline bool operator_less(const X& x, typename traits<X>::xcstr s, size_t n = 0)
+	inline bool operator_less(const X& x, typename traits<X>::xcstr s, size_t n)
 	{
 		typedef xll::traits<X>::xchar xchar;
 

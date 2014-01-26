@@ -7,6 +7,14 @@
 // constexpr bool is_stdcall(const char* f) { return strchr(f, "@"); } ???
 #define XLLEXPORT comment(linker, "/export:" __FUNCDNAME__ "=" __FUNCTION__)
 
+#ifdef XLL_EXPORTS
+#define XLL_DLLIMPEXP __declspec(dllexport)
+#define XLL_EXTERN
+#else
+#define XLL_DLLIMPEXP __declspec(dllimport)
+#define XLL_EXTERN extern
+#endif
+
 // 64-bit uses different name decoration
 #ifdef _M_X64 
 #define XLL_DECORATE(s,n) s
@@ -122,9 +130,9 @@ typedef X_(XLREF)* LPXLREFX;
 #define XLL_HANDLEX X_(XLL_HANDLE)
 
 // Convenience wrappers for Excel calls
-#define XLL_XLF(fn, ...) Excel<XLOPERX>(xlf##fn, __VA_ARGS__)
-#define XLL_XLC(fn, ...) Excel<XLOPERX>(xlc##fn, __VA_ARGS__)
-#define XLL_XL_(fn, ...) Excel<XLOPERX>(xl##fn, __VA_ARGS__)
+#define XLL_XLF(fn, ...) xll::Excel<XLOPERX>(xlf##fn, __VA_ARGS__)
+#define XLL_XLC(fn, ...) xll::Excel<XLOPERX>(xlc##fn, __VA_ARGS__)
+#define XLL_XL_(fn, ...) xll::Excel<XLOPERX>(xl##fn, __VA_ARGS__)
 
 #ifdef XLL_EXPORTS
 #define DECLSPEC_IMPEXP //__declspec(dllexport)

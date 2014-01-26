@@ -2,6 +2,7 @@
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 // #define EXCEL12 for Excel 2007 and later.
 #pragma once
+#pragma warning(disable: 4275 4231 4251 4217)
 #include <ctime>
 
 #ifdef EXCEL12
@@ -57,6 +58,7 @@ HWND xll_GetHwnd(void);
 #include "fp.h"
 #include "handle.h"
 #include "on.h"
+#include "range.h"
 
 #pragma comment(linker, "/include:_xll_caller@0")
 #pragma comment(linker, "/include:_xll_caller12@0")
