@@ -211,18 +211,12 @@ namespace xll {
 	{
 		typedef xll::traits<X>::xchar xchar;
 
-		if (n == 0)
-			n = xll::traits<X>::strlen(s);
-
 		return x.xltype == xltypeStr && x.val.str[0] == static_cast<xchar>(n) && xll::traits<X>::strnicmp(x.val.str + 1, s, n) == 0;
 	}
 	template<class X>
 	inline bool operator_less(const X& x, typename traits<X>::xcstr s, size_t n)
 	{
 		typedef xll::traits<X>::xchar xchar;
-
-		if (n == 0)
-			n = xll::traits<X>::strlen(s);
 
 		return std::lexicographical_compare(x.val.str + 1, x.val.str + 1 + x.val.str[0], s, s + n,
 			[](xchar a, xchar b) { return ::tolower(a) < ::towlower(b); });

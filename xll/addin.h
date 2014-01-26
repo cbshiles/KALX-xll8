@@ -146,15 +146,24 @@ namespace xll {
 
 } // namespace xll
 
-// Enumerated type XLL_ENUM(C_VALUE, ExcelName, _T("Category"), _T("Description"))
-#define XLL_ENUM(value, name, cat, desc) static xll::AddInX xai_##name(   \
-    _T(ENSURE_STRZ_(xll_##name)), XLL_LPOPERX, _T(#name), _T(""), cat, desc _T(" ")); \
-    extern "C" __declspec(dllexport) LPOPERX WINAPI xll_##name(void)      \
-	{ static OPERX o(value); return &o; }
+// Enumerated type XLL_ENUM(C_VALUE, ExcelName, "Category", "Description")
+#define XLL_ENUM(value, name, cat, desc) static xll::AddIn xai_##name(   \
+	ENSURE_STRZ_(_xll_##name##@0), XLL_LPOPER, #name, "", cat, desc); \
+    extern "C" __declspec(dllexport) LPOPER WINAPI xll_##name(void)      \
+	{ static OPER o(value); return &o; }
+#define XLL_ENUM12(value, name, cat, desc) static xll::AddIn12 xai_##name##12(   \
+	ENSURE_STRZ12_(_xll_##name##12@0), XLL_LPOPER12, L#name, L"", L#cat, L#desc); \
+	extern "C" __declspec(dllexport) LPOPER12 WINAPI xll_##name##12(void)      \
+	{ static OPER12 o(value); return &o; }
+#ifdef EXCEL12
+#define XLL_ENUMX XLL_ENUM12
+#else
+#define XLL_ENUMX XLL_ENUM
+#endif
 
 #define XLL_ENUM_DOC(value, name, cat, desc, doc) static xll::AddInX xai_##name(   \
     FunctionX(XLL_LPOPERX, _T(ENSURE_STRZ_(xll_##name)), _T(#name)) \
-	.Category(cat).FunctionHelp(desc _T(" ")).Documentation(doc)); \
+	.Category(cat).FunctionHelp(desc).Documentation(doc)); \
     extern "C" __declspec(dllexport) LPOPERX WINAPI xll_##name(void)      \
 	{ static OPERX o(value); return &o; }
 /*

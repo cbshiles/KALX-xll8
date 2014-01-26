@@ -62,6 +62,8 @@ void test_error(void)
 	hm = xll_Instance;
 }
 
+XLL_ENUM(1.23, OTT, "Cat", "Desc");
+
 // test_xloper
 
 void test_oper(void)

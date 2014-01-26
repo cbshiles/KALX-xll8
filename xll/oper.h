@@ -193,9 +193,9 @@ public:
 	{
 		alloc(str, str0);
 	}
-	XOPER(const xstring& s)
+	XOPER(const xstring& str)
 	{
-		alloc(s.c_str(), static_cast<xchar>(s.length()));
+		alloc(str.c_str(), static_cast<xchar>(str.length()));
 	}
 	XOPER& operator=(xcstr str)
 	{
@@ -237,6 +237,10 @@ public:
 		return xltype == xltypeStr 
 			&& val.str[0] == static_cast<xchar>(xll::traits<X>::strlen(str))
 			&& 0 == xll::traits<X>::strnicmp(val.str + 1, str, val.str[0]);	
+	}
+	bool operator==(const xstring& str) const
+	{
+		return operator==(str.c_str());
 	}
 	static xstring to_string(const X& x)
 	{

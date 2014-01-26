@@ -6,6 +6,8 @@
 // #ifndef NENSURE
 #ifndef ensure
 
+#define ENSURE_HASH12_(x) L#x
+#define ENSURE_STRZ12_(x) ENSURE_HASH12_(x)
 #define ENSURE_HASH_(x) #x
 #define ENSURE_STRZ_(x) ENSURE_HASH_(x)
 #define ENSURE_FILE "file: " __FILE__
