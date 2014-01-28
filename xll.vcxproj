@@ -219,6 +219,7 @@
     <ClCompile Include="xll\error.cpp" />
     <ClCompile Include="xll\hwnd.cpp" />
     <ClCompile Include="xll\range.cpp" />
+    <ClCompile Include="xll\eval.cpp" />
     <ClCompile Include="xll\this.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>

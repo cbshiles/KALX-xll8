@@ -66,3 +66,5 @@ HWND xll_GetHwnd(void);
 #pragma comment(linker, "/include:_xll_this12@0")
 #pragma comment(linker, "/include:_xll_throttle@4")
 #pragma comment(linker, "/include:_xll_throttle12@4")
+#pragma comment(linker, "/include:_xll_eval@4")
+#pragma comment(linker, "/include:_xll_eval12@4")

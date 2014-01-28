@@ -43,7 +43,7 @@ namespace xll {
 		static xchar strlen(xcstr s) 
 		{ 
 			size_t n = ::strlen(s);
-			ensure (n < strmax);
+			ensure (n <= strmax);
 
 			return static_cast<xchar>(n); 
 		}
@@ -119,7 +119,7 @@ namespace xll {
 		static xchar strlen(xcstr s) 
 		{
 			size_t n = ::wcslen(s); 
-			ensure (n < strmax);
+			ensure (n <= strmax);
 
 			return static_cast<xchar>(n);
 		}

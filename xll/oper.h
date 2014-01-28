@@ -152,6 +152,15 @@ public:
 
 		return *this;
 	}
+	XOPER& operator=(DWORD num)
+	{
+		free();
+
+		xltype = xltypeNum;
+		val.num = num;
+
+		return *this;
+	}
 	bool operator==(double num) const
 	{
 		return xltype == xltypeNum && val.num == num;
