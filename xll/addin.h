@@ -130,7 +130,7 @@ namespace xll {
 			return oss.str();
 		}
 */
-	private:
+//	private:
 		static std::vector<XAddIn<X>*>& List(void)
 		{
 			static std::vector<XAddIn<X>*> l_;

@@ -14,7 +14,7 @@ extern "C" BOOL __declspec(dllexport) WINAPI xll_caller(void)
 
 	x = Excel<XLOPER>(xlCoerce, Excel<XLOPER>(xlfCaller));
 
-	return x == 0;
+	return x;
 }
 static AddIn12 xai_caller12(
 	L"_xll_caller12@0", XLL_BOOL12 XLL_UNCALCED12,
@@ -28,6 +28,6 @@ xll_caller12(void)
 
 	x = Excel<XLOPER12>(xlCoerce, Excel<XLOPER12>(xlfCaller));
 
-	return x == 0;
+	return x;
 }
 

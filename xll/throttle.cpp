@@ -14,7 +14,7 @@ extern "C" LPXLOPER __declspec(dllexport) WINAPI xll_throttle(LPXLOPER po)
 
 	x = Excel<XLOPER>(xlCoerce, Excel<XLOPER>(xlfCaller));
 
-	return x == 0 ? po : x.XLFree();
+	return x ? x.XLFree() : po;
 }
 static AddIn12 xai_throttle12(
 	L"_xll_throttle12@4", XLL_LPXLOPER12 XLL_LPXLOPER12 XLL_UNCALCED12, 
@@ -26,6 +26,6 @@ extern "C" LPXLOPER12 __declspec(dllexport) WINAPI xll_throttle12(LPXLOPER12 po)
 
 	x = Excel<XLOPER12>(xlCoerce, Excel<XLOPER12>(xlfCaller));
 
-	return x == 0 ? po : x.XLFree();
+	return x ? x.XLFree() : po;
 }
 

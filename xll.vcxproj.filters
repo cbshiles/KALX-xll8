@@ -16,6 +16,9 @@
     <Filter Include="utility">
       <UniqueIdentifier>{b885a580-cc47-4adb-85d9-01dc8c8597dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shfb">
+      <UniqueIdentifier>{ed9dfdb6-9741-42c7-8a18-6761c52f1e0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xll\addin.h">
@@ -135,6 +138,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xll\eval.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\shfb\shfb.cpp">
+      <Filter>shfb</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\depends.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

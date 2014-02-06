@@ -51,6 +51,10 @@ public:
 	{
 		return !static_cast<const XOPER<X>&>(*this);
 	}
+	operator bool() const
+	{
+		return !!*this;
+	}
 	bool operator==(double num) const
 	{
 		return xltype == xltypeNum && val.num == num;

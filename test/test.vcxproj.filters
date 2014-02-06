@@ -48,6 +48,9 @@
     <ClCompile Include="async.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="blurb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">

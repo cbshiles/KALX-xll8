@@ -38,21 +38,23 @@ DWORD WINAPI xll_echow(LPVOID);
 // start a thread from Excel
 static AddIn12 xai_echoa(
 	Function12(XLL_VOID12, L"?xll_echoa", L"XLL.ECHOA")
-	.Arg(XLL_LPOPER12, L"Arg", L"is an argument.")
+	.Num(L"Arg1", L"is an argument.")
+	.Num(L"Arg2", L"is an argument.")
 	.ThreadSafe()
 	.Asynchronous()
 	.Category(L"XLL")
 	.FunctionHelp(L"Return immediately, then sleep one second and return twice Arg.")
 );
-void WINAPI xll_echoa(LPOPER12 pd, LPXLOPER12 ph)
+void WINAPI xll_echoa(double arg1, double arg2, LPXLOPER12 ph)
 {
 #pragma XLLEXPORT
 	try {
-		OPER12& dh = *new OPER12(2, 1);
+		OPER12& dh = *new OPER12(3, 1);
 
-		dh[0] = *pd;
+		dh[0] = *ph;
 		ensure (ph->xltype == xltypeBigData);
-		dh[1] = *ph;
+		dh[1] = arg1;
+		dh[2] = arg2;
 
 		if (!CreateThread(0, 0, xll_echow, &dh, 0, 0)) { // use _begin/_endthread???
 	//	if (-1L == _beginthread(xll_echow, 0, &dh)) { 
@@ -74,7 +76,7 @@ xll_echow(LPVOID arg)
 	try {
 		Sleep(1000);
 
-		if (dh[0].xltype == xltypeNum)
+		
 			dh[0].val.num *= 2;
 
 		// return result to xll_echoa
