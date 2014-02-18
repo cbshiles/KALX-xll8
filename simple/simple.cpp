@@ -1,5 +1,5 @@
 // simple.cpp - a simple xll
-//#define EXCEL12
+#define EXCEL12
 #include "../xll/xll.h"
 
 using namespace xll;
