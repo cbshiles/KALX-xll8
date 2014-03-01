@@ -70,3 +70,5 @@ HWND xll_GetHwnd(void);
 #pragma comment(linker, "/include:_xll_eval12@4")
 #pragma comment(linker, "/include:_xll_depends@8")
 #pragma comment(linker, "/include:_xll_depends12@8")
+#pragma comment(linker, "/include:_xll_range_set@4")
+#pragma comment(linker, "/include:_xll_range_get@8")

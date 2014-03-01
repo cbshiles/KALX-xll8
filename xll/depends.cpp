@@ -10,15 +10,13 @@ static AddIn xai_depends(
 	.Arg(XLL_LPXLOPER, "Dependent", "is a reference to a cell that is required to be computed before Value.")
 	.Category("XLL")
 	.FunctionHelp("Return Value after Dependent has been computed.")
-	/*
 	.Documentation(
 		_T("Excel calculation order is unspecified for independent formulas. This function ")
 	    _T("can be used to make calculation order deterministic. The value of ")
 		_T("<codeInline>Dependent</codeInline> is not used, only that it has been calculated prior to ")
 		_T("returning <codeInline>Value</codeInline>. Alias <codeInline>DEPENDS</codeInline>. ")
 	)
-	.Alias("DEPENDS")
-	*/
+//	.Alias("DEPENDS")
 );
 extern "C" LPXLOPER __declspec(dllexport) WINAPI xll_depends(LPXLOPER pRef, LPXLOPER pDep)
 {
