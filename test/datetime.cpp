@@ -1,8 +1,12 @@
 // datetime.cpp - test date and time routines
 #include "../xll/xll.h"
-#include "../xll/utility/random.h"
 
-using random::uniform_int;
+inline int uniform_int(int a, int b)
+{
+	OPERX o = XLL_XLF(Randbetween, OPERX(a), OPERX(b));
+
+	return static_cast<int>(o.val.num);
+}
 using namespace xll;
 
 void test_excel2time_t(void)

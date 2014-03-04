@@ -181,6 +181,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="dt.h" />
+    <ClInclude Include="utility\google.h" />
     <ClInclude Include="xll\addin.h" />
     <ClInclude Include="xll\args.h" />
     <ClInclude Include="xll\auto.h" />
@@ -200,8 +201,9 @@
     <ClInclude Include="xll\struct.h" />
     <ClInclude Include="xll\traits.h" />
     <ClInclude Include="xll\types.h" />
+    <ClInclude Include="xll\utility\google.h" />
+    <ClInclude Include="xll\utility\inet.h" />
     <ClInclude Include="xll\utility\log.h" />
-    <ClInclude Include="xll\utility\random.h" />
     <ClInclude Include="xll\utility\registry.h" />
     <ClInclude Include="xll\utility\sendkeys.h" />
     <ClInclude Include="xll\utility\string.h" />

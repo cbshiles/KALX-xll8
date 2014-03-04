@@ -60,13 +60,13 @@ namespace xll {
 				pargs[i] = &args_[i];
 
 			// add a space to last arg description
-			if (pargs.size() > static_cast<size_t>(RegisterArg::Max)) {
+//			if (pargs.size() > static_cast<size_t>(RegisterArg::Max)) {
 				XOPER<X>* pa = static_cast<XOPER<X>*>(pargs.back());
 				if (pa->xltype == xltypeStr && *(pa->val.str + pa->val.str[0]) != ' ') {
 					xchar sp(' ');
 					pa->append(&sp, 1);
 				}
-			}
+//			}
 
 			// check for aliases!!!
 			LXOPER<X> x;
@@ -152,7 +152,7 @@ namespace xll {
     extern "C" __declspec(dllexport) LPOPER WINAPI xll_##name(void)      \
 	{ static OPER o(value); return &o; }
 #define XLL_ENUM12(value, name, cat, desc) static xll::AddIn12 xai_##name##12(   \
-	ENSURE_STRZ12_(_xll_##name##12@0), XLL_LPOPER12, L#name, L"", L#cat, L#desc); \
+	ENSURE_STRZ12_(_xll_##name##12@0), XLL_LPOPER12, L#name, L"", cat, desc); \
 	extern "C" __declspec(dllexport) LPOPER12 WINAPI xll_##name##12(void)      \
 	{ static OPER12 o(value); return &o; }
 #ifdef EXCEL12

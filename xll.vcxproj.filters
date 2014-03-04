@@ -72,9 +72,6 @@
     <ClInclude Include="xll\utility\registry.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="xll\utility\random.h">
-      <Filter>utility</Filter>
-    </ClInclude>
     <ClInclude Include="dt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -104,6 +101,15 @@
     </ClInclude>
     <ClInclude Include="xll\shfb.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\utility\inet.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\google.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\utility\google.h">
+      <Filter>utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,27 +7,21 @@ Reg::Object<char, DWORD> xll_alert_level(
 	HKEY_CURRENT_USER, "Software\\KALX\\xll", "xll_alert_level", 
 	XLL_ALERT_ERROR|XLL_ALERT_WARNING|XLL_ALERT_INFO
 );
-Log::EventSource xll_log(_T("xll"));
 
+Log::EventSource xll_log(_T("xll"));
 
 extern "C" int 
 XLL_ALERT(const char* text, const char* caption, WORD level, UINT type, bool force)
 {
-	int result = 0;
-
 	if ((xll_alert_level&level) || force) {
-		if (xll::log(-1)) {
+		if (xll_alert_level&XLL_ALERT_LOG)
 			xll_log.ReportEvent(level, 0, text);
-		}
-		// No message box for logs
-		if (!(xll_alert_level&XLL_ALERT_LOG)) {
-			result = MessageBoxA(GetForegroundWindow(), text, caption, MB_OKCANCEL|type);
-			if (result == IDCANCEL)
-				xll_alert_level &= ~level;
-		}
+		
+		if (IDCANCEL == MessageBoxA(GetForegroundWindow(), text, caption, MB_OKCANCEL|type))
+			xll_alert_level &= ~level;
 	}
 
-	return result;
+	return xll_alert_level;
 }
 
 int 
@@ -54,7 +48,7 @@ static AddIn xai_alert_level(
 	.Category("XLL")
 	.FunctionHelp(
 		"Return old alert level and set to new level if Level is specified. "
-		"The levels are Error (0x1), Warning (0x2), and Information (0x4)"
+		"The levels are Error (0x1), Warning (0x2), Information (0x4), and Log (0x8)"
 	)
 );
 extern "C" LPOPER __declspec(dllexport) WINAPI 
@@ -79,6 +73,43 @@ xll_alert_level_(LPOPER po)
 	}
 
 	return &o;
+}
+
+static AddIn xai_alert_error(
+	Function(XLL_WORD, "_xll_alert_error@0", "XLL_ALERT_ERROR")
+	.Category("XLL")
+	.FunctionHelp("Return enumeration for the error alert level.")
+);
+extern "C" int __declspec(dllexport) WINAPI xll_alert_error(void)
+{
+	return XLL_ALERT_ERROR;
+}
+static AddIn xai_alert_warning(
+	Function(XLL_WORD, "_xll_alert_warning@0", "XLL_ALERT_WARNING")
+	.Category("XLL")
+	.FunctionHelp("Return enumeration for the warning alert level.")
+);
+extern "C" int __declspec(dllexport) WINAPI xll_alert_warning(void)
+{
+	return XLL_ALERT_WARNING;
+}
+static AddIn xai_alert_info(
+	Function(XLL_WORD, "_xll_alert_info@0", "XLL_ALERT_INFO")
+	.Category("XLL")
+	.FunctionHelp("Return enumeration for the information alert level.")
+);
+extern "C" int __declspec(dllexport) WINAPI xll_alert_info(void)
+{
+	return XLL_ALERT_INFO;
+}
+static AddIn xai_alert_log(
+	Function(XLL_WORD, "_xll_alert_log@0", "XLL_ALERT_LOR")
+	.Category("XLL")
+	.FunctionHelp("Return enumeration for logging alerts.")
+);
+extern "C" int __declspec(dllexport) WINAPI xll_alert_log(void)
+{
+	return XLL_ALERT_LOG;
 }
 /*
 static AddIn xai_alert_filter(XLL_DECORATE("xll_alert_filter", 0), "ALERT.FILTER");

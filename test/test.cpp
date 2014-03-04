@@ -1,7 +1,7 @@
 // test.cpp - Test xll library
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 #include <functional>
-#include"../xll/utility/random.h"
+//#include"../xll/utility/random.h"
 #include "test.h"
 
 using namespace xll;

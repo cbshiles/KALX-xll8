@@ -88,4 +88,6 @@ namespace xll {
 	};
 } // namespace xll
 
+// Google analytics reporting
+
 #include "loper.h"
