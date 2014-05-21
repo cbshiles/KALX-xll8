@@ -4,23 +4,23 @@
 
 // scoped and strongly typed enums
 enum class xltype {
-	Num = xltypeNum,// IEEE 64-bit floating point
-	Str = xltypeStr,// Counted string
-	Bool = xltypeBool,// Boolean value
-	Ref = xltypeRef,// Reference to multiple ranges
-	Err = xltypeErr,// Excel error type
-	Flow = xltypeFlow,// not used
-	Multi = xltypeMulti,// A range of OPERs
+	Num = xltypeNum,        // IEEE 64-bit floating point
+	Str = xltypeStr,        // Counted string
+	Bool = xltypeBool,      // Boolean value
+	Ref = xltypeRef,        // Reference to multiple ranges
+	Err = xltypeErr,        // Excel error type
+	Flow = xltypeFlow,      // not used
+	Multi = xltypeMulti,    // A range of OPERs
 	Missing = xltypeMissing,// Argument not specified
-	Nil = xltypeNil,// Empty data type
-	SRef = xltypeSRef,// Single reference to a range
-	Int = xltypeInt,// Integer type that never occurs
+	Nil = xltypeNil,        // Empty data type
+	SRef = xltypeSRef,      // Single reference to a range
+	Int = xltypeInt,        // Integer type that never occurs
 	BigData = xltypeBigData,// Binary data
 };
 
 enum class xlbit {
-	XLFree = xlbitXLFree,// Excel calls xlFree
-	DLLFree = xlbitDLLFree,// Excel calls xlAutoFree
+	XLFree = xlbitXLFree,   // Excel calls xlFree
+	DLLFree = xlbitDLLFree, // Excel calls xlAutoFree
 };
 
 enum class xlerr {
@@ -36,13 +36,13 @@ enum class xlerr {
 
 enum class xlret {
 	Success = xlretSuccess,
-	Abort = xlretAbort,// macro halted
-	InvXlfn = xlretInvXlfn,// invalid function number
-	InvCount = xlretInvCount,// invalid number of arguments
-	InvXloper = xlretInvXloper,// invalid OPER structure
-	StackOvfl = xlretStackOvfl,// stack overflow
-	Failed = xlretFailed,// command failed
-	Uncalced = xlretUncalced,// uncalced cell
+	Abort = xlretAbort,         // macro halted
+	InvXlfn = xlretInvXlfn,     // invalid function number
+	InvCount = xlretInvCount,   // invalid number of arguments
+	InvXloper = xlretInvXloper, // invalid OPER structure
+	StackOvfl = xlretStackOvfl, // stack overflow
+	Failed = xlretFailed,       // command failed
+	Uncalced = xlretUncalced,   // uncalced cell
 	NotThreadSafe = xlretNotThreadSafe,// not allowed during multi-threaded calc
 	InvAsynchronousContext = xlretInvAsynchronousContext,// invalid asynchronous function handle"
 	NotClusterSafe = xlretNotClusterSafe,// not supported on cluster

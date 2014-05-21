@@ -253,7 +253,7 @@ public:
 	}
 	static xstring to_string(const X& x)
 	{
-		static xchar name[] = { 6, '_', 'n', 'A', 'm', 'E', '_' };
+		static xll::traits<X>::xchar name[] = { 6, '_', 'n', 'A', 'm', 'E', '_' };
 		static X Name = { 0, xltypeStr};
 
 		Name.val.str = name;

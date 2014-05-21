@@ -11,7 +11,7 @@
 #define WINDOWS_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
-#include "ensure.h"
+#include "../ensure.h"
 
 #pragma warning(disable: 4100)
 namespace Reg {
@@ -160,7 +160,7 @@ namespace Reg {
 		template<class T>
 		T QueryValue(const X* name)
 		{
-			T t;
+			T t(0);
 			DWORD type, size(traits<T>::size(T()));
 
 			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, traits<T>::data(t), &size));

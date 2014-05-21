@@ -201,11 +201,14 @@
     <ClInclude Include="xll\struct.h" />
     <ClInclude Include="xll\traits.h" />
     <ClInclude Include="xll\types.h" />
+    <ClInclude Include="xll\utility\codec.h" />
+    <ClInclude Include="xll\utility\environment.h" />
     <ClInclude Include="xll\utility\google.h" />
     <ClInclude Include="xll\utility\inet.h" />
     <ClInclude Include="xll\utility\log.h" />
     <ClInclude Include="xll\utility\registry.h" />
     <ClInclude Include="xll\utility\sendkeys.h" />
+    <ClInclude Include="xll\utility\socket.h" />
     <ClInclude Include="xll\utility\string.h" />
     <ClInclude Include="xll\XLCALL.H" />
     <ClInclude Include="xll\xll.h" />

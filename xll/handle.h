@@ -9,6 +9,7 @@ namespace xll {
 	// Using a double for a handle in 64-bits is problematic.
 	// Could be a denormalized double. Swap 32-bits might fix it?
 	typedef double HANDLEX;
+	static_assert (sizeof(void*) <= sizeof(HANDLEX), "HANDLEX must be able to hold pointers");
 
 	// HANDLEX that returns an error to Excel
 	struct handlex {

@@ -1,30 +1,48 @@
 // google.h - Google analytics reporting
 // google::analytics ga; ga.type("xlAutoOpen").post();
 #pragma once
-#include <string>
-#include "inet.h"
+#include <strstream>
+#include <WinSock2.h>
+#include <ws2tcpip.h>
 #include <sddl.h>
+#include "../ensure.h"
+
+#pragma comment(lib, "Ws2_32.lib")
 
 #ifndef GOOGLE_USER_AGENT
-#define GOOGLE_USER_AGENT _T("Xll Add-in Library")
+#define GOOGLE_USER_AGENT "Xll/1.0"
 #endif
-#define GOOGLE_ANALYTICS_URL _T("http://www.google.com/collect")
+#define GOOGLE_ANALYTICS_HOST "www.google-analytics.com"
 #ifndef GOOGLE_TRACKING_ID
-#define GOOGLE_TRACKING_ID _T("UA-48552649-1")
+#define GOOGLE_TRACKING_ID "UA-48552649-1"
 #endif
 #ifndef GOOGLE_PROTOCOL_VERSION
-#define GOOGLE_PROTOCOL_VERSION _T("1")
+#define GOOGLE_PROTOCOL_VERSION "1"
 #endif
 
 namespace google {
 
 	class analytics {
-		static const Inet::Open& session(void)
-		{
-			static Inet::Open io(GOOGLE_USER_AGENT);
+		struct startup {
+			static int init(void)
+			{
+				static WSADATA wsaData;
+				static int i = WSAStartup(MAKEWORD(2,2), &wsaData);
+				
+				return i;
+			}
+			startup()
+			{
+				ensure (0 == init());
+			}
+			startup(const startup&) = delete;
+			startup& operator=(const startup&) = delete;
+			~startup()
+			{
+				WSACleanup();
+			}
+		};
 
-			return io;
-		}
 		// unique client id
 		static LPCTSTR cid(void)
 		{
@@ -51,36 +69,62 @@ namespace google {
 
 			return pcid;
 		}
+
+		int init_;
+		SOCKET s_;
+		std::ostringstream post_, data_;
 	public:
-		static void post(LPCTSTR type)
+		analytics()
+			: init_(google::analytics::startup::init()), s_(::socket(AF_UNSPEC, SOCK_STREAM, IPPROTO_TCP))
 		{
-			std::basic_string<TCHAR> s(_T("/connect"));
-			s.append(_T("?v="));
-			s.append(GOOGLE_PROTOCOL_VERSION);
-			s.append(_T("&tid="));
-			s.append(GOOGLE_TRACKING_ID);
-			s.append(_T("&cid="));
-			s.append(cid());
-			s.append(_T("&t="));
-			s.append(type);
+			ensure (s_ != INVALID_SOCKET);
+			::addrinfo *pai, hints;
 
-			std::string buf;
-			Inet::Open::Connection ioc = session().Connect(_T("www.google-analytics.com"));
-			Inet::Open::Connection::Request iocr = ioc.OpenRequest(_T("GET"), s.c_str());
+			ZeroMemory(&hints, sizeof(hints));
+			hints.ai_family = AF_UNSPEC;
+			hints.ai_socktype = SOCK_STREAM;
+			hints.ai_protocol = IPPROTO_TCP;
 
-			BOOL b;
-			DWORD err;
-			b = HttpSendRequest(iocr, nullptr, 0, nullptr, 0);
-			err = GetLastError();
-			b = HttpEndRequest(iocr, nullptr, 0, 0);
-			err = GetLastError();
+			ensure (0 == ::getaddrinfo(GOOGLE_ANALYTICS_HOST, "http", &hints, &pai));
+			int result = ::connect(s_, pai->ai_addr, pai->ai_addrlen);
+			::freeaddrinfo(pai);
 
-			char hdr[1024];
-			DWORD n(1024);
-			b = HttpQueryInfo(iocr, HTTP_QUERY_RAW_HEADERS, hdr, &n, 0);
-			err = GetLastError();
+			ensure (result != SOCKET_ERROR);
+		}
+		analytics(const analytics&) = delete;
+		analytics& operator=(const analytics&) = delete;
+		~analytics()
+		{
+			::closesocket(s_);
+		}
 
-			
+		analytics& post(LPCTSTR type)
+		{
+			post_.clear();
+			post_ << "POST /collect HTTP/1.1\r\n";
+			post_ << "Host: www.google-analytics.com\r\n";
+			post_ << "User-Agent: " << GOOGLE_USER_AGENT << "\r\n";
+
+			data_.clear();
+			data_ << "v=" GOOGLE_PROTOCOL_VERSION << "\r\n";
+			data_ << "&tid=" << GOOGLE_TRACKING_ID << "\r\n";
+			data_ << "&cid=" << cid() << "\r\n";
+			data_ << "&t=" << type << "\r\n";
+
+			return *this;
+		}
+		void send()
+		{
+			post_ << "Content-Length: " << data_.str().length() << "\r\n\r\n";
+
+			::send(s_, post_.str().c_str(), post_.str().length(), 0);
+			::send(s_, data_.str().c_str(), data_.str().length(), 0);
+		}
+		std::string get()
+		{
+			post_ << "Content-Length: " << data_.str().length() << "\r\n\r\n";
+
+			return data_.str() + post_.str();
 		}
 	};
 	

@@ -25,7 +25,15 @@ namespace xll {
 		static xcstr VOLATILE() { return XLL_VOLATILE; }
 		static xcstr COMMA() { return ", "; }
 
-		static const int strmax = 0xFF; // maximum number of characters in a str
+		// The total number of available columns in Excel
+		static const BYTE colmax = 0xFF;
+		// The total number of available rows in Excel
+		static const WORD rwmax = 0xFFFF;
+		// The number of characters that can be stored and displayed in a cell formatted as Text
+		static const UCHAR strmax = 0xFF;
+		//Maximum number of arguments to a function
+		static const int argmax = 30;
+
 		static std::string string(xcstr s, xchar n = 0)
 		{
 			return std::string(s, s + (n ? n : strlen(s)));
@@ -38,7 +46,7 @@ namespace xll {
 		}
 		static int strnicmp(xcstr a, xcstr b, size_t n) 
 		{ 
-			return ::_strnicmp(a, b, n); 
+			return ::_strnicmp(a, b, n);
 		}
 		static xchar strlen(xcstr s) 
 		{ 
@@ -94,7 +102,15 @@ namespace xll {
 		static xcstr VOLATILE() { return XLL_VOLATILE12; }
 		static xcstr COMMA() { return L", "; }
 
-		static const int strmax = 0x7FFF;
+		// The total number of available columns.
+		static const COL colmax = 0x3FFF;
+		// The total number of available rows.
+		static const RW rwmax = 0xFFFFF;
+		// The number of characters that can be stored in a cell formatted as Text
+		static const XCHAR strmax = 0x7FFF;
+		//Maximum number of arguments to a function
+		static const int argmax = 255;
+
 		static std::string string(xcstr s, int n = 0)
 		{
 			if (n == 0)

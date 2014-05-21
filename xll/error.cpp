@@ -103,7 +103,7 @@ extern "C" int __declspec(dllexport) WINAPI xll_alert_info(void)
 	return XLL_ALERT_INFO;
 }
 static AddIn xai_alert_log(
-	Function(XLL_WORD, "_xll_alert_log@0", "XLL_ALERT_LOR")
+	Function(XLL_WORD, "_xll_alert_log@0", "XLL_ALERT_LOG")
 	.Category("XLL")
 	.FunctionHelp("Return enumeration for logging alerts.")
 );

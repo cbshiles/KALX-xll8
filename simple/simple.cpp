@@ -38,6 +38,9 @@ int xll_simple(void)
 		"auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs"}
 	}
 */
+	xll_alert_level |= XLL_ALERT_LOG;
+	XLL_WARNING("testing");
+
 	return 1;
 }
 static Auto<OpenAfterX> xao_simple(xll_simple);

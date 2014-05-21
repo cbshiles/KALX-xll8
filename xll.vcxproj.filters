@@ -111,6 +111,15 @@
     <ClInclude Include="xll\utility\google.h">
       <Filter>utility</Filter>
     </ClInclude>
+    <ClInclude Include="xll\utility\environment.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\utility\socket.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\utility\codec.h">
+      <Filter>utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xll\auto.cpp">
