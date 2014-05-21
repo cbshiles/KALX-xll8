@@ -63,7 +63,7 @@ namespace Win {
 			++key;
 		}
 
-		return SendInput(k_.size(), &k_[0], sizeof(keybdinput));
+		return SendInput(static_cast<UINT>(k_.size()), &k_[0], sizeof(keybdinput));
 	}
 
 	using std::operator!=;
@@ -84,7 +84,7 @@ namespace Win {
 			k_.push_back(keybdinput(K, KEYEVENTF_KEYUP));
 		}
 
-		return SendInput(k_.size(), &k_[0], sizeof(keybdinput));
+		return SendInput(static_cast<UINT>(k_.size()), &k_[0], sizeof(keybdinput));
 	}
 
 } // Win
