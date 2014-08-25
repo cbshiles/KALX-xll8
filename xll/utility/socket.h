@@ -1,5 +1,6 @@
 // socket.h - socket wrappers
 #pragma once
+#include <string>
 #include <WinSock2.h>
 #include <ws2tcpip.h>
 
@@ -120,7 +121,7 @@ namespace wsa {
 		int sendto(const char* buf, int len = 0)
 		{
 			if (!len)
-				len = strlen(buf);
+				len = static_cast<int>(strlen(buf));
 
 			return ::sendto(s_, buf, len, 0, ai_.sock(), sizeof(::sockaddr));
 		}
@@ -130,19 +131,19 @@ namespace wsa {
 	{
 		addrinfo ai(host, port, s);
 
-		return ::connect(s, ai.pai->ai_addr, ai.pai->ai_addrlen);
+		return ::connect(s, ai.pai->ai_addr, static_cast<int>(ai.pai->ai_addrlen));
 	}
 
-	inline int send(SOCKET s, const char* buf, size_t len = 0, int flags = 0)
+	inline int send(SOCKET s, const char* buf, int len = 0, int flags = 0)
 	{
 		if (!len)
-			len = strlen(buf);
+			len = static_cast<int>(strlen(buf));
 
 		return ::send(s, buf, len, flags);
 	}
 	inline int send(SOCKET s, const std::string& buf, int flags = 0)
 	{
-		return ::send(s, buf.c_str(), buf.length(), flags);
+		return ::send(s, buf.c_str(), static_cast<int>(buf.length()), flags);
 	}
 
 	inline std::string recv(SOCKET s, int bufsiz = 4096)

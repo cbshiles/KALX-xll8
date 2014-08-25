@@ -3,6 +3,7 @@
 #pragma once
 #include <algorithm>
 #include <cstdlib>
+#include <initializer_list>
 #include <new>
 
 namespace xll {
@@ -167,6 +168,12 @@ namespace xll {
 		{
 			realloc(x.rows, x.columns);
 			copy(&x);
+		}
+		XFP(std::initializer_list<double> a)
+			: buf(0)
+		{
+			realloc(static_cast<xword>(a.size()), 1);
+			copy(a.begin());
 		}
 		XFP& operator=(const XFP& x)
 		{

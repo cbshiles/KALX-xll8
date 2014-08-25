@@ -203,7 +203,6 @@
     <ClInclude Include="xll\types.h" />
     <ClInclude Include="xll\utility\codec.h" />
     <ClInclude Include="xll\utility\environment.h" />
-    <ClInclude Include="xll\utility\google.h" />
     <ClInclude Include="xll\utility\inet.h" />
     <ClInclude Include="xll\utility\log.h" />
     <ClInclude Include="xll\utility\registry.h" />

@@ -2,6 +2,7 @@
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 // Handles must be in their own cell for garbage collection to work.
 #pragma once
+#include <memory>
 #include <vector>
 
 namespace xll {
@@ -11,7 +12,7 @@ namespace xll {
 	typedef double HANDLEX;
 	static_assert (sizeof(void*) <= sizeof(HANDLEX), "HANDLEX must be able to hold pointers");
 
-	// HANDLEX that returns an error to Excel
+	// HANDLEX that defaults to an Excel error value
 	struct handlex {
 		HANDLEX h_;
 	public:
@@ -56,7 +57,7 @@ namespace xll {
 
 	template<class T>
 	class handle_container {
-		std::vector<T*> hc_;
+		std::vector<std::unique_ptr<T>> hc_;
 		handle_container(const handle_container&);
 		handle_container& operator=(const handle_container&);
 	public:
@@ -64,27 +65,21 @@ namespace xll {
 		{ }
 		~handle_container()
 		{
-			for (auto p : hc_)
-				delete p;
+			for (auto& p : hc_)
+				p.release();
 		}
-		void add(T* p)
+		void add(const std::unique_ptr<T>& p)
 		{
-			ensure (0 == find(p));
+			ensure (hc_.end() == std::find(hc_ ,p_));
 
 			hc_.push_back(p);
 		}
-		T* find(T* p)
+		void remove(const std::unique_ptr<T>& p)
 		{
-			auto pi = std::find(hc_.begin(), hc_.end(), p);
-
-			return pi == hc_.end() ? 0 : *pi;
-		}
-		void remove(T* p)
-		{
-			auto pi = std::find(hc_.begin(), hc_.end(), p);
+			auto& pi = std::find(hc_.begin(), hc_.end(), p);
 
 			if (pi != hc_.end()) {
-				delete *pi;
+				pi->release(); // ??? needed?
 				hc_.erase(pi);
 			}
 		}
@@ -95,37 +90,41 @@ namespace xll {
 		}
 	};
 
-	// keep track of all handles
-	class handles {
-	};
-
 	template<class T>
 	class handle {
-		static handle_container<T>& handles(void)
+		static std::vector<std::unique_ptr<T>>& handles()
 		{
-			static handle_container<T> hc_;
+			static std::vector<std::unique_ptr<T>> hc_;
 
 			return hc_;
 		}
 		T* p_;
+		static typename std::vector<std::unique_ptr<T>>::iterator find(T* p)
+		{
+			return std::find_if(handles().begin(), handles().end(), [p](const std::unique_ptr<T>& p_) { return p_.get() == p; });
+		}
 	public:
 		// constructor: handle<T> h(new T(...));
 		handle(T* p)
 			: p_(p)
 		{
-			handles().add(p);
+			handles().push_back(std::unique_ptr<T>(p));
 
 			OPERX o = XLL_XL_(Coerce, XLL_XLF(Caller));
 			if (o.xltype == xltypeNum && o.val.num != 0) {
-				handles().remove(h2p<T>(o.val.num));
+				auto pi = find(h2p<T>(o.val.num));
+				if (pi != handles().end()) {
+					pi->release();
+					handles().erase(pi);
+				}
 			}
 		}
 		// lookup: handle<T> h_(h);
-		handle(HANDLEX h, bool check = true)
-			: p_(handles().find(h2p<T>(h)))
+		handle(HANDLEX h)
+			: p_(h2p<T>(h))
 		{
-			if (check)
-				ensure (p_);
+			if (handles().end() == find(p_))
+				p_ = 0;
 		}
 		~handle()
 		{

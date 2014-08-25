@@ -23,8 +23,7 @@ inline bool xll_key_exists(LPCTSTR pKey)
 	HKEY h;
 
 	return ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, pKey, 0, KEY_ALL_ACCESS, &h)
-		? RegCloseKey(h), true
-		: false;
+		? RegCloseKey(h), true : false;
 }
 
 inline OPERX xl_ver(void)
@@ -174,28 +173,3 @@ double WINAPI xll_version(void)
 	return 1.0;
 }
 
-#include "../xll/utility/google.h"
-
-static AddIn xai_google_post(
-	Function(XLL_CSTRING, "?xll_google_post", "GOOGLE.POST")
-	.Arg(XLL_CSTRING, "Post", "is a string")
-	.Category("XLL")
-	.FunctionHelp("Post to google analytics")
-);
-xcstr WINAPI xll_google_post(xcstr type)
-{
-#pragma XLLEXPORT
-	static std::string post;
-	try {
-		google::analytics ga;
-
-		post = ga.post(type).get();
-	}
-	catch (const std::exception& ex) {
-		XLL_ERROR(ex.what());
-
-		return 0;
-	}
-
-	return post.c_str();
-}

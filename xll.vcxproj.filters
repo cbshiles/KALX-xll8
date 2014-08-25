@@ -108,9 +108,6 @@
     <ClInclude Include="utility\google.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="xll\utility\google.h">
-      <Filter>utility</Filter>
-    </ClInclude>
     <ClInclude Include="xll\utility\environment.h">
       <Filter>utility</Filter>
     </ClInclude>
