@@ -6,6 +6,21 @@ using namespace dual;
 using namespace xll;
 
 template<class T>
+void xll_test_constructor(void)
+{
+	dual::number<int> x{1,2,3};
+
+	ensure (x.size() == 3);
+	ensure (x[0] == 1);
+	ensure (x[1] == 2);
+	ensure (x[2] == 3);
+
+	x[1] = 4;
+	ensure (x[1] == 4);
+
+}
+
+template<class T>
 void xll_test_dual_add(void)
 {
 	T x[] = {1, 2, 3};
@@ -57,6 +72,7 @@ void xll_test_dual_mul(void)
 int xll_test_dual(void)
 {
 	try {
+		xll_test_constructor<double>();
 		xll_test_dual_add<double>();
 //		xll_test_dual_mul<double>();
 	}

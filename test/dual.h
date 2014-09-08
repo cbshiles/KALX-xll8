@@ -4,8 +4,60 @@
 #include <functional>
 #include <initializer_list>
 #include <stdexcept>
+#include <vector>
 
 namespace dual {
+	template<typename T>
+	class number {
+		std::vector<T> x_;
+	public:
+		explicit number(const T& x)
+			: x_{x}
+		{ }
+		number(const std::initializer_list<T> x)
+			: x_(x)
+		{ }
+		template<class I>
+		number(I b, I e)
+			: x_(b, e)
+		{ }
+		number(const number&) = default;
+		number& operator=(const number&) = default;
+		number(number&& x)
+			: x_(x)
+		{
+		}
+		number& operator=(number&& x)
+		{
+			if (this != &x) {
+				x_ = x;
+			}
+
+			return *this;
+		}
+		~number()
+		{ }
+
+		size_t size() const
+		{
+			return x_.size();
+		}
+		T operator[](size_t i) const
+		{
+			return x_[i];
+		}
+		T& operator[](size_t i)
+		{
+			return x_[i];
+		}
+
+		template<class U>
+		number& operator+=(const U& u)
+		{
+			std::transform(x_.begin(), x_.end(), x_.begin(), [u](const T& x) { return x + u; })
+		}
+	};
+
 	// x += a
 	template<class T>
 	inline void op_add(size_t n, T* x, const T& a)

@@ -209,7 +209,6 @@
     <ClInclude Include="xll\utility\registry.h" />
     <ClInclude Include="xll\utility\sendkeys.h" />
     <ClInclude Include="xll\utility\socket.h" />
-    <ClInclude Include="xll\utility\string.h" />
     <ClInclude Include="xll\XLCALL.H" />
     <ClInclude Include="xll\xll.h" />
     <ClInclude Include="xll\xloper.h" />

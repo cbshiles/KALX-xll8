@@ -122,6 +122,12 @@ namespace xll {
 			return args_[i];
 		}
 
+		XArgs& Hidden(void)
+		{
+			Arg(RegisterArg::MacroType) == 0;
+
+			return *this;
+		}
 		bool isHidden(void) const
 		{
 			return Arg(RegisterArg::MacroType) == 0;

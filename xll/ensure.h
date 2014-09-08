@@ -10,6 +10,11 @@
 #define ENSURE_STRZ12_(x) ENSURE_HASH12_(x)
 #define ENSURE_HASH_(x) #x
 #define ENSURE_STRZ_(x) ENSURE_HASH_(x)
+#ifdef EXCEL12
+#define ENSURE_STRZX_ ENSURE_STRZ12_
+#else
+#define ENSURE_STRZX_ ENSURE_STRZ_
+#endif
 #define ENSURE_FILE "file: " __FILE__
 #define ENSURE_FUNC "function: " __FUNCTION__
 #define ENSURE_LINE "line: " ENSURE_STRZ_(__LINE__)
