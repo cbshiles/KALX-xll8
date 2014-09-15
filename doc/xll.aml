@@ -24,8 +24,6 @@
         <autoOutline /> -->
         <para>
           If you want to use VBA or C# to extend Excel you don't need this library.
-          If you think wedging other procedural languages into Excel is a good 
-          idea this is definitely not the library for you.
           If you know C++ and want a simple way to get the highest possible 
           performance from Excel, this is the library for you.
         </para>
@@ -43,7 +41,8 @@
           Just create an
           <link xlink:href="26d5677f-2e60-4c43-affc-fa9e2da39c1a">AddIn</link>
           object that specifies
-          how to map your code to what Excel needs.
+          how to map your code to what Excel needs and implement a
+          function that returns what you want.
         </para>
         <para>
           The xll library works with all versions of Windows since XP and
