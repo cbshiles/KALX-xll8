@@ -149,9 +149,6 @@
     <ClCompile Include="xll\eval.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xll\shfb\shfb.cpp">
-      <Filter>shfb</Filter>
-    </ClCompile>
     <ClCompile Include="xll\depends.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

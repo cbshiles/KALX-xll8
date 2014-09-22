@@ -163,7 +163,8 @@ namespace Reg {
 			T t(0);
 			DWORD type, size(traits<T>::size(T()));
 
-			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, traits<T>::data(t), &size));
+			if (ERROR_SUCCESS != RegQueryValueEx_<X>(h_, name, 0, &type, traits<T>::data(t), &size))
+				throw std::runtime_error("");
 			ensure (traits<T>::type == type);
 
 			return t;
@@ -178,11 +179,8 @@ namespace Reg {
 			DWORD type, size;
 			std::basic_string<X> sz;
 
-			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, 0, &size));
-			ensure (REG_SZ == type || REG_EXPAND_SZ == type);
-
-			sz.resize(size/sizeof(X));
-			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, reinterpret_cast<LPBYTE>(&sz[0]), &size));
+			if (ERROR_SUCCESS != RegQueryValueEx_<X>(h_, name, 0, &type, reinterpret_cast<LPBYTE>(&sz[0]), &size))
+				throw std::runtime_error("");
 			sz.resize(_tcslen(&sz[0]));
 
 			return sz;

@@ -6,9 +6,9 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>$(TargetPath)</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>"$(TargetPath)" /P "$(ProjectDir)"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommand>$(ProgramFiles)\Microsoft Office\OFFICE15\EXCEL.EXE</LocalDebuggerCommand>
+    <LocalDebuggerCommand>C:\Program Files\Microsoft Office\Office15\EXCEL.EXE</LocalDebuggerCommand>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerCommand>C:\Program Files %28x86%29\Microsoft Office\Office15\EXCEL.EXE</LocalDebuggerCommand>
