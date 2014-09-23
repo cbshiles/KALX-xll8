@@ -18,7 +18,7 @@ extern "C" LPXLOPER __declspec(dllexport) WINAPI xll_this(void)
 }
 
 static AddIn12 xai_this12(
-	XLL_DECORATE(L"xll_this12",0), XLL_LPXLOPER12 XLL_UNCALCED12,
+	XLL_DECORATE12(L"xll_this12",0), XLL_LPXLOPER12 XLL_UNCALCED12,
 	L"THIS", L"",
 	L"XLL", L"Return the contents of the calling cell."
 );

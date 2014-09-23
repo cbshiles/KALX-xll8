@@ -24,7 +24,7 @@ extern "C" LPXLOPER __declspec(dllexport) WINAPI xll_depends(LPXLOPER pRef, LPXL
 }
 
 static AddIn12 xai_depends12(
-	Function12(XLL_LPXLOPER12, XLL_DECORATE(L"xll_depends12",8), L"DEPENDS")
+	Function12(XLL_LPXLOPER12, XLL_DECORATE12(L"xll_depends12",8), L"DEPENDS")
 	.Arg(XLL_LPXLOPER12, L"Value", L"is the value to be returned.")
 	.Arg(XLL_LPXLOPER12, L"Dependent", L"is a reference to a cell that is required to be computed before Value.")
 	.Category(L"XLL")

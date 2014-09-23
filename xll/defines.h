@@ -18,10 +18,12 @@
 // 64-bit uses different name decoration
 #ifdef _M_X64 
 #define XLL_DECORATE(s,n) s
+#define XLL_DECORATE12(s,n) s
 #define XLL_X64(x) x
 #define XLL_X32(x)
 #else
 #define XLL_DECORATE(s,n) "_" s "@" #n
+#define XLL_DECORATE12(s,n) L"_" s L"@" L#n
 #define XLL_X64(x)	
 #define XLL_X32(x) x
 #endif 

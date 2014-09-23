@@ -17,7 +17,7 @@ extern "C" LPXLOPER __declspec(dllexport) WINAPI xll_eval(LPXLOPER po)
 	return x.XLFree();
 }
 static AddIn12 xai_eval12(
-	XLL_DECORATE(L"xll_eval12",4), XLL_LPXLOPER12 XLL_LPXLOPER12 XLL_UNCALCED12,
+	XLL_DECORATE12(L"xll_eval12",4), XLL_LPXLOPER12 XLL_LPXLOPER12 XLL_UNCALCED12,
 	L"EVAL", L"String", 
 	L"XLL", L"Call xlfEvaluate on String.");
 extern "C" LPXLOPER12 __declspec(dllexport) WINAPI xll_eval12(LPXLOPER12 po)
