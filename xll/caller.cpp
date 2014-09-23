@@ -4,7 +4,7 @@
 using namespace xll;
 
 static AddIn xai_caller(
-	"_xll_caller@0", XLL_BOOL XLL_UNCALCED,
+	XLL_DECORATE("xll_caller",0), XLL_BOOL XLL_UNCALCED,
 	"CALLING", "",
 	"XLL", "Return TRUE if the cell is being called by F2 Enter."
 );
@@ -17,7 +17,7 @@ extern "C" BOOL __declspec(dllexport) WINAPI xll_caller(void)
 	return x;
 }
 static AddIn12 xai_caller12(
-	L"_xll_caller12@0", XLL_BOOL12 XLL_UNCALCED12,
+	XLL_DECORATE(L"xll_caller12",0), XLL_BOOL12 XLL_UNCALCED12,
 	L"CALLING", L"",
 	L"XLL", L"Return TRUE if the cell is being called by F2 Enter."
 );

@@ -4,7 +4,7 @@
 using namespace xll;
 
 static AddIn xai_range_set(
-	Function(XLL_HANDLE, "_xll_range_set@4", "RANGE.SET")
+	Function(XLL_HANDLE, XLL_DECORATE("xll_range_set",4), "RANGE.SET")
 	.Arg(XLL_LPOPER, "Range", "is a range.")
 	.Uncalced()
 	.Category("XLL")
@@ -18,7 +18,7 @@ extern "C" HANDLEX __declspec(dllexport) WINAPI xll_range_set(LPOPER po)
 }
 
 static AddIn xai_range_get(
-	Function(XLL_LPOPER, "_xll_range_get@8", "RANGE.GET")
+	Function(XLL_LPOPER, XLL_DECORATE("xll_range_get",8), "RANGE.GET")
 	.Arg(XLL_HANDLE, "Handle", "is a handle to a range.")
 	.Category("XLL")
 	.FunctionHelp("Return a range corresponding to handle.")
@@ -38,7 +38,7 @@ extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_get(HANDLEX h)
 }
 
 static AddIn12 xai_range_set12(
-	Function12(XLL_HANDLE12, L"_xll_range_set12@4", L"RANGE.SET")
+	Function12(XLL_HANDLE12, XLL_DECORATE(L"xll_range_set12",4), L"RANGE.SET")
 	.Arg(XLL_LPOPER12, L"Range", L"is a range.")
 	.Uncalced()
 	.Category(L"XLL")
@@ -52,7 +52,7 @@ extern "C" HANDLEX __declspec(dllexport) WINAPI xll_range_set12(LPOPER12 po)
 }
 
 static AddIn12 xai_range_get12(
-	Function12(XLL_LPOPER12, L"_xll_range_get12@8", L"RANGE.GET")
+	Function12(XLL_LPOPER12, XLL_DECORATE(L"xll_range_get12",8), L"RANGE.GET")
 	.Arg(XLL_HANDLE12, L"Handle", L"is a handle to a range.")
 	.Category(L"XLL")
 	.FunctionHelp(L"Return a range corresponding to handle.")

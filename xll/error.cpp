@@ -43,7 +43,7 @@ XLL_INFO(const char* e, bool force)
 using namespace xll;
 
 static AddIn xai_alert_level(
-	Function(XLL_LPOPER, "_xll_alert_level_@4", "XLL.ALERT.LEVEL")
+	Function(XLL_LPOPER, XLL_DECORATE("xll_alert_level_",4), "XLL.ALERT.LEVEL")
 	.Arg(XLL_LPOPER, "Level", "is a bit mask of alert levels to set.")
 	.Category("XLL")
 	.FunctionHelp(
@@ -76,7 +76,7 @@ xll_alert_level_(LPOPER po)
 }
 
 static AddIn xai_alert_error(
-	Function(XLL_WORD, "_xll_alert_error@0", "XLL_ALERT_ERROR")
+	Function(XLL_WORD, XLL_DECORATE("xll_alert_error",0), "XLL_ALERT_ERROR")
 	.Category("XLL")
 	.FunctionHelp("Return enumeration for the error alert level.")
 );
@@ -85,7 +85,7 @@ extern "C" int __declspec(dllexport) WINAPI xll_alert_error(void)
 	return XLL_ALERT_ERROR;
 }
 static AddIn xai_alert_warning(
-	Function(XLL_WORD, "_xll_alert_warning@0", "XLL_ALERT_WARNING")
+	Function(XLL_WORD, XLL_DECORATE("xll_alert_warning",0), "XLL_ALERT_WARNING")
 	.Category("XLL")
 	.FunctionHelp("Return enumeration for the warning alert level.")
 );
@@ -94,7 +94,7 @@ extern "C" int __declspec(dllexport) WINAPI xll_alert_warning(void)
 	return XLL_ALERT_WARNING;
 }
 static AddIn xai_alert_info(
-	Function(XLL_WORD, "_xll_alert_info@0", "XLL_ALERT_INFO")
+	Function(XLL_WORD, XLL_DECORATE("xll_alert_info",0), "XLL_ALERT_INFO")
 	.Category("XLL")
 	.FunctionHelp("Return enumeration for the information alert level.")
 );
@@ -103,7 +103,7 @@ extern "C" int __declspec(dllexport) WINAPI xll_alert_info(void)
 	return XLL_ALERT_INFO;
 }
 static AddIn xai_alert_log(
-	Function(XLL_WORD, "_xll_alert_log@0", "XLL_ALERT_LOG")
+	Function(XLL_WORD, XLL_DECORATE("xll_alert_log",0), "XLL_ALERT_LOG")
 	.Category("XLL")
 	.FunctionHelp("Return enumeration for logging alerts.")
 );
