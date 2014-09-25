@@ -148,11 +148,11 @@ namespace xll {
 
 // Enumerated type XLL_ENUM(C_VALUE, ExcelName, "Category", "Description")
 #define XLL_ENUM(value, name, cat, desc) static xll::AddIn xai_##name(   \
-	ENSURE_STRZ_(_xll_##name##@0), XLL_LPOPER, #name, "", cat, desc); \
+	XLL_DECORATE("xll_" #name, 0), XLL_LPOPER, #name, "", cat, desc); \
     extern "C" __declspec(dllexport) LPOPER WINAPI xll_##name(void)      \
 	{ static OPER o(value); return &o; }
 #define XLL_ENUM12(value, name, cat, desc) static xll::AddIn12 xai_##name##12(   \
-	ENSURE_STRZ12_(_xll_##name##12@0), XLL_LPOPER12, L#name, L"", L#cat, L#desc); \
+	XLL_DECORATE12(L"xll_" L#name L"12", 0), XLL_LPOPER12, L#name, L"", L#cat, L#desc); \
 	extern "C" __declspec(dllexport) LPOPER12 WINAPI xll_##name##12(void)      \
 	{ static OPER12 o(value); return &o; }
 #ifdef EXCEL12
