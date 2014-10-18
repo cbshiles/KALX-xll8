@@ -20,16 +20,22 @@ int xll_simple(void)
 }
 static Auto<OpenAfterX> xao_simple(xll_simple);
 
-#include <cmath>
-
-static AddInX xai_normal_cdf(
-	FunctionX(XLL_DOUBLEX, _T("?xll_normal_cdf"), _T("NORMAL.CDF"))
-	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number"))
-	.Category(_T("FMS"))
-	.FunctionHelp(_T("Return the cumulative normal distribution at x."))
+static AddIn12 xai_select_end(
+	Function12(XLL_LPOPER12, L"?xll_select_end", L"XLL.SELECT.END")
+	.Arg(XLL_LPXLOPER12, L"Range", L"is a range")
+	.Uncalced()
+	.Category(L"XLL")
 );
-double WINAPI xll_normal_cdf(double x)
+LPOPER12 WINAPI xll_select_end(LPXLOPER12 po)
 {
 #pragma XLLEXPORT
-	return 0.5*(1 + erf(x/sqrt(2)));
+	static OPER12 o; 
+	
+//	o = XLL_XLC(Select, *po);
+	o = OPER12(L"!C:C");
+	o = XLL_XLC(Select, o);
+	o = XLL_XLC(SelectLastCell);
+	o = XLL_XLF(ActiveCell);
+
+	return &o;
 }

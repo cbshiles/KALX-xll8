@@ -28,6 +28,7 @@ public:
 		val = o.val;
 
 		o.xltype = xltypeNil;
+		o.val = {0};
 	}
 	XOPER& operator=(const XOPER& o)
 	{
@@ -53,6 +54,7 @@ public:
 		val = o.val;
 
 		o.xltype = xltypeNil;
+		o.val = {0};
 
 		return *this;
 	}

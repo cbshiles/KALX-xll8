@@ -23,6 +23,9 @@ namespace xll {
 
 		static xcstr UNCALCED() { return XLL_UNCALCED; }
 		static xcstr VOLATILE() { return XLL_VOLATILE; }
+		static xcstr THREAD_SAFE() { return XLL_THREAD_SAFE; }
+		static xcstr CLUSTER_SAFE() { return XLL_CLUSTER_SAFE; }
+		static xcstr ASYNCHRONOUS() { return XLL_ASYNCHRONOUS; }
 		static xcstr COMMA() { return ", "; }
 
 		// The total number of available columns in Excel
@@ -100,6 +103,9 @@ namespace xll {
 
 		static xcstr UNCALCED() { return XLL_UNCALCED12; }
 		static xcstr VOLATILE() { return XLL_VOLATILE12; }
+		static xcstr THREAD_SAFE() { return XLL_THREAD_SAFE12; }
+		static xcstr CLUSTER_SAFE() { return XLL_CLUSTER_SAFE12; }
+		static xcstr ASYNCHRONOUS() { return XLL_ASYNCHRONOUS12; }
 		static xcstr COMMA() { return L", "; }
 
 		// The total number of available columns.

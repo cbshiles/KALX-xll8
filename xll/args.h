@@ -157,7 +157,7 @@ namespace xll {
 		XArgs& ThreadSafe(void)
 		{
 			if (typeid(X) == typeid(XLOPER12)) {
-				Arg(RegisterArg::TypeText).append(XLL_THREAD_SAFE12);
+				Arg(RegisterArg::TypeText).append(traits<X>::THREAD_SAFE());
 			}
 
 			return *this;
@@ -165,7 +165,7 @@ namespace xll {
 		XArgs& ClusterSafe(void)
 		{
 			if (typeid(X) == typeid(XLOPER12)) {
-				Arg(RegisterArg::TypeText).append(XLL_CLUSTER_SAFE12);
+				Arg(RegisterArg::TypeText).append(traits<X>::CLUSTER_SAFE());
 			}
 
 			return *this;
@@ -173,7 +173,7 @@ namespace xll {
 		XArgs& Asynchronous(void)
 		{
 			if (typeid(X) == typeid(XLOPER12)) {
-				Arg(RegisterArg::TypeText).append(XLL_ASYNCHRONOUS12);
+				Arg(RegisterArg::TypeText).append(traits<X>::ASYNCHRONOUS());
 			}
 
 			return *this;
