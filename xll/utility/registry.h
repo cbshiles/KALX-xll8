@@ -8,7 +8,7 @@
 #pragma once
 #include <cassert>
 #include <string>
-#define WINDOWS_LEAN_AND_MEAN
+//#define WINDOWS_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
 #include "../ensure.h"
@@ -51,7 +51,7 @@ namespace Reg {
 		static const DWORD type = REG_SZ;
 		static BYTE* data(TCHAR* t) { return (BYTE*)t; }
 		static const BYTE* data(const TCHAR* t) { return (const BYTE*)t; }
-		static DWORD size(TCHAR* t) { return static_cast<DWORD>(sizeof(TCHAR)*(1 + _tcslen(t))); }
+		static DWORD size(const TCHAR* t) { return static_cast<DWORD>(sizeof(TCHAR)*(1 + _tcslen(t))); }
 	};
 	template<> 
 	struct traits<std::basic_string<TCHAR> > {

@@ -72,9 +72,6 @@
     <ClInclude Include="xll\utility\registry.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="dt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="xll\types.h">
       <Filter>Header Files</Filter>
     </ClInclude>

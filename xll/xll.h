@@ -50,8 +50,6 @@ HWND xll_GetHwnd(void);
 // try { ... ensure(...); ... } catch (const std::exception& ex) { XLL_ERROR|WARNING|INFO(ex.what()); }
 #include "error.h"
 
-// extras
-#include "dt.h"
 #include "entities.h"
 //#include "enum.h"
 #include "fp.h"

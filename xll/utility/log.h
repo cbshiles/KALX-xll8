@@ -1,8 +1,6 @@
 // log.h - Windows Event logging.
 // Uses System32\\EventCreate.exe as default message file.
 #pragma once
-#include <exception>
-#include <Windows.h>
 #include "registry.h"
 
 #pragma comment(lib, "advapi32.lib")
