@@ -287,8 +287,8 @@ namespace xll {
 		{
 			return push_back(&t, &t + 1);
 		}
-		template<class T>
-		XFP& push_back(const T* b, const T *e, bool stack = false)
+		template<class I>
+		XFP& push_back(I b, I e, bool stack = false)
 		{
 			xword n = static_cast<xword>(std::distance(b, e));
 
