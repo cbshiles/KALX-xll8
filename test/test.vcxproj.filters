@@ -21,9 +21,6 @@
     <ClCompile Include="sample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="datetime.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="traits.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -49,6 +46,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="blurb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ftap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

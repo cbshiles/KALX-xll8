@@ -123,8 +123,11 @@ namespace xll {
 		handle(HANDLEX h)
 			: p_(h2p<T>(h))
 		{
-			if (handles().end() == find(p_))
+			if (handles().end() == find(p_)) {
 				p_ = 0;
+
+				throw std::runtime_error("xll::handle lookup failed");
+			}
 		}
 		~handle()
 		{

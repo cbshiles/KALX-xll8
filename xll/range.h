@@ -5,6 +5,8 @@
 #include <iterator>
 #include "xll.h"
 
+typedef xll::traits<XLOPERX>::xword xword;
+
 namespace range {
 
 	template<class X>
@@ -30,5 +32,37 @@ namespace range {
 			return i_;
 		}
 	};
+
+	template<class X>
+	inline bool is_scalar(const XOPER<X>& o)
+	{
+		return o.xltype == xltypeMulti && (o.rows() == 1 && o.columns() == 1);
+	}
+	template<class X>
+	inline bool is_vector(const XOPER<X>& o)
+	{
+		return o.xltype == xltypeMulti && (o.rows() == 1 || o.columns() == 1);
+	}
+
+	// select elements of o based on mask
+	template<class X>
+	inline XOPER<X> mask(const XOPER<X>& o, const XOPER<X>& m)
+	{
+		ensure (is_vector(o));
+		ensure (o.size() == m.size());
+
+		XOPER<X> o_;
+
+		for (xword j = 0; j < size<X>(m); ++j) {
+			if (m[j]) {
+				o_.push_back(o[j]);
+			}
+		}
+
+		if (o_.xltype == xltypeNil)
+			o_ = XOPER<X>(xlerr::NA);
+
+		return o_;
+	}
 
 } // range

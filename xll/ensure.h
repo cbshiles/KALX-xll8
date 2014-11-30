@@ -22,8 +22,8 @@
 
 #ifdef _DEBUG
 	#ifdef _WIN32 // defined for 64 bit Windows also
-		#include <Windows.h>
-		#define ensure(e) if (!(e)) { DebugBreak(); }
+		extern "C" __declspec(dllimport) void __stdcall DebugBreak(void);
+		#define ensure(e) if (!(e)) { DebugBreak(); throw std::runtime_error(ENSURE_SPOT "\nensure: \"" #e "\" failed"); } else (void)0;
 	#else
 		#define ensure(e) if (!(e)) { __builtin_trap(); }
 	#endif

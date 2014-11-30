@@ -70,3 +70,45 @@ extern "C" LPOPER12 __declspec(dllexport) WINAPI xll_range_get12(HANDLEX h)
 
 	return po;
 }
+
+
+static AddIn xai_range_mask(
+	Function(XLL_LPOPER, XLL_DECORATE("xll_range_mask",8), "RANGE.MASK")
+	.Arg(XLL_LPOPER, "Range", "is a range or handle to a range.")
+	.Arg(XLL_LPOPER, "Mask", "is a range.")
+	.Category("XL")
+	.FunctionHelp("Mask elements of Range.")
+);
+extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_mask(const LPOPER pr, const LPOPER pm)
+{
+	static OPER o;
+
+	try {
+		o = range::mask(*pr, *pm);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return &o;
+}
+static AddIn12 xai_range_mask12(
+	Function12(XLL_LPOPER12, XLL_DECORATE12(L"xll_range_mask12",8), L"RANGE.MASK")
+	.Arg(XLL_LPOPER12, L"Range", L"is a range or handle to a range.")
+	.Arg(XLL_LPOPER12, L"Mask", L"is a range.")
+	.Category(L"XLL")
+	.FunctionHelp(L"Mask elements of Range.")
+);
+extern "C" LPOPER12 __declspec(dllexport) WINAPI xll_range_mask12(const LPOPER12 pr, const LPOPER12 pm)
+{
+	static OPER12 o;
+
+	try {
+		o = range::mask(*pr, *pm);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return &o;
+}
