@@ -112,3 +112,46 @@ extern "C" LPOPER12 __declspec(dllexport) WINAPI xll_range_mask12(const LPOPER12
 
 	return &o;
 }
+
+static AddIn xai_range_take(
+	Function(XLL_LPOPER, XLL_DECORATE("xll_range_take",8), "RANGE.TAKE")
+	.Arg(XLL_LPOPER, "Range", "is a range or handle to a range.")
+	.Arg(XLL_LONG, "Count", "is the number of elements to take.")
+	.Category("XL")
+	.FunctionHelp("take elements of Range.")
+);
+extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_take(const LPOPER pr, LONG n)
+{
+	static OPER o;
+
+	try {
+		o = *pr;
+		range::take(o, n);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return &o;
+}
+static AddIn12 xai_range_take12(
+	Function12(XLL_LPOPER12, XLL_DECORATE12(L"xll_range_take12",8), L"RANGE.TAKE")
+	.Arg(XLL_LPOPER12, L"Range", L"is a range or handle to a range.")
+	.Arg(XLL_LONG12, L"Count", L"is the number of elements to take.")
+	.Category(L"XLL")
+	.FunctionHelp(L"Take elements of Range.")
+);
+extern "C" LPOPER12 __declspec(dllexport) WINAPI xll_range_take12(const LPOPER12 pr, LONG n)
+{
+	static OPER12 o;
+
+	try {
+		o = *pr;
+		range::take(o, n);
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return &o;
+}

@@ -65,4 +65,34 @@ namespace range {
 		return o_;
 	}
 
+#pragma warning(disable: 4244 4996)
+
+	// take elements of a range
+	template<class X>
+	inline void take(XOPER<X>& o, long n)
+	{
+		if (o.rows() > 1) {
+			if (n > 0) {
+				xword r = (std::min<xword>)(o.rows(), static_cast<xword>(n));
+				o.resize(r, o.columns());
+			}
+			else if (n < 0) {
+				xword r = (std::min<xword>)(o.rows(), static_cast<xword>(-n));
+				std::copy(o.end() - r*o.columns(), o.end(), o.begin());
+				o.resize(r, o.columns());
+			}
+		}
+		else {
+			if (n > 0) {
+				xword c = (std::min<xword>)(o.size(), static_cast<xword>(n));
+				std::copy(o.end() - c, o.end(), o.begin());
+				o.resize(1, c);
+			}
+			else if (n < 0) {
+				xword c = (std::min<xword>)(o.size(), static_cast<xword>(-n));
+				o.resize(1, c);
+			}
+		}
+	}
+
 } // range
