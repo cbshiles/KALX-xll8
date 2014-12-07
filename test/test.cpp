@@ -349,6 +349,25 @@ void test_loper(void)
 
 }
 
+void test_initializer(void)
+{
+	OPERX o{OPERX(1.2), OPERX(_T("abc")), OPERX(false)};
+
+	ensure (o.rows() == 3);
+	ensure (o.columns() == 1);
+	ensure (o[0] == 1.2);
+	ensure (o[1] == _T("abc"));
+	ensure (o[2] == false);
+/*
+	OPERX o2(1.2, _T("abc"), false);
+	ensure (o2.rows() == 3);
+	ensure (o2.columns() == 1);
+	ensure (o2[0] == 1.2);
+	ensure (o2[1] == _T("abc"));
+	ensure (o2[2] == false);
+*/
+}
+
 #ifndef _DEBUG
 #pragma warning(disable: 4127)
 #endif
@@ -396,6 +415,7 @@ int xll_test(void)
 		test_to_string();
 		ensure (_CrtCheckMemory());
 		test_loper();
+		test_initializer();
 	}
 	catch (const std::exception& ex) {
 		MessageBoxA(0, ex.what(), "Error", MB_OK);

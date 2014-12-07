@@ -196,7 +196,7 @@
     <ClInclude Include="xll\loper.h" />
     <ClInclude Include="xll\on.h" />
     <ClInclude Include="xll\oper.h" />
-    <ClInclude Include="xll\range.h" />
+    <ClInclude Include="xll\range\range.h" />
     <ClInclude Include="xll\shfb.h" />
     <ClInclude Include="xll\struct.h" />
     <ClInclude Include="xll\traits.h" />
@@ -222,8 +222,9 @@
     <ClCompile Include="xll\dllmain.cpp" />
     <ClCompile Include="xll\error.cpp" />
     <ClCompile Include="xll\hwnd.cpp" />
-    <ClCompile Include="xll\range.cpp" />
     <ClCompile Include="xll\eval.cpp" />
+    <ClCompile Include="xll\range\mask.cpp" />
+    <ClCompile Include="xll\range\range.cpp" />
     <ClCompile Include="xll\this.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>

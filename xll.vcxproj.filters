@@ -19,6 +19,9 @@
     <Filter Include="shfb">
       <UniqueIdentifier>{ed9dfdb6-9741-42c7-8a18-6761c52f1e0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="range">
+      <UniqueIdentifier>{ce3723c1-43bf-4539-bfa0-6f41302b704f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xll\addin.h">
@@ -90,9 +93,6 @@
     <ClInclude Include="xll\utility\log.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="xll\range.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="xll\shfb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -110,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="xll\utility\codec.h">
       <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\range\range.h">
+      <Filter>range</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -140,14 +143,17 @@
     <ClCompile Include="xll\caller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xll\range.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xll\eval.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xll\depends.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\range\range.cpp">
+      <Filter>range</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\range\mask.cpp">
+      <Filter>range</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

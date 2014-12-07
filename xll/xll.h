@@ -55,7 +55,7 @@ HWND xll_GetHwnd(void);
 #include "fp.h"
 #include "handle.h"
 #include "on.h"
-#include "range.h"
+#include "range/range.h"
 
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_caller", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_caller12", 0))
@@ -71,4 +71,6 @@ HWND xll_GetHwnd(void);
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_get", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_set12", 4))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_get12", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_mask", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_mask12", 8))
 

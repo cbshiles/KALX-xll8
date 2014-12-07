@@ -30,6 +30,11 @@ public:
 		o.xltype = xltypeNil;
 		o.val = {0};
 	}
+	explicit XOPER(std::initializer_list<XOPER> o)
+	{
+		resize(static_cast<xll::traits<X>::xword>(o.size()), 1);
+		std::copy(o.begin(), o.end(), stdext::checked_array_iterator<XOPER*>(begin(), size()));
+	}
 	XOPER& operator=(const XOPER& o)
 	{
 		if (this != &o) {
@@ -338,6 +343,13 @@ public:
 		}
 
 		return *this;
+	}
+	// conforming resize
+	XOPER& resize(xword n)
+	{
+		ensure (rows() == 1 || columns() == 1);
+
+		return rows() == 1 ? resize(1, n) : resize(n, 1);
 	}
 	XOPER& front()
 	{
