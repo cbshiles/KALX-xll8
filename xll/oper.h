@@ -68,11 +68,11 @@ public:
 		free();
 	}
 
-	XOPER(const X& x)
+	XOPER(const typename xll::traits<X>::type x)
 	{
 		alloc(x);
 	}
-	XOPER& operator=(const X& x)
+	XOPER& operator=(const typename xll::traits<X>::type x)
 	{
 		free();
 		alloc(x);
@@ -92,25 +92,25 @@ public:
 	// forward to XLOPER
 	xword rows() const
 	{
-		return ::rows<X>(*this);
+		return xll::rows<X>(*this);
 	}
 	xword columns() const
 	{
-		return ::columns<X>(*this);
+		return xll::columns<X>(*this);
 	}
 	xword size() const
 	{
-		return ::size<X>(*this);
+		return xll::size<X>(*this);
 	}
 
 	// 1-d index
 	XOPER& operator[](xword i)
 	{
-		return static_cast<XOPER&>(::index<X>(*this, i));
+		return static_cast<XOPER&>(xll::index<X>(*this, i));
 	}
 	const XOPER& operator[](xword i) const
 	{
-		return static_cast<const XOPER&>(::index<X>(*this, i));
+		return static_cast<const XOPER&>(xll::index<X>(*this, i));
 	}
 	// 2-d index
 	XOPER& operator()(xword r, xword c)
@@ -119,25 +119,25 @@ public:
 	}
 	const XOPER& operator()(xword r, xword c) const
 	{
-		return static_cast<const XOPER&>(::index<X>(*this, r, c));
+		return static_cast<const XOPER&>(xll::index<X>(*this, r, c));
 	}
 
 	// STL friendly
 	XOPER* begin()
 	{
-		return static_cast<XOPER*>(::begin<X>(*this));
+		return xltype == xltypeMulti ? static_cast<XOPER*>(val.array.lparray) : this;
 	}
 	XOPER* end()
 	{
-		return static_cast<XOPER*>(::end<X>(*this));
+		return xltype == xltypeMulti ? static_cast<XOPER*>(val.array.lparray) + size() : this + 1;
 	}
 	const XOPER* begin() const
 	{
-		return static_cast<const XOPER*>(::begin<X>(*this));
+		return xltype == xltypeMulti ? static_cast<const XOPER*>(val.array.lparray) : this;
 	}
 	const XOPER* end() const
 	{
-		return static_cast<const XOPER*>(::end<X>(*this));
+		return xltype == xltypeMulti ? static_cast<const XOPER*>(val.array.lparray) + size() : this + 1;
 	}
 
 	// Num
@@ -148,7 +148,7 @@ public:
 	}
 	operator double() const
 	{
-		return to_double(*this);
+		return xll::to_double<X>(*this);
 	}
 	XOPER& operator=(double num)
 	{
@@ -258,7 +258,7 @@ public:
 	{
 		return operator==(str.c_str());
 	}
-	static xstring to_string(const X& x)
+	static xstring to_string(const typename xll::traits<X>::type x)
 	{
 		static xll::traits<X>::xchar name[] = { 6, '_', 'n', 'A', 'm', 'E', '_' };
 		static X Name = { 0, xltypeStr};
@@ -438,7 +438,7 @@ private:
 		xltype = static_cast<WORD>(type);
 	}
 
-	void alloc(const X& x)
+	void alloc(const typename xll::traits<X>::type x)
 	{
 		xltype = x.xltype;
 
@@ -452,10 +452,10 @@ private:
 			val.array.columns = 0;
 			val.array.lparray = 0;
 
-			realloc(::rows(x), ::columns(x));
-			ensure (::end<X>(x) <= begin() || end() <= ::begin<X>(x));
+			realloc(xll::rows<X>(x), xll::columns<X>(x));
+			ensure (xll::end<X>(x) <= begin() || end() <= xll::begin<X>(x));
 			for (xword i = 0; i < size(); ++i)
-				operator[](i) = ::index(x, i);
+				operator[](i) = xll::index<X>(x, i);
 		}
 		else {
 			val = x.val;

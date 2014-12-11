@@ -2,7 +2,7 @@
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 // #define EXCEL12 for Excel 2007 and later.
 #pragma once
-#pragma warning(disable: 4275 4231 4251 4217)
+#pragma warning(disable: 4275 4231 4251 4217 4996)
 #include <ctime>
 
 #ifdef EXCEL12
@@ -73,4 +73,9 @@ HWND xll_GetHwnd(void);
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_get12", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_mask", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_mask12", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_take", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_take12", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_drop", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_drop12", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim12", 4))
 

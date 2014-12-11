@@ -37,6 +37,7 @@ namespace xll {
 			HANDLEX h;
 		} u;
 
+		u.h = 0;
 		u.p = p;
 		// if u.h denormal ...
 
@@ -120,13 +121,14 @@ namespace xll {
 			}
 		}
 		// lookup: handle<T> h_(h);
-		handle(HANDLEX h)
+		handle(HANDLEX h, bool throw_ = true)
 			: p_(h2p<T>(h))
 		{
 			if (handles().end() == find(p_)) {
 				p_ = 0;
 
-				throw std::runtime_error("xll::handle lookup failed");
+				if (throw_)
+					throw std::runtime_error("xll::handle lookup failed");
 			}
 		}
 		~handle()

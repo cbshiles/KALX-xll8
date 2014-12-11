@@ -10,6 +10,7 @@ namespace xll {
 
 	template<>
 	struct traits<XLOPER> {
+		typedef XLOPER type;
 		typedef WORD xbool;
 		typedef CHAR xchar;
 		typedef WORD xrw;
@@ -90,6 +91,7 @@ namespace xll {
 
 	template<>
 	struct traits<XLOPER12> {
+		typedef XLOPER12 type;
 		typedef BOOL xbool;
 		typedef XCHAR xchar;
 		typedef RW xrw;

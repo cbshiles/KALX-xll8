@@ -2,7 +2,7 @@
 //XLL_DLLIMPEXP xll::handle<OPER> handle_oper;
 //XLL_DLLIMPEXP xll::handle<OPER12> handle_oper12;
 #pragma once
-#include <iterator>
+#include <algorithm>
 #include "../xll.h"
 
 typedef xll::traits<XLOPERX>::xword xword;
@@ -18,23 +18,6 @@ namespace range {
 	inline bool is_vector(const XOPER<X>& o)
 	{
 		return o.xltype == xltypeMulti && (o.rows() == 1 || o.columns() == 1);
-	}
-
-	// get range pointer even if handle
-	template<class X>
-	inline const XOPER<X>* ptr(const XOPER<X>& x)
-	{
-		// throws if not a valid handle
-		if (is_scalar(x) && x.val.array.lparray[0].xltype == xltypeNum) {
-			try {
-				return xll::handle<XOPER<X>>(x.val.array.lparray[0].val.num).ptr();
-			}
-			catch (...) {
-				return 0;
-			}
-		}
-
-		return &x;
 	}
 
 	// select elements of o based on mask
@@ -69,30 +52,90 @@ namespace range {
 
 	// take elements of a range
 	template<class X>
-	inline void take(XOPER<X>& o, long n)
+	inline XOPER<X> take(const XOPER<X>& o, long n)
 	{
-		if (o.rows() > 1) {
-			if (n > 0) {
-				xword r = (std::min<xword>)(o.rows(), static_cast<xword>(n));
-				o.resize(r, o.columns());
-			}
-			else if (n < 0) {
-				xword r = (std::min<xword>)(o.rows(), static_cast<xword>(-n));
-				std::copy(o.end() - r*o.columns(), o.end(), o.begin());
-				o.resize(r, o.columns());
-			}
+		XOPER<X> o_;
+
+		if (n > 0) {
+			n = (std::min<long>)(n, o.size());
+
+			if (o.rows() == 1)
+				o_.resize(1, n);
+			else
+				o_.resize(n, 1);
+
+			std::copy(o.begin(), o.begin() + n, o_.begin());
+		}
+		else if (n < 0) {
+			n = (std::min<long>)(-n, o.size());
+
+			if (o.rows() == 1)
+				o_.resize(1, n);
+			else
+				o_.resize(n, 1);
+
+			std::copy(o.end() - n, o.end(), o_.begin());
 		}
 		else {
-			if (n > 0) {
-				xword c = (std::min<xword>)(o.size(), static_cast<xword>(n));
-				std::copy(o.end() - c, o.end(), o.begin());
-				o.resize(1, c);
-			}
-			else if (n < 0) {
-				xword c = (std::min<xword>)(o.size(), static_cast<xword>(-n));
-				o.resize(1, c);
-			}
+			o_ = XOPER<X>();
 		}
+
+		return o_;
+	}
+
+	// drop elements of a range
+	template<class X>
+	inline XOPER<X> drop(const XOPER<X>& o, long n)
+	{
+		XOPER<X> o_;
+
+		if (n > 0) {
+			n = (std::min<long>)(n, o.size());
+
+			if (o.rows() == 1)
+				o_.resize(1, o.size() - n);
+			else
+				o_.resize(o.size() - n, 1);
+
+			std::copy(o.begin() + n, o.end(), o_.begin());
+		}
+		else if (n < 0) {
+			n = (std::min<long>)(-n, o.size());
+
+			if (o.rows() == 1)
+				o_.resize(1, o.size() - n);
+			else
+				o_.resize(o.size() - n, 1);
+
+			std::copy(o.begin(), o.end() - n, o_.begin());
+		}
+		else {
+			o_ = o;
+		}
+
+		return o_;
+	}
+	// trim empty elements from front and back of range
+	template<class X>
+	inline XOPER<X> trim(const XOPER<X>& o)
+	{
+		XOPER<X> o_;
+
+		ensure (o.size() > 0);
+
+		auto nil = [](const XOPER<X>& x) { return x.xltype == xltypeNil; };
+		const XOPER<X>* lb = std::find_if_not(o.begin(), o.end(), nil);
+//		const XOPER<X>* ub = std::find_if_not(o.rbegin(), o.rend(), nil).base();
+		const XOPER<X>* ub = std::find_if_not(o.begin(), o.end(), nil);
+
+		if (o.rows() == 1)
+			o_.resize(1, std::distance(lb, ub));
+		else
+			o_.resize(std::distance(lb, ub), 1);
+
+		std::copy(lb, ub, o_.begin());
+
+		return o_;
 	}
 
 } // range
