@@ -139,6 +139,23 @@ public:
 	{
 		return xltype == xltypeMulti ? static_cast<const XOPER*>(val.array.lparray) + size() : this + 1;
 	}
+	// STL friendly
+	std::reverse_iterator<XOPER*> rbegin()
+	{
+		return std::reverse_iterator<XOPER*>((xltype == xltypeMulti ? static_cast<XOPER*>(val.array.lparray) : this) + size());
+	}
+	std::reverse_iterator<XOPER*> rend()
+	{
+		return std::reverse_iterator<XOPER*>(xltype == xltypeMulti ? static_cast<XOPER*>(val.array.lparray) : this);
+	}
+	const std::reverse_iterator<const XOPER*> rbegin() const
+	{
+		return std::reverse_iterator<const XOPER*>((xltype == xltypeMulti ? static_cast<XOPER*>(val.array.lparray) : this) + size());
+	}
+	const std::reverse_iterator<const XOPER*> rend() const
+	{
+		return std::reverse_iterator<const XOPER*>(xltype == xltypeMulti ? static_cast<XOPER*>(val.array.lparray) : this);
+	}
 
 	// Num
 	explicit XOPER(double num)

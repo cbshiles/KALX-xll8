@@ -117,21 +117,29 @@ namespace range {
 	}
 	// trim empty elements from front and back of range
 	template<class X>
-	inline XOPER<X> trim(const XOPER<X>& o)
+	inline XOPER<X> trim(const XOPER<X>& o, bool contiguous = false)
 	{
 		XOPER<X> o_;
 
 		ensure (o.size() > 0);
 
-		auto nil = [](const XOPER<X>& x) { return x.xltype == xltypeNil; };
+		auto nil = [](const XOPER<X>& x) { return x.xltype == xltypeNil || (x.xltype == xltypeStr && x.val.str[0] == 0); };
 		const XOPER<X>* lb = std::find_if_not(o.begin(), o.end(), nil);
-//		const XOPER<X>* ub = std::find_if_not(o.rbegin(), o.rend(), nil).base();
-		const XOPER<X>* ub = std::find_if_not(o.begin(), o.end(), nil);
+
+		if (lb == o.end())
+			return XOPER<X>(xlerr::NA);
+
+		const XOPER<X>* ub = contiguous 
+			? std::lower_bound(lb, o.end(), XOPER<X>(), [&nil](const XOPER<X>& x, const XOPER<X>& y) { return !nil(x) && nil(y); })
+			: std::find_if_not(o.rbegin(), o.rend(), nil).base();
+
+		ptrdiff_t n = std::distance(lb, ub);
+		ensure (n > 0);
 
 		if (o.rows() == 1)
-			o_.resize(1, std::distance(lb, ub));
+			o_.resize(1, n);
 		else
-			o_.resize(std::distance(lb, ub), 1);
+			o_.resize(n, 1);
 
 		std::copy(lb, ub, o_.begin());
 

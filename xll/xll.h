@@ -77,5 +77,6 @@ HWND xll_GetHwnd(void);
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_take12", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_drop", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_drop12", 8))
-#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim12", 4))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim12", 8))
 
