@@ -115,6 +115,7 @@ namespace range {
 
 		return o_;
 	}
+
 	// trim empty elements from front and back of range
 	template<class X>
 	inline XOPER<X> trim(const XOPER<X>& o, bool contiguous = false)
@@ -144,6 +145,23 @@ namespace range {
 		std::copy(lb, ub, o_.begin());
 
 		return o_;
+	}
+
+	template<class X>
+	inline XOPER<X> remove(const XOPER<X>& o, int mask)
+	{
+		XOPER<X> o_;
+
+		for (const auto& i : o) {
+			if (!(i.xltype&mask))
+				o_.push_back(i);
+		}
+
+		if (o.rows() == 1)
+			o_.resize(1, o_.size());
+		else
+			o_.resize(o_.size(), 1);
+
 	}
 
 } // range

@@ -75,6 +75,28 @@ xll_alert_level_(LPOPER po)
 	return &o;
 }
 
+static AddIn xai_alert_error_toggle(Macro(XLL_DECORATE("xll_alert_error_toggle",0), "XLL.ALERT.ERROR.TOGGLE"));
+extern "C" int __declspec(dllexport) WINAPI xll_alert_error_toggle(void)
+{
+	xll_alert_level ^= XLL_ALERT_ERROR;
+
+	return 1;
+}
+static AddIn xai_alert_warning_toggle(Macro(XLL_DECORATE("xll_alert_warning_toggle",0), "XLL.ALERT.WARNING.TOGGLE"));
+extern "C" int __declspec(dllexport) WINAPI xll_alert_warning_toggle(void)
+{
+	xll_alert_level ^= XLL_ALERT_WARNING;
+
+	return 1;
+}
+static AddIn xai_alert_info_toggle(Macro(XLL_DECORATE("xll_alert_info_toggle",0), "XLL.ALERT.INFO.TOGGLE"));
+extern "C" int __declspec(dllexport) WINAPI xll_alert_info_toggle(void)
+{
+	xll_alert_level ^= XLL_ALERT_INFO;
+
+	return 1;
+}
+
 static AddIn xai_alert_error(
 	Function(XLL_WORD, XLL_DECORATE("xll_alert_error",0), "XLL_ALERT_ERROR")
 	.Category("XLL")
@@ -111,6 +133,7 @@ extern "C" int __declspec(dllexport) WINAPI xll_alert_log(void)
 {
 	return XLL_ALERT_LOG;
 }
+
 /*
 static AddIn xai_alert_filter(XLL_DECORATE("xll_alert_filter", 0), "ALERT.FILTER");
 extern "C" int __declspec(dllexport) WINAPI

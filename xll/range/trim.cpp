@@ -33,7 +33,7 @@ extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_trim(LPOPER po, bool co
 }
 
 static AddIn12 xai_range_trim12(
-	Function12(XLL_LPOPER12, XLL_DECORATE12(L"xll_range_trim12",8), L"RANGE.TRIM12")
+	Function12(XLL_LPOPER12, XLL_DECORATE12(L"xll_range_trim12",8), L"RANGE.TRIM")
 	.Arg(XLL_LPOPER12, L"Range", L"is a range.")
 	.Arg(XLL_BOOL12, L"_Contiguous", L"is an optional argument indicating data are contiguous.")
 	.Uncalced()
@@ -61,13 +61,15 @@ extern "C" LPOPER12 __declspec(dllexport) WINAPI xll_range_trim12(LPOPER12 po, b
 	return &o;
 }
 
-#ifdef _DEBUB
+#ifdef _DEBUG
 
 int xll_test_range_trim(void)
 {
 	try {
-		std::vector<int> v{0,1,1,0,1,0};
-		auto lb = std::lower_bound(v.begin(), v.end(), 0, [](int i, int j)
+		OPERX o{OPERX(), OPERX(1),  OPERX()};
+		auto o2 = range::trim(o);
+		ensure (o2.size() == 1);
+		ensure (o2[0] = o[1]);
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());

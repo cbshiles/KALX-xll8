@@ -342,6 +342,12 @@ namespace Reg {
 
 			return ProxyObject(*this);
 		}
+		ProxyObject operator^=(int t)
+		{
+			t_ ^= t;
+
+			return ProxyObject(*this);
+		}
 		// should add the complete list - welcome to proxy objects!
 	};
 
