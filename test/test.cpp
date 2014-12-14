@@ -397,23 +397,12 @@ int xll_test(void)
 		n = sizeof(XLOPER12);
 		ensure (n == 32);
 //		_crtBreakAlloc = 102;
-		OPERX ab = Excel<XLOPERX>(xlfConcatenate, OPERX(_T("a")), OPERX(_T("b")));
-		ensure (ab == _T("ab"));
-		xll_alert_level = 7;
-//		test_error();
-		ensure (_CrtCheckMemory());
 		test_oper();
-		ensure (_CrtCheckMemory());
 		test_push_back();
-		ensure (_CrtCheckMemory());
 		test_excel();
-		ensure (_CrtCheckMemory());
 		test_on();
-		ensure (_CrtCheckMemory());
 		test_name();
-		ensure (_CrtCheckMemory());
 		test_to_string();
-		ensure (_CrtCheckMemory());
 		test_loper();
 		test_initializer();
 	}

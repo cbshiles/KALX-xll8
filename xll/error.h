@@ -21,6 +21,8 @@ extern Reg::Object<char, DWORD> xll_alert_level;
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_alert_info", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_alert_log", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_alert_error_toggle", 0))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_alert_warning_toggle", 0))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_alert_info_toggle", 0))
 #pragma comment(linker, "/include:?xll_alert_level@@3V?$Object@DK@Reg@@A")
 
 #endif // _LIB

@@ -159,9 +159,12 @@ namespace range {
 
 		if (o.rows() == 1)
 			o_.resize(1, o_.size());
-		else
+		else if (o.columns() == 1)
 			o_.resize(o_.size(), 1);
+		else
+			o_ = XOPER<X>(xlerr::NA);
 
+		return o_;
 	}
 
 } // range

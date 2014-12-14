@@ -4,7 +4,7 @@
 
 // All addins coordinate through the registry.
 Reg::Object<char, DWORD> xll_alert_level(
-	HKEY_CURRENT_USER, "Software\\KALX\\xll", "xll_alert_level", 
+	HKEY_CURRENT_USER, "Software\\KALX\\xll", "xll_alert_level",
 	XLL_ALERT_ERROR|XLL_ALERT_WARNING|XLL_ALERT_INFO
 );
 
@@ -57,14 +57,14 @@ xll_alert_level_(LPOPER po)
 	static OPER o;
 
 	try {
-		o = static_cast<double>(xll_alert_level);
-
 		if (po->xltype != xltypeMissing) {
 			ensure (po->xltype == xltypeNum);
 			DWORD xal = static_cast<DWORD>(po->val.num);
-			ensure (xal < 0x8);
+			ensure (xal <= 0xF);
 			xll_alert_level = xal;
 		}
+
+		o = static_cast<double>(xll_alert_level);
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());

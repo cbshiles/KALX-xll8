@@ -29,12 +29,12 @@
     <AssemblyName>ribbon</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
-    <IsWebBootstrapper>True</IsWebBootstrapper>
+    <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>http://localhost:55556/</PublishUrl>
-    <InstallUrl>http://localhost:55556/</InstallUrl>
+    <PublishUrl>\\IOMEGA-2TB\Backups\xll\</PublishUrl>
+    <InstallUrl>\\X220\Users\</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.7</ApplicationVersion>
+    <ApplicationVersion>1.0.0.10</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -213,6 +213,8 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="ribbon_TemporaryKey.pfx" />
+    <Content Include="README.txt" />
+    <Content Include="test.xll" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>

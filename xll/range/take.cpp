@@ -28,6 +28,7 @@ extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_take(LONG n, const LPOP
 
 	return &o;
 }
+
 static AddIn12 xai_range_take12(
 	Function12(XLL_LPOPER12, XLL_DECORATE12(L"xll_range_take12",8), L"RANGE.TAKE")
 	.Arg(XLL_LONG12, L"Count", L"is the number of elements to take.")

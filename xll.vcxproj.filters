@@ -164,6 +164,9 @@
     <ClCompile Include="xll\range\trim.cpp">
       <Filter>range</Filter>
     </ClCompile>
+    <ClCompile Include="xll\range\remove.cpp">
+      <Filter>range</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="xll\oper.natvis">
