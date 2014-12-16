@@ -12,21 +12,16 @@ namespace ribbon
 {
     public partial class ThisAddIn
     {
+        private bool is64Bit()
+        {
+            return false; //!!! for now
+        }
         // load all add-ins in current and subdirectories
         private void LoadAddins()
         {
-//            string dir = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(@"C:\Users\Keith\Source\Repos\xll8\Debug\");
             foreach (string xll in Directory.EnumerateFiles(".", "*.xll", System.IO.SearchOption.AllDirectories))
             {
                 this.Application.RegisterXLL(xll);
-                Microsoft.Office.Tools.Ribbon.RibbonCheckBox cb = Globals.Ribbons.GetRibbon<AlertLevel>().Factory.CreateRibbonCheckBox();
-                // !!! read only
-//                Globals.Ribbons.GetRibbon<AlertLevel>().groupModule.Items.Add(cb);
-//                cb.Label = xll;
-//                cb.Name = "module" + xll;
-
-
             }
         }
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
