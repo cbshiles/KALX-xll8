@@ -173,7 +173,7 @@ namespace xll {
 	{
 		return ::index<X>(x, r*x.val.array.columns + c);
 	}
-
+#pragma warning(disable: 4459)
 	template<class X>
 	inline bool operator_equal(const typename xll::traits<X>::type& x, typename traits<X>::xcstr s, size_t n)
 	{

@@ -33,7 +33,8 @@ public:
 	explicit XOPER(std::initializer_list<XOPER> o)
 	{
 		resize(static_cast<xll::traits<X>::xword>(o.size()), 1);
-		std::copy(o.begin(), o.end(), stdext::checked_array_iterator<XOPER*>(begin(), size()));
+//		std::copy(o.begin(), o.end(), stdext::checked_array_iterator<XOPER*>(begin(), size()));
+		std::copy(o.begin(), o.end(), begin());
 	}
 	XOPER& operator=(const XOPER& o)
 	{
@@ -408,12 +409,14 @@ public:
 
 		if (x.columns() == 1 || (columns() == x.columns())) { // favor columns
 			resize(rows() + x.rows(), x.columns());
-			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.size(), x.size()));
+//			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.size(), x.size()));
+			std::copy(x.begin(), x.end(), end() - x.size());
 		}
 		else {
 			ensure (x.rows() == 1);
 			resize(1, columns() + x.columns());
-			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.columns(), x.columns()));
+//			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.columns(), x.columns()));
+			std::copy(x.begin(), x.end(), end() - x.columns());
 		}
 
 		return *this;
@@ -487,7 +490,8 @@ private:
 		}
 		else if (xltype == xltypeMulti) {
 			realloc(o.rows(), o.columns());
-			std::copy(o.begin(), o.end(), stdext::checked_array_iterator<XOPER<X>*>(begin(), size()));
+//			std::copy(o.begin(), o.end(), stdext::checked_array_iterator<XOPER<X>*>(begin(), size()));
+			std::copy(o.begin(), o.end(), begin());
 		}
 		else {
 			val = o.val;

@@ -56,8 +56,6 @@ void test_error(void)
 
 	xll_alert_level = xal;
 
-	HWND hw;
-	hw = xll_GetHwnd();
 	HMODULE hm;
 	hm = xll_Instance;
 }

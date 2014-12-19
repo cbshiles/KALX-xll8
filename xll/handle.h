@@ -102,7 +102,7 @@ namespace xll {
 		T* p_;
 		static typename std::vector<std::unique_ptr<T>>::iterator find(T* p)
 		{
-			return std::find_if(handles().begin(), handles().end(), [p](const std::unique_ptr<T>& p_) { return p_.get() == p; });
+			return std::find_if(handles().begin(), handles().end(), [p](const std::unique_ptr<T>& q) { return q.get() == p; });
 		}
 	public:
 		// constructor: handle<T> h(new T(...));

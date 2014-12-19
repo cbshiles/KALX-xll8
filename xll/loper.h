@@ -38,7 +38,7 @@ public:
 	~LXOPER()
 	{
 		if (owner_)
-			ensure (xlretSuccess == xll::traits<X>::Excel(xlFree, 0, 1, this));
+			xll::traits<X>::Excel(xlFree, 0, 1, this);
 	}
 
 	// Return xlret types if not xlretSuccess

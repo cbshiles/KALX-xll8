@@ -128,9 +128,6 @@
     <ClCompile Include="xll\error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xll\hwnd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xll\XLCALL.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
