@@ -19,6 +19,15 @@ namespace ribbon
         // load all add-ins in current and subdirectories
         private void LoadAddins()
         {
+            System.Reflection.Assembly assemblyInfo = System.Reflection.Assembly.GetExecutingAssembly();
+
+            //Location is where the assembly is run from 
+            string assemblyLocation = assemblyInfo.Location;
+
+            //CodeBase is the location of the ClickOnce deployment files
+            Uri uriCodeBase = new Uri(assemblyInfo.CodeBase);
+            string ClickOnceLocation = Path.GetDirectoryName(uriCodeBase.LocalPath.ToString());
+
             foreach (string xll in Directory.EnumerateFiles(".", "*.xll", System.IO.SearchOption.AllDirectories))
             {
                 this.Application.RegisterXLL(xll);
