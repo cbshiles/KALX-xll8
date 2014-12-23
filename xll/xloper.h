@@ -202,7 +202,7 @@ namespace xll {
 		case xltypeNum:
 			return x.val.num == y.val.num;
 		case xltypeStr:
-			return operator_equal<X>(x, y.val.str + 1, y.val.str[0]);
+			return x.val.str[0] == y.val.str[0] && 0 == xll::traits<X>::strnicmp(x.val.str + 1, y.val.str + 1, y.val.str[0]);
 		case xltypeBool:
 			return x.val.xbool == y.val.xbool;
 		//case xltypeRef:

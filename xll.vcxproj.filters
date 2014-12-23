@@ -137,9 +137,6 @@
     <ClCompile Include="xll\this.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xll\caller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xll\eval.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -163,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="xll\range\remove.cpp">
       <Filter>range</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\paste.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

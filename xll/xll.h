@@ -26,7 +26,6 @@
 
 #endif
 
-#pragma warning(disable: 4996)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
@@ -50,6 +49,7 @@ extern HMODULE xll_Instance;
 // try { ... ensure(...); ... } catch (const std::exception& ex) { XLL_ERROR|WARNING|INFO(ex.what()); }
 #include "error.h"
 
+// extras
 #include "entities.h"
 //#include "enum.h"
 #include "fp.h"
@@ -57,8 +57,6 @@ extern HMODULE xll_Instance;
 #include "on.h"
 #include "range/range.h"
 
-#pragma comment(linker, "/include:" XLL_DECORATE("xll_caller", 0))
-#pragma comment(linker, "/include:" XLL_DECORATE("xll_caller12", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_this", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_this12", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_throttle", 4))
@@ -80,3 +78,4 @@ extern HMODULE xll_Instance;
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim12", 8))
 
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_paste_basic", 0))
