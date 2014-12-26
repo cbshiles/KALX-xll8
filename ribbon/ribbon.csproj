@@ -29,12 +29,12 @@
     <AssemblyName>ribbon</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
-    <IsWebBootstrapper>False</IsWebBootstrapper>
+    <IsWebBootstrapper>True</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <PublishUrl>\\IOMEGA-2TB\Backups\xll\</PublishUrl>
-    <InstallUrl>\\X220\Users\</InstallUrl>
+    <PublishUrl>ftp://kal.webfactional.com/webapps/xll/</PublishUrl>
+    <InstallUrl>http://xll.kalx.net/</InstallUrl>
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.11</ApplicationVersion>
+    <ApplicationVersion>1.0.0.14</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>

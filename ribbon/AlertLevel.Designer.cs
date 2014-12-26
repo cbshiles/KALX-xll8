@@ -39,17 +39,13 @@
             this.alertError = this.Factory.CreateRibbonCheckBox();
             this.alertWarning = this.Factory.CreateRibbonCheckBox();
             this.alertInfo = this.Factory.CreateRibbonCheckBox();
-            this.group2 = this.Factory.CreateRibbonGroup();
-            this.menu1 = this.Factory.CreateRibbonMenu();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
-            this.group2.SuspendLayout();
             // 
             // tab1
             // 
             this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
             this.tab1.Groups.Add(this.group1);
-            this.tab1.Groups.Add(this.group2);
             this.tab1.Label = "TabAddIns";
             this.tab1.Name = "tab1";
             // 
@@ -79,17 +75,6 @@
             this.alertInfo.Name = "alertInfo";
             this.alertInfo.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.alertInfo_Click);
             // 
-            // group2
-            // 
-            this.group2.Items.Add(this.menu1);
-            this.group2.Label = "group2";
-            this.group2.Name = "group2";
-            // 
-            // menu1
-            // 
-            this.menu1.Label = "menu1";
-            this.menu1.Name = "menu1";
-            // 
             // AlertLevel
             // 
             this.Name = "AlertLevel";
@@ -100,8 +85,6 @@
             this.tab1.PerformLayout();
             this.group1.ResumeLayout(false);
             this.group1.PerformLayout();
-            this.group2.ResumeLayout(false);
-            this.group2.PerformLayout();
 
         }
 
@@ -112,8 +95,6 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox alertError;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox alertWarning;
         internal Microsoft.Office.Tools.Ribbon.RibbonCheckBox alertInfo;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
-        internal Microsoft.Office.Tools.Ribbon.RibbonMenu menu1;
     }
 
     partial class ThisRibbonCollection

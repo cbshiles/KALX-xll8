@@ -8,7 +8,7 @@ using namespace xll;
 
 static AddIn xai_sqrt(
 	Function(XLL_LPOPER, "?xll_sqrt", "XLL.SQRT")
-	.Num("Number", "is a floating point number.")
+	.Num("Number", "is a floating point number.", 2)
 	.Category("XLL")
 	.FunctionHelp("Return the square root of Number or #NUM! if less than 0.")
 );
