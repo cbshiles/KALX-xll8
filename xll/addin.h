@@ -107,7 +107,7 @@ namespace xll {
 
 		static const XAddIn<X>* Find(const XOPER<X>& regid)
 		{
-			for (auto ai : List()) {
+			for (const auto& ai : List()) {
 				if (ai->regid_ == regid || ai->Args().FunctionText() == regid)
 					return ai;
 			}

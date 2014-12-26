@@ -82,7 +82,7 @@ void test_oper(void)
 	num = 2.34;
 	ensure (2.34 == num);
 	num = 4;
-	ensure (num.xltype == xltypeNum); // like Excel
+	ensure (num.xltype == xltypeInt); // like Excel
 	ensure (num == 4);
 	ensure (4 == num);
 
@@ -90,7 +90,7 @@ void test_oper(void)
 	ensure (str.xltype == xltypeStr);
 	ensure (str.val.str[0] == 3);
 	ensure (str == _T("str"));
-	ensure (num < str);
+//	ensure (num < str);
 	XLOPERX xstr;
 	xstr.xltype = xltypeStr;
 	xstr.val.str = _T("\003Str");
@@ -270,17 +270,18 @@ void test_to_string(void)
 	traits<XLOPERX>::xstring s;
 
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
-	ensure (s == _T("=0"));
+	ensure (s == _T("=\"\""));
+	o = OPERX(s);
+	ensure (o.xltype == xltypeStr && o.val.str[0] == 3);
+	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
+	ensure (o == _T(""));
 
 	o = OPERX(xltype::Missing);
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=0"));
 
 	o = 1.23;
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=1.23"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
@@ -292,20 +293,16 @@ void test_to_string(void)
 
 	o = true;
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
-	
 	ensure (s == _T("=TRUE"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 	
 	o = false;
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=FALSE"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
 	o = OPERX(xlerr::NA);
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=#N/A"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
@@ -318,8 +315,6 @@ void test_to_string(void)
 	s = o.to_string();
 	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("={1.23,\"string\",TRUE;#VALUE!,#REF!,#N/A}"));
-	o[3] = OPERX(xlerr::Value);
-	o[5] = OPERX(xlerr::NA);
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 }
 

@@ -69,34 +69,19 @@ namespace xll {
 
 		return std::numeric_limits<double>::quiet_NaN();
 	}
-	/*
 	template<class X>
 	inline typename xll::traits<X>::xstring to_string(const typename xll::traits<X>::type& x)
 	{
-		typedef xll::traits<X>::xstring xstring;
-		typedef xll::traits<X>::xword xword;
+		if (x.xltype == xltypeNil)
+			return xll::traits<X>::string("=\"\""); // Evaluates to ""
 
-		switch (x.xltype) {
-		case xltypeNum:
-			return xll::traits<X>::to_string(x.val.num);
-		case xltypeStr:
-			return xstring(x.val.str + 1, x.val.str[0]);
-		case xltypeBool:
-			return xll::traits<X>::to_string(x.val.xbool ? true : false);
-		case xltypeMulti: 
-			{
-				xstring s;
+		static XOPER<X> xName(xll::traits<X>::string("__NaMe__")); // hopefully unique
+		Excel<X>(xlfSetName, xName, x);
+		XOPER<X> y = Excel<X>(xlfGetName, xName);
+		Excel<X>(xlfSetName, xName); // unset
 
-				for (xword i = 0; i < size(x); ++i)
-					s.append(to_string(index(x, i)));
-
-				return s;
-			}
-		}
-
-		return xstring('?', 1);
+		return xll::traits<X>::xstring(y.val.str + 1, y.val.str[0]);
 	}
-	*/
 	template<class X>
 	inline typename xll::traits<X>::xword rows(const typename xll::traits<X>::type& x)
 	{

@@ -32,7 +32,7 @@ namespace xll {
 
 		XOPER<X> args_;
 //		XOPER<X> type_; // return type followed by arg types
-		XOPER<X> default_;
+		mutable XOPER<X> default_;
 		xstring doc_, see_; // documentation, see also
 
 		XOPER<X>& Arg(RegisterArg ra)
@@ -107,7 +107,10 @@ namespace xll {
 
 		xword Arity() const
 		{
-			return size() - static_cast<xword>(RegisterArg::Max);
+			xword n = size() - static_cast<xword>(RegisterArg::Max);
+			default_.resize(n, 1);
+
+			return n;
 		}
 		xword size() const
 		{
@@ -423,6 +426,15 @@ namespace xll {
 		const xstring& Documentation() const
 		{
 			return doc_;
+		}
+		const xstring& SeeAlso() const
+		{
+			return doc_;
+		}
+
+		const XOPER<X>& Default(xword i) const
+		{
+			return default_[i];
 		}
 	};
 

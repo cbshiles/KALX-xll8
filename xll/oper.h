@@ -13,6 +13,7 @@ class XOPER : public X {
 	typedef typename xll::traits<X>::xcstr xcstr;
 	typedef typename xll::traits<X>::xstring xstring;
 	typedef typename xll::traits<X>::xword xword;
+	typedef typename xll::traits<X>::xint xint;
 public:
 	XOPER()
 	{
@@ -177,15 +178,6 @@ public:
 
 		return *this;
 	}
-	XOPER& operator=(DWORD num)
-	{
-		free();
-
-		xltype = xltypeNum;
-		val.num = num;
-
-		return *this;
-	}
 	bool operator==(double num) const
 	{
 		return xltype == xltypeNum && val.num == num;
@@ -198,24 +190,6 @@ public:
 		val.num += to_double(o);
 
 		return *this;
-	}
-	explicit XOPER(int i)
-	{
-		xltype = xltypeNum;
-		val.num = i;
-	}
-	XOPER& operator=(int i)
-	{
-		free();
-
-		xltype = xltypeNum;
-		val.num = i;
-
-		return *this;
-	}
-	bool operator==(int i) const
-	{
-		return xltype == xltypeNum && val.num == i;
 	}
 
 	// Str
@@ -266,6 +240,25 @@ public:
 
 		return *this;
 	}
+	XOPER& append(const xstring& s)
+	{
+		return append(s.c_str(), static_cast<xchar>(s.size()));
+	}
+	XOPER& append(const XOPER& o)
+	{
+		xstring s = xll::to_string<X>(o);
+
+		// artifacts of xlfSetName
+		if (s[0] == '=' && s[1] == '"' && s.back() == '"') {
+			s.erase(0,2);
+			s.pop_back();
+		}
+		if (s[0] == '=') {
+			s.erase(0,1);
+		}
+
+		return append(s);
+	}
 	bool operator==(xcstr str) const
 	{
 		return xltype == xltypeStr 
@@ -276,26 +269,9 @@ public:
 	{
 		return operator==(str.c_str());
 	}
-	static xstring to_string(const typename xll::traits<X>::type x)
-	{
-		static xll::traits<X>::xchar name[] = { 6, '_', 'n', 'A', 'm', 'E', '_' };
-		static X Name = { 0, xltypeStr};
-
-		Name.val.str = name;
-
-		// Get/Set name converts "str" to "=\"str\""
-		// lock to make thread safe???
-		Excel<X>(xlfSetName, Name, x);
-		XOPER<X> o = Excel<X>(xlfGetName, Name); // too clever?
-		Excel<X>(xlfSetName, Name);
-
-		ensure (o.xltype == xltypeStr);
-
-		return xstring(o.val.str + 1, o.val.str[0]);
-	}
 	xstring to_string(void) const
 	{
-		return to_string(*this);
+		return xll::to_string<X>(*this);
 	}
 
 	// Bool
@@ -433,8 +409,43 @@ public:
 
 	// sref
 
-	// Int - converts to double, like Excel
+	// Intaa
+	explicit XOPER(int i)
+	{
+		xltype = xltypeInt;
+		val.w = static_cast<xint>(i);
+	}
+	XOPER& operator=(int i)
+	{
+		free();
 
+		xltype = xltypeInt;
+		val.w = static_cast<xint>(i);
+
+		return *this;
+	}
+	bool operator==(int i) const
+	{
+		return xltype == xltypeInt && val.w ==i || (xltype == xltypeNum && val.num == i);
+	}
+	explicit XOPER(DWORD i)
+	{
+		xltype = xltypeInt;
+		val.w = i;
+	}
+	XOPER& operator=(DWORD num)
+	{
+		free();
+
+		xltype = xltypeInt;
+		val.w = num;
+
+		return *this;
+	}
+	bool operator==(DWORD i) const
+	{
+		return xltype == xltypeInt && val.w ==i || (xltype == xltypeNum && val.num == i);
+	}
 	// emplace, emplace_back, emplace_front, emplace_hint!!!
 
 private:

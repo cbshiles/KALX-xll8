@@ -39,6 +39,8 @@ namespace xll {
 	template<class Key, class X = XLOPERX>
 	class On {
 		typedef typename traits<X>::xcstr xcstr;
+		typedef typename traits<X>::xword xword;
+		typedef typename traits<X>::xint xint;
 	public:
 		On(xcstr text, xcstr macro)
 		{
@@ -80,17 +82,15 @@ namespace xll {
 		static int Open(void)
 		{
 			try {
-				callback_list& l(callbacks());
+				for (const auto& i : callbacks()) {
+					xword f = static_cast<xword>(i[0]);
 
-				for (callback_iter i = l.begin(); i != l.end(); ++i) {
-					int f = static_cast<int>((*i)[0].val.num);
-
-					if ((*i).size() == 3)
-						Excel<X>(f, (*i)[1], (*i)[2]);
-					else if ((*i).size() == 4)
-						Excel<X>(f, (*i)[1], (*i)[2], (*i)[3]);
-					else if ((*i).size() == 5)
-						Excel<X>(f, (*i)[1], (*i)[2], (*i)[3], (*i)[4]);
+					if (i.size() == 3)
+						Excel<X>(f, i[1], i[2]);
+					else if (i.size() == 4)
+						Excel<X>(f, i[1], i[2], i[3]);
+					else if (i.size() == 5)
+						Excel<X>(f, i[1], i[2], i[3], i[4]);
 				}
 			}
 			catch (const std::exception& ex) {
@@ -104,12 +104,10 @@ namespace xll {
 		static int Close(void)
 		{
 			try {
-				callback_list& l(callbacks());
-
-				for (callback_iter i = l.begin(); i != l.end(); ++i) {
-					if ((*i).size() > 1) {
-						int f = static_cast<int>((*i)[0].val.num);
-						Excel<X>(f, (*i)[1]); // unregister
+				for (const auto& i : callbacks()) {
+					if (i.size() > 1) {
+						xword f = static_cast<xword>(i[0]);
+						Excel<X>(f, i[1]); // unregister
 					}
 				}
 			}

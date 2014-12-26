@@ -20,16 +20,16 @@ int xll_simple(void)
 }
 static Auto<OpenAfterX> xao_simple(xll_simple);
 
-static AddIn12 xai_select_end(
-	Function12(L">", L"?xll_select_end", L"XLL.SELECT.END")
-	.Arg(XLL_LPXLOPER12, L"Range", L"is a range")
+static AddInX xai_select_end(
+	Function(_T(">"), _T("?xll_select_end"), _T("XLL.SELECT.END"))
+	.Arg(XLL_LPXLOPERX, _T("Range"), _T("is a range"))
 	.Uncalced()
-	.Category(L"XLL")
+	.Category(_T("XL_T("))
 );
-LPOPER12 WINAPI xll_select_end(LPXLOPER12 po)
+LPOPERX WINAPI xll_select_end(LPXLOPERX po)
 {
 #pragma XLLEXPORT
-	static OPER12 o; 
+	static OPERX o; 
 	
 	o = *po;
 

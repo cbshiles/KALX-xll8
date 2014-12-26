@@ -130,6 +130,18 @@ namespace xll {
 
 			return s_;
 		}
+		static std::basic_string<wchar_t> string(const char* s, int n = 0)
+		{
+
+			if (n == 0)
+				n = static_cast<int>(::strlen(s));
+		
+			int n_ = MultiByteToWideChar(CP_ACP, 0, s, n, 0, 0);
+			std::basic_string<wchar_t> s_(n, 0);
+			MultiByteToWideChar(CP_ACP, 0, s, n, &s_[0], n_);
+
+			return s_;
+		}
 		static std::string string(const XLOPER12& s)
 		{
 			ensure (s.xltype == xltypeStr);
@@ -176,6 +188,7 @@ namespace xll {
 			return Excelv(f, res, n, &args[0]);
 		}
 	};
+
 /*
 	WideCharToMultiByte();
 	MultiByteToWideChar();
