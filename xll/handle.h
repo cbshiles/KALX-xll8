@@ -35,11 +35,17 @@ namespace xll {
 		union {
 			T* p;
 			HANDLEX h;
+			uint32_t u[2];
 		} u;
 
 		u.h = 0;
 		u.p = p;
 		// if u.h denormal ...
+		//ensure (isnormal(u.h));
+//		if (!isnormal(u.h)) {
+			std::swap(u.u[0], u.u[1]);
+//		}
+		ensure (isnormal(u.h));
 
 		return u.h;
 	}
@@ -49,9 +55,12 @@ namespace xll {
 		union {
 			T* p;
 			HANDLEX h;
+			uint32_t u[2];
 		} u;
 
 		u.h = h;
+
+		std::swap(u.u[0], u.u[1]);
 
 		return u.p;
 	}

@@ -93,8 +93,10 @@ namespace xll {
 		static int RegisterAll(void)
 		{
 			try {
-				for (auto ai : List())
-					ai->Register();
+				for (auto ai : List()) {
+					if (!ai->Args().isDocument())
+						ai->Register();
+				}
 			}
 			catch (const std::exception& ex) {
 				MessageBoxA(0, ex.what(), "Error", MB_OK);
@@ -186,7 +188,3 @@ namespace xll {
 */
 
 //#include "error.h"
-
-#ifdef _DEBUG
-//#include "utility/random.h"
-#endif

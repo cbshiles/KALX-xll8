@@ -44,9 +44,12 @@ namespace xll {
 			return args_[static_cast<xword>(ra)];
 		}
 	public:
-//		XArgs()
-//			: args_((xword)RegisterArg::Max, 1)
-//		{ }
+		XArgs(xcstr category)
+			: args_((xword)RegisterArg::Max, 1)
+		{
+			Arg(RegisterArg::MacroType) = -1; // documentation
+			Arg(RegisterArg::Category) = category;
+		}
 		XArgs(xcstr proc, xcstr text)
 			: args_((xword)RegisterArg::Max, 1)
 		{
@@ -143,6 +146,10 @@ namespace xll {
 		bool isMacro(void) const
 		{
 			return Arg(RegisterArg::MacroType) == 2;
+		}
+		bool isDocument(void) const
+		{
+			return Arg(RegisterArg::MacroType) == -1;
 		}
 
 		XArgs& Volatile(void)

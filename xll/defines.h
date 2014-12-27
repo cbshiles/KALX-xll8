@@ -38,7 +38,7 @@
 #else
 #define X_(f) f
 #define TX_(s) s
-// poor man's raw string literal (no commas or parens allowed)
+// poor man's raw string literal (no commas or parentheses allowed)
 #define R_(...) #__VA_ARGS__
 #define ExcelXv Excel4v
 #endif
