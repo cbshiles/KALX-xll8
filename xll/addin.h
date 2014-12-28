@@ -76,7 +76,7 @@ namespace xll {
 				err.append(xll::traits<X>::string(args_.FunctionText()));
 				MessageBoxA(0, err.c_str(), "Error", MB_OK);
 			}
-			else if (!x) {
+			else if (x.xltype == xltypeErr) {
 				std::string err("Failed to register function: ");
 				err.append(xll::traits<X>::string(args_.FunctionText()));
 				err.append("\nPerhaps you forgot to use #pragma XLLEXPORT or told Excel the wrong name for your function?"); 
@@ -110,7 +110,7 @@ namespace xll {
 		static const XAddIn<X>* Find(const XOPER<X>& regid)
 		{
 			for (const auto& ai : List()) {
-				if (ai->regid_ == regid || ai->Args().FunctionText() == regid)
+				if (regid == ai->regid_ || regid == ai->Args().FunctionText())
 					return ai;
 			}
 

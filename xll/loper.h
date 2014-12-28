@@ -40,26 +40,18 @@ public:
 		if (owner_)
 			xll::traits<X>::Excel(xlFree, 0, 1, this);
 	}
-
+/*
 	// Return xlret types if not xlretSuccess
 	LXOPER(xlret type)
 	{
 		xltype = xltypeInt; // not used elsewhere
 		val.w = static_cast<xll::traits<X>::xint>(type);
 	}
-	bool operator!(void) const
+	operator XOPER<X>()
 	{
-		return !static_cast<const XOPER<X>&>(*this);
+		return *this;
 	}
-	operator bool() const
-	{
-		return !!*this;
-	}
-	bool operator==(double num) const
-	{
-		return xltype == xltypeNum && val.num == num;
-	}
-
+*/
 	// For thread-safe functions:
 	// LPXLOPERX WINAPI foo(...) { static LOPERX o; ... ; return o.XLFree() }
 	X* XLFree()

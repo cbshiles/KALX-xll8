@@ -69,7 +69,7 @@ int xll_test_range_trim(void)
 		OPERX o{OPERX(), OPERX(1),  OPERX()};
 		auto o2 = range::trim(o);
 		ensure (o2.size() == 1);
-		ensure (o2[0] = o[1]);
+		ensure (o2[0] == o[1]);
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());

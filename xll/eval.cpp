@@ -26,6 +26,6 @@ extern "C" LPXLOPER12 __declspec(dllexport) WINAPI xll_eval12(LPXLOPER12 po)
 
 	x = Excel<XLOPER12>(xlfEvaluate, *po);
 
-	return x? x.XLFree() : po;
+	return x.XLFree();
 }
 

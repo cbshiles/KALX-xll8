@@ -90,6 +90,12 @@ public:
 
 		return this;
 	}
+	XOPER* XLFree()
+	{
+		xltype |= xlbitXLFree;
+
+		return this;
+	}
 
 	// forward to XLOPER
 	xword rows() const
@@ -280,7 +286,6 @@ public:
 		xltype = xltypeBool;
 		val.xbool = b;
 	}
-	
 	XOPER operator=(bool b)
 	{
 		free();
@@ -409,7 +414,7 @@ public:
 
 	// sref
 
-	// Intaa
+	// Int
 	explicit XOPER(int i)
 	{
 		xltype = xltypeInt;

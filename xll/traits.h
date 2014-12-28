@@ -18,7 +18,7 @@ namespace xll {
 		typedef LPSTR xstr;
 		typedef LPCSTR xcstr;
 		typedef std::basic_string<xchar> xstring;
-		typedef xrw xword; // use for array indices
+		typedef unsigned short xword; // use for array indices
 		typedef short int xint;
 		typedef _FP xfp;
 
@@ -99,7 +99,7 @@ namespace xll {
 		typedef XCHAR* xstr;
 		typedef const XCHAR* xcstr;
 		typedef std::basic_string<xchar> xstring;
-		typedef xrw xword; // use for array indices
+		typedef unsigned int xword; // use for array indices
 		typedef int xint;
 		typedef _FP12 xfp;
 
