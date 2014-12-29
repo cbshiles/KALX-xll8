@@ -21,8 +21,17 @@ inline bool paste_basic(void)
 		formula.append(traits<X>::string("("));
 
 		for (xword i = 0; i < a.Arity(); ++i) {
-			XOPER<X> xOff = Excel<X>(xlfOffset, ac, XOPER<X>(i + 1), XOPER<X>(0));
-			Excel<X>(xlSet, xOff, a.Default(i));
+			XOPER<X> o = Excel<X>(xlfOffset, ac, XOPER<X>(i + 1), XOPER<X>(0));
+
+			const XOPER<X>& ai = a.Default(i);
+			if (ai.xltype == xltypeStr && ai.val.str[0] > 0 && ai.val.str[1] == '=') {
+				Excel<X>(xlcSelect, o);
+				Excel<X>(xlcFormula, ai);
+				Excel<X>(xlcSelect, ac);
+			}
+			else {
+				Excel<X>(xlSet, o, ai);
+			}
 			
 			formula.append(xstr(i > 1 ? ", " : ""));
 			formula.append(xstr("R["));
