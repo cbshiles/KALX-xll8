@@ -23,20 +23,31 @@ inline bool paste_basic(void)
 		for (xword i = 0; i < a.Arity(); ++i) {
 			XOPER<X> o = Excel<X>(xlfOffset, ac, XOPER<X>(i + 1), XOPER<X>(0));
 
+			formula.append(xstr(i > 0 ? ", " : ""));
+
 			const XOPER<X>& ai = a.Default(i);
+			bool array = false;
 			if (ai.xltype == xltypeStr && ai.val.str[0] > 0 && ai.val.str[1] == '=') {
-				Excel<X>(xlcSelect, o);
-				Excel<X>(xlcFormula, ai);
-				Excel<X>(xlcSelect, ac);
+				if (ai.val.str[0] > 1 && ai.val.str[2] == '{') {
+					array = true;
+					Excel<X>(xlSet, o, ai);
+					formula.append(xstr("EVAL("));
+				}
+				else {
+					Excel<X>(xlcSelect, o);
+					Excel<X>(xlcFormula, ai);
+					Excel<X>(xlcSelect, ac);
+				}
 			}
 			else {
 				Excel<X>(xlSet, o, ai);
 			}
 			
-			formula.append(xstr(i > 1 ? ", " : ""));
 			formula.append(xstr("R["));
 			formula.append(XOPER<X>(i + 1));
 			formula.append(xstr("]C"));
+			if (array)
+				formula.append(xstr(")"));
 		}
 		formula.append(xstr(")"));
 

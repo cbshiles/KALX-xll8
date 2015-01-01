@@ -207,7 +207,7 @@ namespace xll {
 		XArgs& Arg(xcstr type, xcstr name, xcstr help, const T& t)
 		{
 			Arg(type, name, help);
-			default_.back() = XOPER<X>(t);
+			default_.push_back(XOPER<X>(t));
 
 			return *this;
 		}

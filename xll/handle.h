@@ -45,7 +45,7 @@ namespace xll {
 //		if (!isnormal(u.h)) {
 			std::swap(u.u[0], u.u[1]);
 //		}
-		ensure (isnormal(u.h));
+		ensure (u.h == 0 || isnormal(u.h));
 
 		return u.h;
 	}

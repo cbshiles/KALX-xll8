@@ -447,6 +447,15 @@ public:
 
 		return *this;
 	}
+	XOPER& operator=(unsigned int num)
+	{
+		free();
+
+		xltype = xltypeInt;
+		val.w = num;
+
+		return *this;
+	}
 	bool operator==(DWORD i) const
 	{
 		return xltype == xltypeInt && val.w ==i || (xltype == xltypeNum && val.num == i);
