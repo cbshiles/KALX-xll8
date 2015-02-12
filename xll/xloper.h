@@ -258,13 +258,13 @@ namespace xll {
 	}
 
 } // namespace xll
-
+/*
 template<class X>
 inline bool operator!(const typename xll::traits<X>::type& x)
 {
 	return xll::to_double<X>(x) != 0;
 }
-
+*/
 inline bool operator==(const XLOPER12& x, const XLOPER12& y)
 {
 	return xll::operator_equal<XLOPER12>(x, y);

@@ -40,6 +40,10 @@ public:
 		if (owner_)
 			xll::traits<X>::Excel(xlFree, 0, 1, this);
 	}
+	operator double() const
+	{
+		return xll::to_double<X>(*this);
+	}
 /*
 	// Return xlret types if not xlretSuccess
 	LXOPER(xlret type)

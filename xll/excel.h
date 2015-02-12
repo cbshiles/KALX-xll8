@@ -1,14 +1,7 @@
 // excel.h - Wrapper functions for Excel* functions.
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 // included by loper.h
-/*
-template<class.. Ts> void fun(Ts... vs)
-{
-	// capture args and do something with them later
-	auto g = [&vs...] { return gun(vs...); }
-	g();
-}
-*/
+#include <array>
 
 namespace xll {
 
@@ -22,7 +15,6 @@ namespace xll {
 
 		return x;
 	}
-
 }
 
 #include "oper.h"

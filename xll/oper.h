@@ -82,6 +82,14 @@ public:
 		return *this;
 	}
 
+	friend void swap(XOPER& x, XOPER& y)
+	{
+		using std::swap;
+
+		swap(x.xltype, y.xltype);
+		swap(x.val, y.val); //???
+	}
+
 	// For thread-safe programs:
 	// LPOPERX WINAPI foo(...) { OPERX* px = new(OPERX(...)); ... ; return px->DLLFree(); }
 	XOPER* DLLFree()
@@ -193,7 +201,7 @@ public:
 		ensure (xltype == xltypeNum);
 		ensure (o.xltype == xltypeNum);
 
-		val.num += to_double(o);
+		val.num += to_double<X>(o);
 
 		return *this;
 	}
@@ -416,6 +424,11 @@ public:
 
 	// Int
 	explicit XOPER(int i)
+	{
+		xltype = xltypeInt;
+		val.w = static_cast<xint>(i);
+	}
+	explicit XOPER(unsigned int i)
 	{
 		xltype = xltypeInt;
 		val.w = static_cast<xint>(i);

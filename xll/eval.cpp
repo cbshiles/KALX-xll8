@@ -13,13 +13,7 @@ extern "C" LPXLOPER __declspec(dllexport) WINAPI xll_eval(LPXLOPER po, BOOL form
 	static LOPER x;
 
 	try {
-		if (formula) {
-			OPER f = Excel<XLOPER>(xlfGetCell, OPER(6), *po);
-			x = Excel<XLOPER>(xlfEvaluate, f);
-		}
-		else {
-			x = Excel<XLOPER>(xlfEvaluate, *po);
-		}
+		x = Excel<XLOPER>(xlfEvaluate, formula ? Excel<XLOPER>(xlfGetCell, OPER(6), *po) : *po);
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());
@@ -36,13 +30,7 @@ extern "C" LPXLOPER12 __declspec(dllexport) WINAPI xll_eval12(LPXLOPER12 po, BOO
 	static LOPER12 x;
 
 	try {
-		if (formula) {
-			OPER12 f = Excel<XLOPER12>(xlfGetCell, OPER12(6), *po);
-			x = Excel<XLOPER12>(xlfEvaluate, f);
-		}
-		else {
-			x = Excel<XLOPER12>(xlfEvaluate, *po);
-		}
+		x = Excel<XLOPER12>(xlfEvaluate, formula ? Excel<XLOPER12>(xlfGetCell, OPER12(6), *po) : *po);
 	}
 	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());
