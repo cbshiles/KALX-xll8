@@ -160,7 +160,7 @@ namespace Reg {
 		template<class T>
 		T QueryValue(const X* name)
 		{
-			T t(0);
+			T t;
 			DWORD type, size(traits<T>::size(T()));
 
 			if (ERROR_SUCCESS != RegQueryValueEx_<X>(h_, name, 0, &type, traits<T>::data(t), &size))

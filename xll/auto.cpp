@@ -1,7 +1,6 @@
 // auto.cpp - Implement well known Excel interfaces.
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 #include "xll.h"
-//#include "utility/google.h"
 
 using namespace xll;
 
@@ -11,8 +10,6 @@ int __declspec(dllexport) WINAPI
 xlAutoOpen(void)
 {
 	try {
-//		google::analytics().post(_T("xlAutoOpen"));
-
 		ensure (Auto<Open>::Call());
 		ensure (AddIn::RegisterAll());
 		ensure (Auto<OpenAfter>::Call());

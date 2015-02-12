@@ -56,6 +56,7 @@ extern HMODULE xll_Instance;
 #include "handle.h"
 #include "on.h"
 #include "range/range.h"
+#include "locus.h"
 
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_this", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_this12", 0))
