@@ -1,6 +1,7 @@
 // inet.h - Wininet wrappers
 #pragma once
 #include "../ensure.h"
+#include "scoped_handle.h"
 #include <initializer_list>
 #include <memory>
 #include <Windows.h>
@@ -9,72 +10,23 @@
 
 #pragma comment(lib, "wininet.lib")
 
-namespace handle {
-
-	template<class H>
-	struct traits {
-		static H invalid_handle(void);
-		static void close(H& h);
-	};
-
-	template<class H>
-	class base {
-	protected:
-		H h_;
-	public:
-		base()
-			: h_(traits<H>::invalid_handle())
-		{ }
-		explicit base(H h)
-			: h_(h)
-		{
-			ensure (h_ != traits<H>::invalid_handle());
-		}
-		base(const base& h) = delete;
-		base(base&& h)
-			: h_(h.h_)
-		{
-			h.h_ = traits<H>::invalid_handle();
-		}
-		base& operator=(const base&) = delete;
-		base& operator=(base&& h)
-		{
-			if (this != &h) {
-				h_ = h.h_;
-				h.h_ = traits<H>::invalid_handle();			
-			}
-
-			return *this;
-		}
-		virtual ~base()
-		{
-			if (h_ != traits<H>::invalid_handle())
-				traits<H>::close(h_);
-		}
-		operator const H&() const
-		{
-			return h_;
-		}
-	};
-
-};
-
 template<>
-struct ::handle::traits<HINTERNET> {
-	static HINTERNET invalid_handle(void) 
+struct ::scoped_handle::traits<HINTERNET> {
+	static HINTERNET invalid(void) 
 		{ return nullptr; }
 	static void close(HINTERNET h) 
 		{ InternetCloseHandle(h); }
 };
 
+
 namespace Inet {
 
-	using handle = ::handle::base<HINTERNET>;
+	using handle = ::scoped_handle::base<HINTERNET>;
 
 	struct Open : public handle {
 //		Open() : handle() { }
-		Open(LPCTSTR lpszAgent)
-			: handle(InternetOpen(lpszAgent, INTERNET_OPEN_TYPE_DIRECT, nullptr, nullptr, 0))
+		Open(LPCTSTR lpszAgent = _T("WinInet"), DWORD access = INTERNET_OPEN_TYPE_DIRECT)
+			: handle(InternetOpen(lpszAgent, access, nullptr, nullptr, 0))
 		{
 			ensure (h_);
 		}

@@ -287,6 +287,12 @@ public:
 	{
 		return xll::to_string<X>(*this);
 	}
+	xstring string(void) const
+	{
+		ensure (xltype == xltypeStr);
+
+		return xstring(val.str + 1, val.str + 1 + val.str[0]);
+	}
 
 	// Bool
 	explicit XOPER(bool b)

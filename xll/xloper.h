@@ -277,10 +277,10 @@ inline bool operator<(const XLOPER12& x, const XLOPER12& y)
 {
 	return xll::operator_less<XLOPER12>(x, y);
 }
-inline bool operator>=(const XLOPER12& x, const XLOPER12& y)
+/*inline bool operator>=(const XLOPER12& x, const XLOPER12& y)
 {
 	return !xll::operator_less<XLOPER12>(x, y);
-}
+}*/
 inline bool operator<=(const XLOPER12& x, const XLOPER12& y)
 {
 	return xll::operator_less<XLOPER12>(x, y) || xll::operator_equal<XLOPER12>(x, y);
@@ -302,10 +302,10 @@ inline bool operator<(const XLOPER& x, const XLOPER& y)
 {
 	return xll::operator_less<XLOPER>(x, y);
 }
-inline bool operator>=(const XLOPER& x, const XLOPER& y)
+/*inline bool operator>=(const XLOPER& x, const XLOPER& y)
 {
 	return !xll::operator_less<XLOPER>(x, y);
-}
+}*/
 inline bool operator<=(const XLOPER& x, const XLOPER& y)
 {
 	return xll::operator_less<XLOPER>(x, y) || xll::operator_equal<XLOPER>(x, y);

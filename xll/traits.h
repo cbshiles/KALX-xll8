@@ -38,6 +38,10 @@ namespace xll {
 		//Maximum number of arguments to a function
 		static const int argmax = 30;
 
+		static double strtod(xcstr s, xcstr* e)
+		{
+			return ::strtod(s, (xchar**)e);
+		}
 		static std::string string(xcstr s, xchar n = 0)
 		{
 			return std::string(s, s + (n ? n : strlen(s)));
@@ -71,6 +75,14 @@ namespace xll {
 		static std::string to_string(T t)
 		{
 			return std::to_string(t);
+		}
+		template<>
+		static std::string to_string<double>(double t)
+		{
+			xchar buf[32];
+			sprintf(buf, "%.17g", t);
+
+			return std::string(buf);
 		}
 		static int Excel(int f, LPXLOPER res, int n, ...) 
 		{
@@ -119,6 +131,10 @@ namespace xll {
 		//Maximum number of arguments to a function
 		static const int argmax = 255;
 
+		static double strtod(xcstr s, xcstr* e)
+		{
+			return ::wcstod(s, (xchar**)e);
+		}
 		static std::string string(xcstr s, int n = 0)
 		{
 			if (n == 0)
@@ -167,6 +183,14 @@ namespace xll {
 		static std::wstring to_string(T t)
 		{
 			return std::to_wstring(t);
+		}
+		template<>
+		static std::wstring to_string<double>(double t)
+		{
+			xchar buf[32];
+			swprintf(buf, 32, L"%.17g", t);
+
+			return std::wstring(buf);
 		}
 		static int Excelv(int f, LPXLOPER12 res, int n, LPXLOPER12 args[])
 		{

@@ -182,6 +182,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="utility\google.h" />
+    <ClInclude Include="utility\scoped_handle.h" />
     <ClInclude Include="xll\addin.h" />
     <ClInclude Include="xll\args.h" />
     <ClInclude Include="xll\auto.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="xll\utility\log.h" />
     <ClInclude Include="xll\utility\message.h" />
     <ClInclude Include="xll\utility\registry.h" />
+    <ClInclude Include="xll\utility\scoped_resource.h" />
     <ClInclude Include="xll\utility\sendkeys.h" />
     <ClInclude Include="xll\utility\socket.h" />
     <ClInclude Include="xll\XLCALL.H" />

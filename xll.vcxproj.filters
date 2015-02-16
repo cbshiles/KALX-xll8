@@ -120,6 +120,12 @@
     <ClInclude Include="xll\locus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="xll\utility\scoped_resource.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="utility\scoped_handle.h">
+      <Filter>utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="xll\auto.cpp">
