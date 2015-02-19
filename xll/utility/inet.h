@@ -71,11 +71,11 @@ namespace Inet {
 						&& HttpAddRequestHeaders(*this, value, _tcsclen(value), 0);
 				}
 			};
-			Request OpenRequest(LPCTSTR lpszVerb = _T("GET"), LPCTSTR lpszObjectName = _T("/"),
+			Request&& OpenRequest(LPCTSTR lpszVerb = _T("GET"), LPCTSTR lpszObjectName = _T("/"),
 					LPCTSTR lpszVersion = _T("HTTP/1.1"), LPCTSTR lpszReferer = nullptr, 
 					LPCTSTR *lplpszAcceptTypes = nullptr, DWORD dwFlags = 0, DWORD_PTR dwContext = 0) const
 			{
-				return Request(*this, lpszVerb, lpszObjectName, lpszVersion, lpszReferer, lplpszAcceptTypes, dwFlags, dwContext);
+				return std::move(Request(*this, lpszVerb, lpszObjectName, lpszVersion, lpszReferer, lplpszAcceptTypes, dwFlags, dwContext));
 			}
 		};
 		struct URL : public handle {
@@ -86,7 +86,7 @@ namespace Inet {
 				DWORD dwFlags = 0, DWORD_PTR dwContext = 0)
 				: handle(InternetOpenUrl(h, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext))
 			{
-				ensure (h_);
+				ensure (h_ || !"InternetOpenUrl failed");
 			}
 			URL(const URL&) = delete;
 			URL& operator=(const URL&) = delete;
@@ -96,30 +96,29 @@ namespace Inet {
 			// read all bytes from InternetOpenUrl
 			std::string Read(DWORD bufsiz = 1024)
 			{
-				std::string buf;
-				buf.resize(bufsiz);
+				std::string buf, read;
+				buf.reserve(bufsiz);
 
-				for (DWORD n = bufsiz, off = 0; n == bufsiz || n == 0; off += bufsiz) {
-					buf.reserve(off + bufsiz);
-					ensure (InternetReadFile(*this, &buf[off], bufsiz, &n));
-					buf.resize(off + n);
+				DWORD n;
+				while (InternetReadFile(*this, &buf[0], bufsiz, &n) && n != 0) {
+					read.append(&buf[0], n);
 				}
 
-				return buf;
+				return read;
 			}
 
 		};
 
-		Connection Connect(LPCTSTR lpszServerName, INTERNET_PORT nServerPort = INTERNET_DEFAULT_HTTP_PORT,
+		Connection&& Connect(LPCTSTR lpszServerName, INTERNET_PORT nServerPort = INTERNET_DEFAULT_HTTP_PORT,
 				LPCTSTR lpszUsername = nullptr, LPCTSTR lpszPassword = nullptr,
 				DWORD dwService = INTERNET_SERVICE_HTTP, DWORD dwFlags = 0, DWORD dwContext = 0) const
 		{
-			return Connection(*this, lpszServerName, nServerPort, lpszUsername, lpszPassword, dwService, dwFlags, dwContext);
+			return std::move(Connection(*this, lpszServerName, nServerPort, lpszUsername, lpszPassword, dwService, dwFlags, dwContext));
 		}
-		URL OpenUrl(LPCTSTR lpszUrl, LPCTSTR lpszHeaders = nullptr, DWORD dwHeadersLength = 0,
+		URL&& OpenUrl(LPCTSTR lpszUrl, LPCTSTR lpszHeaders = nullptr, DWORD dwHeadersLength = 0,
 				DWORD dwFlags = 0, DWORD_PTR dwContext = 0) const
 		{
-			return URL(*this, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext);
+			return std::move(URL(*this, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext));
 		}
 		/*
 		handle FtpFile(Connection c, LPCTSTR lpszFilename, DWORD dwAccess = GENERIC_READ, 
