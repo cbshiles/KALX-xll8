@@ -49,7 +49,7 @@ namespace Inet {
 			{ }
 			struct Request : public handle {
 //				Request() : handle() { }
-				Request(const Connection& h, LPCTSTR lpszVerb = _T("/"), LPCTSTR lpszObjectName = _T("GET"),
+				Request(const Connection& h, LPCTSTR lpszVerb = _T("GET"), LPCTSTR lpszObjectName = _T("/"),
 					LPCTSTR lpszVersion = nullptr, LPCTSTR lpszReferer = nullptr, 
 					LPCTSTR *lplpszAcceptTypes = nullptr, DWORD dwFlags = 0, DWORD_PTR dwContext = 0)
 					: handle(HttpOpenRequest(h, lpszVerb, lpszObjectName, lpszVersion, lpszReferer, lplpszAcceptTypes, dwFlags, dwContext))
@@ -60,15 +60,18 @@ namespace Inet {
 				Request operator=(const Request&) = delete;
 				~Request()
 				{ }
-				BOOL AddHeader(LPCTSTR header) const
+				BOOL AddHeader(LPCTSTR header, DWORD flags = 0) const
 				{
-					return HttpAddRequestHeaders(*this, header, _tcsclen(header), 0);
+					return HttpAddRequestHeaders(*this, header, _tcsclen(header), flags);
 				}
-				BOOL AddHeader(LPCTSTR key, LPCTSTR value)
+				BOOL AddHeader(LPCTSTR key, LPCTSTR value, DWORD flags = 0)
 				{
-					return HttpAddRequestHeaders(*this, key, _tcsclen(key), 0)
-						&& HttpAddRequestHeaders(*this, _T(": "), 2, 0)
-						&& HttpAddRequestHeaders(*this, value, _tcsclen(value), 0);
+					std::basic_string<TCHAR> header(key);
+
+					header.append(_T(" "));
+					header.append(value);
+
+					return HttpAddRequestHeaders(*this, header.c_str(), header.length(), flags);
 				}
 			};
 			Request&& OpenRequest(LPCTSTR lpszVerb = _T("GET"), LPCTSTR lpszObjectName = _T("/"),

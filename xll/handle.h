@@ -121,11 +121,13 @@ namespace xll {
 			handles().push_back(std::unique_ptr<T>(p));
 
 			OPERX o = XLL_XL_(Coerce, XLL_XLF(Caller));
-			if (o.xltype == xltypeNum && o.val.num != 0) {
-				auto pi = find(h2p<T>(o.val.num));
-				if (pi != handles().end()) {
-					pi->release();
-					handles().erase(pi);
+			for (const auto& oh : o) {
+				if (oh.xltype == xltypeNum && oh.val.num != 0) {
+					auto pi = find(h2p<T>(oh.val.num));
+					if (pi != handles().end()) {
+						pi->release();
+						handles().erase(pi);
+					}
 				}
 			}
 		}
@@ -133,7 +135,7 @@ namespace xll {
 		handle(HANDLEX h, bool throw_ = true)
 			: p_(h2p<T>(h))
 		{
-			if (handles().end() == find(p_)) {
+			if (find(p_) == handles().end()) {
 				p_ = 0;
 
 				if (throw_)
