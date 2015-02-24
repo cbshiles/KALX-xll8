@@ -28,8 +28,7 @@ public:
 		xltype = o.xltype;
 		val = o.val;
 
-		o.xltype = xltypeNil;
-		o.val = {0};
+		o.alloc(xltype::Nil);
 	}
 	explicit XOPER(std::initializer_list<XOPER> o)
 	{
@@ -60,8 +59,7 @@ public:
 		xltype = o.xltype;
 		val = o.val;
 
-		o.xltype = xltypeNil;
-		o.val = {0};
+		o.alloc(xltype::Nil);
 
 		return *this;
 	}
@@ -329,7 +327,7 @@ public:
 	}
 	bool operator==(xlerr err) const
 	{
-		return xltype == xltypeErr && val.err == static_cast<xword>(err);
+		return xltype == xltypeErr && val.err == static_cast<xll::traits<X>::xint>(err);
 	}
 	bool operator!=(xlerr err) const
 	{
@@ -555,7 +553,8 @@ private:
 		ensure (xltype == xltypeStr);
 
 		ensure (0 != (val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(1 + str0)))));
-		xll::traits<X>::strncpy(val.str + 1, str, str0);
+		if (str0)
+			xll::traits<X>::strncpy(val.str + 1, str, str0);
 		val.str[0] = str0;
 	}
 

@@ -22,6 +22,8 @@ public:
 		xltype = o.xltype;
 		val = o.val;
 
+		ZeroMemory(&o, sizeof(o));
+		o.xltype = xltypeNil;
 		o.owner_ = false;
 
 	}
@@ -30,7 +32,8 @@ public:
 		owner_ = true;
 		xltype = o.xltype;
 		val = o.val;
-
+		
+		o.xltype = xltypeNil;
 		o.owner_ = false;
 
 		return *this;

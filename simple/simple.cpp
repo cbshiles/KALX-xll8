@@ -1,12 +1,21 @@
 // simple.cpp - a simple xll
-//#define EXCEL12
+#define EXCEL12
 #include "../xll/xll.h"
-#include <random>
 
 using namespace xll;
 
-// X_j Pi_j = (C_j+1 + X_j+1) Pi_j+1 | F_j
+int xll_test_simple()
+{
+	OPERX o;
+	traits<XLOPERX>::xstring s;
 
-//template<class Algebra, class Gamma, class CashFlow, class Price, class Deflator>
-//std::function<double, Algebra<i>> value(int i, 
+	s = o.to_string();
+	ensure (s == _T("=\"\""));
+	o = OPERX(s);
+	ensure (o.xltype == xltypeStr && o.val.str[0] == 3);
+	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
+	ensure (o == _T(""));
 
+	return 1;
+}
+static Auto<OpenX> xao_test_simple(xll_test_simple);

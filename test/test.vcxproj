@@ -168,7 +168,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\simple\xlljson.cpp" />
     <ClCompile Include="async.cpp" />
     <ClCompile Include="blurb.cpp" />
     <ClCompile Include="ftap.cpp" />
@@ -206,7 +205,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\simple\json.h" />
     <ClInclude Include="iterator.h" />
     <ClInclude Include="test.h" />
   </ItemGroup>

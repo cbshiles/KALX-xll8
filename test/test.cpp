@@ -368,6 +368,7 @@ void test_initializer(void)
 int xll_test(void)
 {
 	try {
+		_CrtSetBreakAlloc(1275);
 		struct { int i; double d; char c; } s = {1, 1.23, 'c'};
 		auto t = std::make_tuple<int, double , char>(1, 1.23, 'c');
 		auto pt = &t;

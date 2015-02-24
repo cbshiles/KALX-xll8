@@ -157,15 +157,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="simple.cpp" />
-    <ClCompile Include="xlljson.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xll.vcxproj">
       <Project>{8b15c18c-4c25-476c-abbd-88be05c35a3e}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="json.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
