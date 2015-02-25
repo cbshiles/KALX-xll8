@@ -19,3 +19,11 @@ int xll_test_simple()
 	return 1;
 }
 static Auto<OpenX> xao_test_simple(xll_test_simple);
+
+static AddInX xai_foo(_T("?xll_foo"), XLL_SHORTX XLL_SHORTX, _T("SIMPLE.FOO"), _T("int"));
+SHORT WINAPI xll_foo(SHORT i)
+{
+#pragma XLLEXPORT
+
+	return xyz_foo(i);
+}

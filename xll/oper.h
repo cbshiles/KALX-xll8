@@ -179,7 +179,32 @@ public:
 	}
 	operator double() const
 	{
-		return xll::to_double<X>(*this);
+		switch (xltype) {
+		case xltypeNum:
+			return val.num;
+			break;
+		case xltypeStr:
+			return val.str[0]; // non zero length string
+			break;
+		case xltypeBool:
+			return val.xbool;
+			break;
+		case xltypeMulti:
+			for (const auto& v : *this) {
+				double x = v.operator double();
+				if (x)
+					return x;
+			}
+			return 0;
+			break;
+		case xltypeInt:
+			return val.w;
+			break;
+		case xltypeNil: case xltypeMissing: case xltypeErr:
+			return 0;
+		}
+
+		return std::numeric_limits<double>::quiet_NaN();
 	}
 	XOPER& operator=(double num)
 	{

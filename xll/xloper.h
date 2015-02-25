@@ -55,8 +55,11 @@ namespace xll {
 		switch (x.xltype) {
 		case xltypeNum:
 			return x.val.num;
-		case xltypeStr:
-			return x.val.str[0]; // length???
+		case xltypeStr: {
+			LXOPER<X> o = Excel<X>(xlfEvaluate, x);
+
+			return o.xltype == xltypeNum ? o.val.num : std::numeric_limits<double>::quiet_NaN();
+		}
 		case xltypeBool:
 			return x.val.xbool;
 		case xltypeInt:

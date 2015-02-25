@@ -168,8 +168,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\xll\handle.cpp" />
     <ClCompile Include="async.cpp" />
     <ClCompile Include="blurb.cpp" />
+    <ClCompile Include="conversion.cpp" />
     <ClCompile Include="ftap.cpp" />
     <ClCompile Include="handle.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

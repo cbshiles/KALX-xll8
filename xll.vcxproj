@@ -222,6 +222,7 @@
     <ClCompile Include="xll\dllmain.cpp" />
     <ClCompile Include="xll\error.cpp" />
     <ClCompile Include="xll\eval.cpp" />
+    <ClCompile Include="xll\handle.cpp" />
     <ClCompile Include="xll\paste.cpp" />
     <ClCompile Include="xll\range\drop.cpp" />
     <ClCompile Include="xll\range\mask.cpp" />

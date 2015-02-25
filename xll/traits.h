@@ -80,7 +80,7 @@ namespace xll {
 		static std::string to_string<double>(double t)
 		{
 			xchar buf[32];
-			sprintf(buf, "%.17g", t);
+			sprintf(buf, "%.17g", t); // guaranteed round trip
 
 			return std::string(buf);
 		}

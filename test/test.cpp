@@ -8,6 +8,14 @@ using namespace xll;
 
 typedef traits<XLOPERX>::xcstr xcstr;
 
+static AddInX xai_test_foo2(_T("?xll_test_foo2"), XLL_SHORTX XLL_SHORTX, _T("TEST.FOO"), _T("int"));
+SHORT WINAPI xll_test_foo2(SHORT i)
+{
+#pragma XLLEXPORT
+
+	return xyz_foo(i);
+}
+
 struct run {
 	run(const std::function<int(void)>& f)
 	{
