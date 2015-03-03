@@ -57,7 +57,7 @@ void test_error(void)
 	xll_alert_level = 7;
 
 	XLL_ERROR("(Not really an) Error", true);
-	XLL_WARNING("Warning (about nothting)", true);
+	XLL_WARNING("Warning (about nothing)", true);
 	char buf[1024] = "Info: xll_alert_level = ";
 	_itoa(xal, buf + strlen(buf), 16);
 	XLL_INFO(buf, true);
@@ -276,7 +276,7 @@ void test_to_string(void)
 {
 	OPERX o;
 	traits<XLOPERX>::xstring s;
-
+/*
 	s = o.to_string();
 	ensure (s == _T("=\"\""));
 	o = OPERX(s);
@@ -324,6 +324,7 @@ void test_to_string(void)
 	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("={1.23,\"string\",TRUE;#VALUE!,#REF!,#N/A}"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
+*/
 }
 
 static XAddIn<XLOPERX> xai_foo(
@@ -376,7 +377,7 @@ void test_initializer(void)
 int xll_test(void)
 {
 	try {
-		_CrtSetBreakAlloc(1275);
+//		_CrtSetBreakAlloc(1275);
 		struct { int i; double d; char c; } s = {1, 1.23, 'c'};
 		auto t = std::make_tuple<int, double , char>(1, 1.23, 'c');
 		auto pt = &t;

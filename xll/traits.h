@@ -42,6 +42,7 @@ namespace xll {
 		{
 			return ::strtod(s, (xchar**)e);
 		}
+
 		static std::string string(xcstr s, xchar n = 0)
 		{
 			return std::string(s, s + (n ? n : strlen(s)));
@@ -50,8 +51,23 @@ namespace xll {
 		{
 			ensure (s.xltype == xltypeStr);
 			
-			return string(s.val.str + 1, s.val.str[0]);
+			return std::string(s.val.str + 1, s.val.str + 1 + s.val.str[0]);
 		}
+		/*
+		template<typename T>
+		static std::string to_string(T t)
+		{
+			return std::to_string(t);
+		}
+		template<>
+		static std::string to_string<double>(double t)
+		{
+			xchar buf[32];
+			sprintf(buf, "%.17g", t); // guaranteed round trip
+
+			return std::string(buf);
+		}
+		*/
 		static int strnicmp(xcstr a, xcstr b, size_t n) 
 		{ 
 			return ::_strnicmp(a, b, n);
@@ -70,19 +86,6 @@ namespace xll {
 		static int Excelv(int f, LPXLOPER res, int n, LPXLOPER args[])
 		{
 			return ::Excel4v(f, res, n, args);
-		}
-		template<typename T>
-		static std::string to_string(T t)
-		{
-			return std::to_string(t);
-		}
-		template<>
-		static std::string to_string<double>(double t)
-		{
-			xchar buf[32];
-			sprintf(buf, "%.17g", t); // guaranteed round trip
-
-			return std::string(buf);
 		}
 		static int Excel(int f, LPXLOPER res, int n, ...) 
 		{

@@ -120,7 +120,7 @@
     <ClInclude Include="xll\utility\scoped_resource.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="utility\scoped_handle.h">
+    <ClInclude Include="xll\utility\scoped_handle.h">
       <Filter>utility</Filter>
     </ClInclude>
   </ItemGroup>

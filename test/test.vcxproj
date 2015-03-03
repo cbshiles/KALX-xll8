@@ -168,7 +168,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\xll\handle.cpp" />
     <ClCompile Include="async.cpp" />
     <ClCompile Include="blurb.cpp" />
     <ClCompile Include="conversion.cpp" />

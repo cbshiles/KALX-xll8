@@ -30,11 +30,12 @@ public:
 
 		o.alloc(xltype::Nil);
 	}
-	explicit XOPER(std::initializer_list<XOPER> o)
+	explicit XOPER(const std::initializer_list<XOPER>& o)
 	{
-		resize(static_cast<xll::traits<X>::xword>(o.size()), 1);
+		alloc(1, static_cast<xll::traits<X>::xword>(o.size()));
 		std::copy(o.begin(), o.end(), stdext::checked_array_iterator<XOPER*>(begin(), size()));
 //		std::copy(o.begin(), o.end(), begin());
+		ensure (xltype == xltypeMulti);
 	}
 	XOPER& operator=(const XOPER& o)
 	{
@@ -68,11 +69,11 @@ public:
 		free();
 	}
 
-	XOPER(const typename xll::traits<X>::type x)
+	XOPER(const typename xll::traits<X>::type& x)
 	{
 		alloc(x);
 	}
-	XOPER& operator=(const typename xll::traits<X>::type x)
+	XOPER& operator=(const typename xll::traits<X>::type& x)
 	{
 		free();
 		alloc(x);
@@ -254,6 +255,7 @@ public:
 
 		return *this;
 	}
+
 	XOPER& append(xcstr str)
 	{
 		return append(str, xll::traits<X>::strlen(str));
@@ -266,10 +268,8 @@ public:
 		else if (xltype == xltypeStr) {
 			val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(val.str[0] + n + 1)));
 			ensure (val.str);
-			if (val.str != 0) {
-				xll::traits<X>::strncpy(val.str + val.str[0] + 1, str, n);
-				val.str[0] += static_cast<xchar>(n);
-			}
+			xll::traits<X>::strncpy(val.str + val.str[0] + 1, str, n);
+			val.str[0] += static_cast<xchar>(n);
 		}
 		else {
 			throw std::runtime_error("XOPER::append must be str or empty");
@@ -283,19 +283,14 @@ public:
 	}
 	XOPER& append(const XOPER& o)
 	{
-		xstring s = xll::to_string<X>(o);
+		if (o.xltype == xltypeNil)
+			return *this;
 
-		// artifacts of xlfSetName
-		if (s[0] == '=' && s[1] == '"' && s.back() == '"') {
-			s.erase(0,2);
-			s.pop_back();
-		}
-		if (s[0] == '=') {
-			s.erase(0,1);
-		}
+		ensure (o.xltype == xltypeStr);
 
-		return append(s);
+		return append(o.val.str + 1, o.val.str[0]);
 	}
+
 	bool operator==(xcstr str) const
 	{
 		return xltype == xltypeStr 
@@ -308,7 +303,10 @@ public:
 	}
 	xstring to_string(void) const
 	{
-		return xll::to_string<X>(*this);
+		XOPER<X> o = xll::name<X>(*this);
+		ensure (o.xltype == xltypeStr);
+
+		return xstring(o.val.str + 1, o.val.str + 1 + o.val.str[0]);
 	}
 	xstring string(void) const
 	{
@@ -366,17 +364,7 @@ public:
 	}
 	XOPER& resize(xword r, xword c)
 	{
-		if (r*c == 0) {
-			free();
-		}
-		else if (xltype == xltypeMulti) {
-			realloc(r, c);
-		}
-		else {
-			XOPER tmp(*this);
-			alloc(r, c);
-			operator[](0) = tmp;
-		}
+		realloc(r, c);
 
 		return *this;
 	}
@@ -511,7 +499,8 @@ private:
 			::free(val.str);
 		}
 		else if (xltype == xltypeMulti) {
-			std::for_each(begin(), end(), [](XOPER& x) { x.free(); });
+			for (xword i = 0; i < size(); ++i)
+				operator[](i).free();
 			::free(val.array.lparray);
 		}
 
@@ -525,43 +514,43 @@ private:
 		xltype = static_cast<WORD>(type);
 	}
 
-	void alloc(const typename xll::traits<X>::type x)
+	void alloc(const typename xll::traits<X>::type& o)
 	{
-		xltype = x.xltype;
+		xltype = o.xltype;
 
 		if (xltype == xltypeStr) {
 			val.str = 0;
 
-			realloc(x.val.str + 1, x.val.str[0]);
+			realloc(o.val.str + 1, o.val.str[0]);
 		}
 		else if (xltype == xltypeMulti) {
 			val.array.rows = 0;
 			val.array.columns = 0;
 			val.array.lparray = 0;
 
-			realloc(xll::rows<X>(x), xll::columns<X>(x));
-			ensure (xll::end<X>(x) <= begin() || end() <= xll::begin<X>(x));
+			realloc(xll::rows<X>(o), xll::columns<X>(o));
+			ensure (xll::end<X>(o) <= begin() || end() <= xll::begin<X>(o));
 			for (xword i = 0; i < size(); ++i)
-				operator[](i) = xll::index<X>(x, i);
-		}
-		else {
-			val = x.val;
-		}
-	}
-	void realloc(const XOPER& o)
-	{
-		ensure (xltype == o.xltype);
-
-		if (xltype == xltypeStr) {
-			realloc(o.val.str + 1, o.val.str[0]);
-		}
-		else if (xltype == xltypeMulti) {
-			realloc(o.rows(), o.columns());
-			std::copy(o.begin(), o.end(), stdext::checked_array_iterator<XOPER<X>*>(begin(), size()));
-//			std::copy(o.begin(), o.end(), begin());
+				operator[](i) = xll::index<X>(o, i);
 		}
 		else {
 			val = o.val;
+		}
+	}
+	void realloc(const typename xll::traits<X>::type& x)
+	{
+		ensure (xltype == x.xltype);
+
+		if (xltype == xltypeStr) {
+			realloc(x.val.str + 1, x.val.str[0]);
+		}
+		else if (xltype == xltypeMulti) {
+			realloc(xll::rows<X>(x), xll::columns<X>(x));
+//			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(begin(), size()));
+			std::copy(xll::begin<X>(x), xll::end<X>(x), begin());
+		}
+		else {
+			val = x.val;
 		}
 	}
 
@@ -595,6 +584,12 @@ private:
 	}
 	void realloc(xword r, xword c)
 	{
+		if (r*c == 0) {
+			free();
+
+			return;
+		}
+
 		// index juggling
 		if (xltype == xltypeMulti && size() == r*c) {
 			val.array.rows = r;
@@ -603,7 +598,10 @@ private:
 			return;
 		}
 
-		ensure (xltype == xltypeMulti);
+		OPERX this_;
+		if (xltype != xltypeMulti)
+			this_ = *this;
+
 		xword n = size();
 
 		if (r*c != size()) { // r*c == 0 calls ::free
@@ -611,12 +609,15 @@ private:
 			ensure (val.array.lparray);
 		}
 
+		xltype = xltypeMulti;
 		val.array.rows = r;
 		val.array.columns = c;
 
 		for (xword i = n; i < r*c; ++i) {
 			operator[](i).alloc(xltype::Nil);
 		}
+
+		operator[](0) = this_;
 	}
 };
 

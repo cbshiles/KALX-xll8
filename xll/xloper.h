@@ -64,7 +64,7 @@ namespace xll {
 			return x.val.xbool;
 		case xltypeInt:
 			return x.val.w;
-		case xltypeErr: // so ensure (x) fails in this case
+		case xltypeErr: // so ensure (x) fails in these cases
 		case xltypeMissing:
 		case xltypeNil:
 			return 0;
@@ -74,6 +74,23 @@ namespace xll {
 	}
 	template<class X>
 	inline typename xll::traits<X>::xstring to_string(const typename xll::traits<X>::type& x)
+	{
+		switch (x.xltype) {
+		case xltypeNil: case xltypeMissing:
+			return xll::traits<X>::xstring{};
+		case xltypeNum:
+			return xll::traits<X>::to_string(x.val.num);
+		case xltypeBool:
+			return x.val.xbool ? _T("TRUE") : _T("FALSE"); // !!! parameterize by X
+		}
+
+		return xll::traits<X>::xstring{};
+	}
+
+	// Use xlfSetName to convert to string
+	// invariant: x == EVAL(NAME(x))
+	template<class X>
+	inline typename xll::traits<X>::xstring name(const typename xll::traits<X>::type& x)
 	{
 		if (x.xltype == xltypeNil)
 			return xll::traits<X>::string("=\"\""); // Evaluates to ""

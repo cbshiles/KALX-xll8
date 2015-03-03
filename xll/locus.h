@@ -70,7 +70,7 @@ namespace xll {
 			Name(v);
 
 			return *this;
-		}
+		}/*
 		static OPERX Names()
 		{
 			OPERX o;
@@ -79,7 +79,7 @@ namespace xll {
 				o.push_back(Excel<XLOPERX>(xlfConcatenate, i->first, OPERX(_T(":")), OPERX(to_string<XLOPERX>(i->second).c_str())));
 
 			return o;
-		}
+		}*/
 	private:
 		static std::map<OPERX, OPERX>& names()
 		{

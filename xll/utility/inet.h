@@ -132,4 +132,4 @@ namespace Inet {
 		*/
 	};
 
-} // inet
+} // Inet

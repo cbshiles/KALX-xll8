@@ -196,7 +196,7 @@ namespace xll {
 
 } // namespace xll
 
-extern "C" _declspec(dllexport) int xyz_foo(int);
+extern "C" int xyz_foo(int);
 //#ifdef XLL_EXPORTS
 //#pragma comment(linker, "/include:_xyz_foo@4")
 //#endif 
