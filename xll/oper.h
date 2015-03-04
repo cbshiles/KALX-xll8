@@ -601,6 +601,7 @@ private:
 		if (xltype != xltypeMulti) {
 			XOPER<X> this_ = *this;
 
+			free();
 			val.array.lparray = static_cast<X*>(::malloc(r*c*sizeof(X)));
 			xltype = xltypeMulti;
 			val.array.rows = r;
