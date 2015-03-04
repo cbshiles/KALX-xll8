@@ -355,8 +355,8 @@ void test_initializer(void)
 {
 	OPERX o{OPERX(1.2), OPERX(_T("abc")), OPERX(false)};
 
-	ensure (o.rows() == 3);
-	ensure (o.columns() == 1);
+	ensure (o.rows() == 1);
+	ensure (o.columns() == 3);
 	ensure (o[0] == 1.2);
 	ensure (o[1] == _T("abc"));
 	ensure (o[2] == false);

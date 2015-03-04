@@ -397,7 +397,7 @@ public:
 	}
 	XOPER& push_back(const XOPER<X>& x)
 	{
-		// nil is nil
+		// nil is nop
 		if (x.xltype == xltypeNil)
 			return *this;
 
@@ -406,7 +406,7 @@ public:
 
 		// overlapping ranges
 		if (x.begin() < end() && begin() < x.end()) {
-			return push_back(XOPER<X>(x));
+			return push_back(XOPER<X>(x)); // make a copy
 		}
 	
 		if (xltype != xltypeMulti) {
@@ -598,13 +598,23 @@ private:
 			return;
 		}
 
-		OPERX this_;
-		if (xltype != xltypeMulti)
-			this_ = *this;
+		if (xltype != xltypeMulti) {
+			XOPER<X> this_ = *this;
 
+			val.array.lparray = static_cast<X*>(::malloc(r*c*sizeof(X)));
+			xltype = xltypeMulti;
+			val.array.rows = r;
+			val.array.columns = c;
+
+			operator[](0) = this_;
+			for (xword i = 1; i < r*c; ++i)
+				operator[](i).alloc(xltype::Nil);
+
+			return;
+		}
+	
 		xword n = size();
-
-		if (r*c != size()) { // r*c == 0 calls ::free
+		if (r*c != n || val.array.lparray == 0) {
 			val.array.lparray = static_cast<X*>(::realloc(val.array.lparray, r*c*sizeof(X)));
 			ensure (val.array.lparray);
 		}
@@ -616,8 +626,6 @@ private:
 		for (xword i = n; i < r*c; ++i) {
 			operator[](i).alloc(xltype::Nil);
 		}
-
-		operator[](0) = this_;
 	}
 };
 
