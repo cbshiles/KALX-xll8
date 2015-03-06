@@ -30,7 +30,7 @@ public:
 
 		o.alloc(xltype::Nil);
 	}
-	explicit XOPER(const std::initializer_list<XOPER>& o)
+	explicit XOPER(std::initializer_list<XOPER> o)
 	{
 		alloc(1, static_cast<xll::traits<X>::xword>(o.size()));
 		std::copy(o.begin(), o.end(), stdext::checked_array_iterator<XOPER*>(begin(), size()));
@@ -57,10 +57,14 @@ public:
 	}
 	XOPER& operator=(XOPER&& o)
 	{
-		xltype = o.xltype;
-		val = o.val;
+		if (this != &o) {
+			free();
 
-		o.alloc(xltype::Nil);
+			xltype = o.xltype;
+			val = o.val;
+
+			o.alloc(xltype::Nil);
+		}
 
 		return *this;
 	}
@@ -688,6 +692,53 @@ inline bool operator==(const OPER& x, const XLOPER& y)
 inline bool operator<(const OPER& x, const XLOPER& y)
 {
 	return xll::operator_less<XLOPER>(x, y);
+}
+/*
+// convert string to OPER of appropriate type
+inline OPER to_OPER(LPCSTR s, CHAR len = 0) 
+{
+	OPER o(s, len);
+	OPER v = Excel<XLOPER>(xlfValue, o);
+	if (v.xltype == xltypeNum)
+		return v; // numbers and dates
+
+	v = Excel<XLOPER>(xlfEvaluate, o);
+	if (v != OPER(xlerr::Name)) // o is unquoted string
+		return v;
+
+	return o;
+}
+inline OPER12 to_OPER(LPWSTR s, WCHAR len = 0) 
+{
+	OPER12 o(s, len);
+	OPER12 v = Excel<XLOPER12>(xlfValue, o);
+	if (v.xltype == xltypeNum)
+		return v; // numbers and dates
+
+	v = Excel<XLOPER12>(xlfEvaluate, o);
+	if (v != OPER12(xlerr::Name)) // o is unquoted string
+		return v;
+
+	return o;
+}
+*/
+template<class X>
+inline XOPER<X> to_XOPER(typename xll::traits<X>::xcstr s, typename xll::traits<X>::xchar len = 0)
+{
+	if (!len)
+		len = xll::traits<X>::strlen(s);
+
+	XOPER<X> o(s, len);
+
+	XOPER<X> v = Excel<X>(xlfValue, o);
+	if (v.xltype == xltypeNum)
+		return v; // numbers and dates
+
+	v = Excel<X>(xlfEvaluate, o);
+	if (v != XOPER<X>(xlerr::Name)) // o is unquoted string
+		return v;
+
+	return o;
 }
 
 #include "args.h"

@@ -370,6 +370,23 @@ void test_initializer(void)
 */
 }
 
+void test_to_operx(void)
+{
+	OPERX o;
+	o = to_XOPER<XLOPERX>(_T("1.23"));
+	ensure (o == 1.23);
+	o = to_XOPER<XLOPERX>(_T("foobarbaz"));
+	ensure (o == _T("foobarbaz"));
+	o = to_XOPER<XLOPERX>(_T("\"foobarbaz\""));
+	ensure (o == _T("foobarbaz"));
+	o = to_XOPER<XLOPERX>(_T("FALSE"));
+	ensure (o == false);
+	o = to_XOPER<XLOPERX>(_T("#N/A"));
+	ensure (o == OPERX(xlerr::NA));
+	o = to_XOPER<XLOPERX>(_T("2013-1-2"));
+	ensure (o == XLL_XLF(Date, OPERX(2013), OPERX(1), OPERX(2)));
+
+}
 #ifndef _DEBUG
 #pragma warning(disable: 4127)
 #endif
@@ -408,6 +425,7 @@ int xll_test(void)
 		test_to_string();
 		test_loper();
 		test_initializer();
+		test_to_operx();
 	}
 	catch (const std::exception& ex) {
 		MessageBoxA(0, ex.what(), "Error", MB_OK);
