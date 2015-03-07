@@ -31,7 +31,6 @@ public:
 
 		return *this;
 	}
-	/*
 	LXOPER(LXOPER&& o)
 	{
 		owner_ = true;
@@ -45,23 +44,34 @@ public:
 	}
 	LXOPER& operator=(LXOPER&& o)
 	{
-		owner_ = true;
-		xltype = o.xltype;
-		val = o.val;
-		
-		o.xltype = xltypeNil;
-		o.owner_ = false;
+		if (this != &o) {
+			this->~LXOPER();
+
+			owner_ = o.owner_;
+			xltype = o.xltype;
+			val = o.val;
+
+			ZeroMemory(&o, sizeof(o));
+			o.xltype = xltypeNil;
+			o.owner_ = false;
+		}
 
 		return *this;
-	}*/
+	}
 	~LXOPER()
 	{
 		if (owner_)
 			xll::traits<X>::Excel(xlFree, 0, 1, this);
 	}
+	bool operator==(typename xll::traits<X>::xcstr str) const
+	{
+		return xltype == xltypeStr
+			&& val.str[0] == static_cast<xchar>(xll::traits<X>::strlen(str))
+			&& 0 == xll::traits<X>::strnicmp(val.str + 1, str, val.str[0]);
+	}
 	operator double() const
 	{
-		return xll::to_double<X>(*this);
+		return xll::to_double<X>(*this); // ???
 	}
 /*
 	// Return xlret types if not xlretSuccess

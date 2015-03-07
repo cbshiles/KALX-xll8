@@ -235,7 +235,7 @@ public:
 	}
 
 	// Str
-	XOPER(xcstr str)
+	explicit XOPER(xcstr str)
 	{
 		alloc(str, xll::traits<X>::strlen(str));
 	}
@@ -398,6 +398,10 @@ public:
 		ensure (size() != 0);
 
 		return operator[](size() - 1);
+	}
+	XOPER& push_back(xcstr s)
+	{
+		return push_back(XOPER(s));
 	}
 	XOPER& push_back(const XOPER<X>& x)
 	{
@@ -735,7 +739,7 @@ inline XOPER<X> to_XOPER(typename xll::traits<X>::xcstr s, typename xll::traits<
 		return v; // numbers and dates
 
 	v = Excel<X>(xlfEvaluate, o);
-	if (v != XOPER<X>(xlerr::Name)) // o is unquoted string
+	if (v.xltype != xltypeErr || (o.val.str[0] >= 4 && o.val.str[1] == '#'))
 		return v;
 
 	return o;
