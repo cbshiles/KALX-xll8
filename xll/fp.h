@@ -177,7 +177,7 @@ namespace xll {
 		}
 		XFP& operator=(const XFP& x)
 		{
-			if (x.this_() != this) {
+			if (&x != this) {
 				realloc(x.rows(), x.columns());
 				copy(x.pf);
 			}
@@ -210,10 +210,6 @@ namespace xll {
 			return *this;
 		}
 */	private:
-		const XFP* this_() const
-		{
-			return this;
-		}
 	public:
 		xfp* get(void)
 		{
@@ -225,6 +221,10 @@ namespace xll {
 			return pf;
 		}
 		double* array()
+		{
+			return pf->array;
+		}
+		const double* array() const
 		{
 			return pf->array;
 		}

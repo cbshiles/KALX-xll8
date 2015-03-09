@@ -10,7 +10,7 @@ struct CrtDbg {
 	CrtDbg(int flags = _CRTDBG_ALLOC_MEM_DF)
 	{
 		_CrtSetDbgFlag (_CrtSetDbgFlag( _CRTDBG_REPORT_FLAG )|flags);
-//		_crtBreakAlloc = 142;
+		//_crtBreakAlloc = 1067;
 	}
 	// When information about a memory block is reported by one of the debug 
 	// dump functions, this number is enclosed in braces, such as {36}.
@@ -44,23 +44,5 @@ struct CrtDbg {
 #pragma warning(disable: 4073)
 #pragma init_seg(lib)
 CrtDbg crtDbg;
-
-#include <typeinfo>
-
-struct clear_type_info_cache {
-	~clear_type_info_cache() {
-		__type_info_node* & node = __type_info_root_node._Next;
-		while(node)
-		{
-			if (node->_MemPtr)
-			{
-				delete node->_MemPtr;
-			}
-			__type_info_node* tempNode = node;
-			node = node->_Next;
-			delete tempNode;
-		}
-	}
-};// ctic;
 
 #endif // _DEBUG

@@ -3,15 +3,7 @@
 
 using namespace xll;
 
-static AddIn xai_xltype_num(
-	Function(XLL_WORD, XLL_DECORATE("xll_alert_error",0), "XLYPE_NUM")
-	.Category("XLL")
-	.FunctionHelp("Return enumeration for floating point numbers.")
-);
-extern "C" int __declspec(dllexport) WINAPI xll_xltype_num(void)
-{
-	return xltypeNum;
-}
+XLL_ENUM(xltypeNum, XLTYPE_NUM, "XLL", "Enumeration for floating point numbers")
 
 static AddIn xai_range_remove(
 	Function(XLL_LPOPER, XLL_DECORATE("xll_range_remove",8), "RANGE.REMOVE")

@@ -34,6 +34,8 @@ namespace Log {
 
 			//Register(lpSourceName, lpMsgFile, dwTypesSupported);
 		}
+		EventSource(const EventSource&) = delete;
+		EventSource& operator=(const EventSource&) = delete;
 		~EventSource()
 		{
 			DeregisterEventSource(hEventLog);

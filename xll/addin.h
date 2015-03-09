@@ -74,13 +74,13 @@ namespace xll {
 			if (ret != xlretSuccess) {
 				std::string err("Failed to register function: ");
 				err.append(xll::traits<X>::string(args_.FunctionText()));
-				MessageBoxA(xll_GetHwnd(), err.c_str(), "Error", MB_OK);
+				MessageBoxA(0, err.c_str(), "Error", MB_OK);
 			}
-			else if (!x) {
+			else if (x.xltype == xltypeErr) {
 				std::string err("Failed to register function: ");
 				err.append(xll::traits<X>::string(args_.FunctionText()));
 				err.append("\nPerhaps you forgot to use #pragma XLLEXPORT or told Excel the wrong name for your function?"); 
-				MessageBoxA(xll_GetHwnd(), err.c_str(), "Warning", MB_OK);
+				MessageBoxA(0, err.c_str(), "Warning", MB_OK);
 			}
 			else {
 				ensure (x.xltype == xltypeNum);
@@ -93,11 +93,13 @@ namespace xll {
 		static int RegisterAll(void)
 		{
 			try {
-				for (auto ai : List())
-					ai->Register();
+				for (auto ai : List()) {
+					if (!ai->Args().isDocument())
+						ai->Register();
+				}
 			}
 			catch (const std::exception& ex) {
-				MessageBoxA(xll_GetHwnd(), ex.what(), "Error", MB_OK);
+				MessageBoxA(0, ex.what(), "Error", MB_OK);
 
 				return 0;
 			}
@@ -107,8 +109,8 @@ namespace xll {
 
 		static const XAddIn<X>* Find(const XOPER<X>& regid)
 		{
-			for (auto ai : List()) {
-				if (ai->regid_ == regid || ai->Args().FunctionText() == regid)
+			for (const auto& ai : List()) {
+				if (regid == ai->regid_ || regid == ai->Args().FunctionText())
 					return ai;
 			}
 
@@ -186,7 +188,3 @@ namespace xll {
 */
 
 //#include "error.h"
-
-#ifdef _DEBUG
-//#include "utility/random.h"
-#endif

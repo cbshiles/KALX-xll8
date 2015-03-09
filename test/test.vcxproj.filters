@@ -39,9 +39,6 @@
     <ClCompile Include="iterator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dual.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="async.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,15 +48,15 @@
     <ClCompile Include="ftap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="conversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="iterator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dual.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

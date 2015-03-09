@@ -38,7 +38,7 @@
 #else
 #define X_(f) f
 #define TX_(s) s
-// poor man's raw string literal (no commas or parens allowed)
+// poor man's raw string literal (no commas or parentheses allowed)
 #define R_(...) #__VA_ARGS__
 #define ExcelXv Excel4v
 #endif
@@ -96,12 +96,12 @@ typedef X_(XLREF)* LPXLREFX;
 #define XLL_LONG_12    L"N"  // reference to signed 4 byte int
 #define XLL_LPOPER12   L"Q"  // pointer to OPER struct (never a reference type).
 #define XLL_LPXLOPER12 L"U"  // pointer to XLOPER struct
-// Modify add-in function behaviour.
+// Modify add-in function behavior.
 #define XLL_VOLATILE12 L"!"  // called every time sheet is recalced
 #define XLL_UNCALCED12 L"#"  // dereferencing uncalced cells returns old value
 #define XLL_THREAD_SAFE12 L"$" // declares function to be thread safe
 #define XLL_CLUSTER_SAFE12 L"&"	// declares function to be cluster safe
-#define XLL_ASYNCHRONOUS12 L"X"	// declases function to be asynchronous
+#define XLL_ASYNCHRONOUS12 L"X"	// declares function to be asynchronous
 #define XLL_VOID12     L">"	// return type to use for asynchronous functions
 
 #define XLL_HANDLE12 XLL_DOUBLE12

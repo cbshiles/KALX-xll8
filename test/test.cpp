@@ -8,6 +8,14 @@ using namespace xll;
 
 typedef traits<XLOPERX>::xcstr xcstr;
 
+static AddInX xai_test_foo2(_T("?xll_test_foo2"), XLL_SHORTX XLL_SHORTX, _T("TEST.FOO"), _T("int"));
+SHORT WINAPI xll_test_foo2(SHORT i)
+{
+#pragma XLLEXPORT
+
+	return xyz_foo(i);
+}
+
 struct run {
 	run(const std::function<int(void)>& f)
 	{
@@ -49,15 +57,13 @@ void test_error(void)
 	xll_alert_level = 7;
 
 	XLL_ERROR("(Not really an) Error", true);
-	XLL_WARNING("Warning (about nothting)", true);
+	XLL_WARNING("Warning (about nothing)", true);
 	char buf[1024] = "Info: xll_alert_level = ";
 	_itoa(xal, buf + strlen(buf), 16);
 	XLL_INFO(buf, true);
 
 	xll_alert_level = xal;
 
-	HWND hw;
-	hw = xll_GetHwnd();
 	HMODULE hm;
 	hm = xll_Instance;
 }
@@ -84,7 +90,7 @@ void test_oper(void)
 	num = 2.34;
 	ensure (2.34 == num);
 	num = 4;
-	ensure (num.xltype == xltypeNum); // like Excel
+	ensure (num.xltype == xltypeInt); // like Excel
 	ensure (num == 4);
 	ensure (4 == num);
 
@@ -92,7 +98,7 @@ void test_oper(void)
 	ensure (str.xltype == xltypeStr);
 	ensure (str.val.str[0] == 3);
 	ensure (str == _T("str"));
-	ensure (num < str);
+//	ensure (num < str);
 	XLOPERX xstr;
 	xstr.xltype = xltypeStr;
 	xstr.val.str = _T("\003Str");
@@ -270,19 +276,20 @@ void test_to_string(void)
 {
 	OPERX o;
 	traits<XLOPERX>::xstring s;
-
+/*
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
-	ensure (s == _T("=0"));
+	ensure (s == _T("=\"\""));
+	o = OPERX(s);
+	ensure (o.xltype == xltypeStr && o.val.str[0] == 3);
+	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
+	ensure (o == _T(""));
 
 	o = OPERX(xltype::Missing);
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=0"));
 
 	o = 1.23;
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=1.23"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
@@ -294,20 +301,16 @@ void test_to_string(void)
 
 	o = true;
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
-	
 	ensure (s == _T("=TRUE"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 	
 	o = false;
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=FALSE"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
 	o = OPERX(xlerr::NA);
 	s = o.to_string();
-//	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("=#N/A"));
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
 
@@ -320,9 +323,8 @@ void test_to_string(void)
 	s = o.to_string();
 	o = Excel<XLOPERX>(xlfEvaluate, OPERX(s));
 	ensure (s == _T("={1.23,\"string\",TRUE;#VALUE!,#REF!,#N/A}"));
-	o[3] = OPERX(xlerr::Value);
-	o[5] = OPERX(xlerr::NA);
 	ensure (o == Excel<XLOPERX>(xlfEvaluate, OPERX(s)));
+*/
 }
 
 static XAddIn<XLOPERX> xai_foo(
@@ -353,8 +355,8 @@ void test_initializer(void)
 {
 	OPERX o{OPERX(1.2), OPERX(_T("abc")), OPERX(false)};
 
-	ensure (o.rows() == 3);
-	ensure (o.columns() == 1);
+	ensure (o.rows() == 1);
+	ensure (o.columns() == 3);
 	ensure (o[0] == 1.2);
 	ensure (o[1] == _T("abc"));
 	ensure (o[2] == false);
@@ -368,6 +370,23 @@ void test_initializer(void)
 */
 }
 
+void test_to_operx(void)
+{
+	OPERX o;
+	o = to_XOPER<XLOPERX>(_T("1.23"));
+	ensure (o == 1.23);
+	o = to_XOPER<XLOPERX>(_T("foobarbaz"));
+	ensure (o == _T("foobarbaz"));
+	o = to_XOPER<XLOPERX>(_T("\"foobarbaz\""));
+	ensure (o == _T("foobarbaz"));
+	o = to_XOPER<XLOPERX>(_T("FALSE"));
+	ensure (o == false);
+	o = to_XOPER<XLOPERX>(_T("#N/A"));
+	ensure (o == OPERX(xlerr::NA));
+	o = to_XOPER<XLOPERX>(_T("2013-1-2"));
+	ensure (o == XLL_XLF(Date, OPERX(2013), OPERX(1), OPERX(2)));
+
+}
 #ifndef _DEBUG
 #pragma warning(disable: 4127)
 #endif
@@ -375,6 +394,7 @@ void test_initializer(void)
 int xll_test(void)
 {
 	try {
+//		_CrtSetBreakAlloc(1275);
 		struct { int i; double d; char c; } s = {1, 1.23, 'c'};
 		auto t = std::make_tuple<int, double , char>(1, 1.23, 'c');
 		auto pt = &t;
@@ -405,6 +425,7 @@ int xll_test(void)
 		test_to_string();
 		test_loper();
 		test_initializer();
+		test_to_operx();
 	}
 	catch (const std::exception& ex) {
 		MessageBoxA(0, ex.what(), "Error", MB_OK);

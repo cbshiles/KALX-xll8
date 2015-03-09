@@ -4,6 +4,8 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <Windows.h>
+#include "xlcall.h"
 
 namespace xll {
 
@@ -35,11 +37,17 @@ namespace xll {
 		union {
 			T* p;
 			HANDLEX h;
+			uint32_t u[2];
 		} u;
 
 		u.h = 0;
 		u.p = p;
 		// if u.h denormal ...
+		//ensure (isnormal(u.h));
+//		if (!isnormal(u.h)) {
+			std::swap(u.u[0], u.u[1]);
+//		}
+		ensure (u.h == 0 || isnormal(u.h));
 
 		return u.h;
 	}
@@ -49,9 +57,12 @@ namespace xll {
 		union {
 			T* p;
 			HANDLEX h;
+			uint32_t u[2];
 		} u;
 
 		u.h = h;
+
+		std::swap(u.u[0], u.u[1]);
 
 		return u.p;
 	}
@@ -102,7 +113,7 @@ namespace xll {
 		T* p_;
 		static typename std::vector<std::unique_ptr<T>>::iterator find(T* p)
 		{
-			return std::find_if(handles().begin(), handles().end(), [p](const std::unique_ptr<T>& p_) { return p_.get() == p; });
+			return std::find_if(handles().begin(), handles().end(), [p](const std::unique_ptr<T>& q) { return q.get() == p; });
 		}
 	public:
 		// constructor: handle<T> h(new T(...));
@@ -112,11 +123,13 @@ namespace xll {
 			handles().push_back(std::unique_ptr<T>(p));
 
 			OPERX o = XLL_XL_(Coerce, XLL_XLF(Caller));
-			if (o.xltype == xltypeNum && o.val.num != 0) {
-				auto pi = find(h2p<T>(o.val.num));
-				if (pi != handles().end()) {
-					pi->release();
-					handles().erase(pi);
+			for (const auto& oh : o) {
+				if (oh.xltype == xltypeNum && oh.val.num != 0) {
+					auto pi = find(h2p<T>(oh.val.num));
+					if (pi != handles().end()) {
+						pi->release();
+						handles().erase(pi);
+					}
 				}
 			}
 		}
@@ -124,7 +137,7 @@ namespace xll {
 		handle(HANDLEX h, bool throw_ = true)
 			: p_(h2p<T>(h))
 		{
-			if (handles().end() == find(p_)) {
+			if (find(p_) == handles().end()) {
 				p_ = 0;
 
 				if (throw_)
@@ -182,3 +195,11 @@ namespace xll {
 	};
 
 } // namespace xll
+
+extern "C" int xyz_foo(int);
+//#ifdef XLL_EXPORTS
+//#pragma comment(linker, "/include:_xyz_foo@4")
+//#endif 
+//template<> static XLL_DLLIMPEXP std::vector<std::unique_ptr<XLOPER>>& xll::handle<XLOPER>::handles(void);
+//template<> static XLL_DLLIMPEXP std::vector<std::unique_ptr<XLOPER12>>& xll::handle<XLOPER12>::handles(void);
+

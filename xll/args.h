@@ -32,7 +32,7 @@ namespace xll {
 
 		XOPER<X> args_;
 //		XOPER<X> type_; // return type followed by arg types
-		XOPER<X> default_;
+		mutable XOPER<X> default_;
 		xstring doc_, see_; // documentation, see also
 
 		XOPER<X>& Arg(RegisterArg ra)
@@ -44,9 +44,12 @@ namespace xll {
 			return args_[static_cast<xword>(ra)];
 		}
 	public:
-//		XArgs()
-//			: args_((xword)RegisterArg::Max, 1)
-//		{ }
+		XArgs(xcstr category)
+			: args_((xword)RegisterArg::Max, 1)
+		{
+			Arg(RegisterArg::MacroType) = -1; // documentation
+			Arg(RegisterArg::Category) = category;
+		}
 		XArgs(xcstr proc, xcstr text)
 			: args_((xword)RegisterArg::Max, 1)
 		{
@@ -107,7 +110,10 @@ namespace xll {
 
 		xword Arity() const
 		{
-			return size() - static_cast<xword>(RegisterArg::Max);
+			xword n = size() - static_cast<xword>(RegisterArg::Max);
+			default_.resize(n, 1);
+
+			return n;
 		}
 		xword size() const
 		{
@@ -140,6 +146,10 @@ namespace xll {
 		bool isMacro(void) const
 		{
 			return Arg(RegisterArg::MacroType) == 2;
+		}
+		bool isDocument(void) const
+		{
+			return Arg(RegisterArg::MacroType) == -1;
 		}
 
 		XArgs& Volatile(void)
@@ -197,7 +207,7 @@ namespace xll {
 		XArgs& Arg(xcstr type, xcstr name, xcstr help, const T& t)
 		{
 			Arg(type, name, help);
-			default_.back() = XOPER<X>(t);
+			default_.push_back(XOPER<X>(t));
 
 			return *this;
 		}
@@ -423,6 +433,15 @@ namespace xll {
 		const xstring& Documentation() const
 		{
 			return doc_;
+		}
+		const xstring& SeeAlso() const
+		{
+			return doc_;
+		}
+
+		const XOPER<X>& Default(xword i) const
+		{
+			return default_[i];
 		}
 	};
 

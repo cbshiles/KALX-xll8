@@ -8,6 +8,9 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
 
+//using System.Windows.Forms;
+
+
 namespace ribbon
 {
     public partial class ThisAddIn
@@ -19,9 +22,29 @@ namespace ribbon
         // load all add-ins in current and subdirectories
         private void LoadAddins()
         {
-            foreach (string xll in Directory.EnumerateFiles(".", "*.xll", System.IO.SearchOption.AllDirectories))
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+            //Location is where the assembly is run from 
+            string assemblyLocation = assembly.Location;
+
+            //CodeBase is the location of the ClickOnce deployment files
+            Uri codeBase = new Uri(assembly.CodeBase);
+            string dir = Path.GetDirectoryName(codeBase.LocalPath.ToString());
+
+            string cwd = Directory.GetCurrentDirectory();
+            try
             {
-                this.Application.RegisterXLL(xll);
+ //               MessageBox.Show(dir);
+
+                Directory.SetCurrentDirectory(dir);
+                foreach (string xll in Directory.EnumerateFiles(".", "*.xll", System.IO.SearchOption.AllDirectories))
+                {
+                    this.Application.RegisterXLL(xll);
+                }
+            }
+            finally 
+            {
+                Directory.SetCurrentDirectory(cwd);
             }
         }
         private void ThisAddIn_Startup(object sender, System.EventArgs e)

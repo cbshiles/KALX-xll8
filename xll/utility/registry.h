@@ -160,7 +160,7 @@ namespace Reg {
 		template<class T>
 		T QueryValue(const X* name)
 		{
-			T t(0);
+			T t;
 			DWORD type, size(traits<T>::size(T()));
 
 			if (ERROR_SUCCESS != RegQueryValueEx_<X>(h_, name, 0, &type, traits<T>::data(t), &size))
@@ -179,9 +179,11 @@ namespace Reg {
 			DWORD type, size;
 			std::basic_string<X> sz;
 
+			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, 0, &size));
+			sz.resize(size/sizeof(X));
 			if (ERROR_SUCCESS != RegQueryValueEx_<X>(h_, name, 0, &type, reinterpret_cast<LPBYTE>(&sz[0]), &size))
 				throw std::runtime_error("");
-			sz.resize(_tcslen(&sz[0]));
+			
 
 			return sz;
 		}
@@ -271,7 +273,7 @@ namespace Reg {
 
 		bool operator==(const X* str) const
 		{
-			return 0 == _tcscmp(t_.c_str(),  str);
+			return 0 == _tcscmp(t_.c_str(), str);
 		}
 
 		friend class ProxyObject;

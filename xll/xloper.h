@@ -55,13 +55,16 @@ namespace xll {
 		switch (x.xltype) {
 		case xltypeNum:
 			return x.val.num;
-		case xltypeStr:
-			return x.val.str[0]; // length???
+		case xltypeStr: {
+			LXOPER<X> o = Excel<X>(xlfEvaluate, x);
+
+			return o.xltype == xltypeNum ? o.val.num : std::numeric_limits<double>::quiet_NaN();
+		}
 		case xltypeBool:
 			return x.val.xbool;
 		case xltypeInt:
 			return x.val.w;
-		case xltypeErr: // so ensure (x) fails in this case
+		case xltypeErr: // so ensure (x) fails in these cases
 		case xltypeMissing:
 		case xltypeNil:
 			return 0;
@@ -69,34 +72,36 @@ namespace xll {
 
 		return std::numeric_limits<double>::quiet_NaN();
 	}
-	/*
 	template<class X>
 	inline typename xll::traits<X>::xstring to_string(const typename xll::traits<X>::type& x)
 	{
-		typedef xll::traits<X>::xstring xstring;
-		typedef xll::traits<X>::xword xword;
-
 		switch (x.xltype) {
+		case xltypeNil: case xltypeMissing:
+			return xll::traits<X>::xstring{};
 		case xltypeNum:
 			return xll::traits<X>::to_string(x.val.num);
-		case xltypeStr:
-			return xstring(x.val.str + 1, x.val.str[0]);
 		case xltypeBool:
-			return xll::traits<X>::to_string(x.val.xbool ? true : false);
-		case xltypeMulti: 
-			{
-				xstring s;
-
-				for (xword i = 0; i < size(x); ++i)
-					s.append(to_string(index(x, i)));
-
-				return s;
-			}
+			return x.val.xbool ? _T("TRUE") : _T("FALSE"); // !!! parameterize by X
 		}
 
-		return xstring('?', 1);
+		return xll::traits<X>::xstring{};
 	}
-	*/
+
+	// Use xlfSetName to convert to string
+	// invariant: x == EVAL(NAME(x))
+	template<class X>
+	inline typename xll::traits<X>::xstring name(const typename xll::traits<X>::type& x)
+	{
+		if (x.xltype == xltypeNil)
+			return xll::traits<X>::string("=\"\""); // Evaluates to ""
+
+		static XOPER<X> xName(xll::traits<X>::string("__NaMe__")); // hopefully unique
+		Excel<X>(xlfSetName, xName, x);
+		XOPER<X> y = Excel<X>(xlfGetName, xName);
+		Excel<X>(xlfSetName, xName); // unset
+
+		return xll::traits<X>::xstring(y.val.str + 1, y.val.str[0]);
+	}
 	template<class X>
 	inline typename xll::traits<X>::xword rows(const typename xll::traits<X>::type& x)
 	{
@@ -173,7 +178,7 @@ namespace xll {
 	{
 		return ::index<X>(x, r*x.val.array.columns + c);
 	}
-
+#pragma warning(disable: 4459)
 	template<class X>
 	inline bool operator_equal(const typename xll::traits<X>::type& x, typename traits<X>::xcstr s, size_t n)
 	{
@@ -202,7 +207,7 @@ namespace xll {
 		case xltypeNum:
 			return x.val.num == y.val.num;
 		case xltypeStr:
-			return operator_equal<X>(x, y.val.str + 1, y.val.str[0]);
+			return x.val.str[0] == y.val.str[0] && 0 == xll::traits<X>::strnicmp(x.val.str + 1, y.val.str + 1, y.val.str[0]);
 		case xltypeBool:
 			return x.val.xbool == y.val.xbool;
 		//case xltypeRef:
@@ -273,13 +278,13 @@ namespace xll {
 	}
 
 } // namespace xll
-
+/*
 template<class X>
 inline bool operator!(const typename xll::traits<X>::type& x)
 {
 	return xll::to_double<X>(x) != 0;
 }
-
+*/
 inline bool operator==(const XLOPER12& x, const XLOPER12& y)
 {
 	return xll::operator_equal<XLOPER12>(x, y);
@@ -292,10 +297,10 @@ inline bool operator<(const XLOPER12& x, const XLOPER12& y)
 {
 	return xll::operator_less<XLOPER12>(x, y);
 }
-inline bool operator>=(const XLOPER12& x, const XLOPER12& y)
+/*inline bool operator>=(const XLOPER12& x, const XLOPER12& y)
 {
 	return !xll::operator_less<XLOPER12>(x, y);
-}
+}*/
 inline bool operator<=(const XLOPER12& x, const XLOPER12& y)
 {
 	return xll::operator_less<XLOPER12>(x, y) || xll::operator_equal<XLOPER12>(x, y);
@@ -317,10 +322,10 @@ inline bool operator<(const XLOPER& x, const XLOPER& y)
 {
 	return xll::operator_less<XLOPER>(x, y);
 }
-inline bool operator>=(const XLOPER& x, const XLOPER& y)
+/*inline bool operator>=(const XLOPER& x, const XLOPER& y)
 {
 	return !xll::operator_less<XLOPER>(x, y);
-}
+}*/
 inline bool operator<=(const XLOPER& x, const XLOPER& y)
 {
 	return xll::operator_less<XLOPER>(x, y) || xll::operator_equal<XLOPER>(x, y);

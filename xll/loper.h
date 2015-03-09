@@ -4,11 +4,7 @@
 
 template<class X>
 class LXOPER : public X {
-	LXOPER(const LXOPER&);
-	LXOPER& operator=(const LXOPER&);
-	LXOPER(const X& x);
-	LXOPER& operator=(const X& x);
-	bool owner_;
+	mutable bool owner_;
 public:
 	LXOPER()
 		: owner_(true)
@@ -16,50 +12,79 @@ public:
 		ZeroMemory(this, sizeof(*this));
 		xltype = xltypeNil;
 	}
+	LXOPER(const LXOPER& o)
+	{
+		owner_ = true;
+		xltype = o.xltype;
+		val = o.val;
+		o.owner_ = false;
+	}
+	LXOPER& operator=(const LXOPER& o)
+	{
+		if (this != &o) {
+			owner_ = true;
+			xltype = o.xltype;
+			val = o.val;
+		
+			o.owner_ = false;
+		}
+
+		return *this;
+	}
 	LXOPER(LXOPER&& o)
 	{
 		owner_ = true;
 		xltype = o.xltype;
 		val = o.val;
 
+		ZeroMemory(&o, sizeof(o));
+		o.xltype = xltypeNil;
 		o.owner_ = false;
 
 	}
 	LXOPER& operator=(LXOPER&& o)
 	{
-		owner_ = true;
-		xltype = o.xltype;
-		val = o.val;
+		if (this != &o) {
+			this->~LXOPER();
 
-		o.owner_ = false;
+			owner_ = o.owner_;
+			xltype = o.xltype;
+			val = o.val;
+
+			ZeroMemory(&o, sizeof(o));
+			o.xltype = xltypeNil;
+			o.owner_ = false;
+		}
 
 		return *this;
 	}
 	~LXOPER()
 	{
 		if (owner_)
-			ensure (xlretSuccess == xll::traits<X>::Excel(xlFree, 0, 1, this));
+			xll::traits<X>::Excel(xlFree, 0, 1, this);
 	}
-
+	bool operator==(typename xll::traits<X>::xcstr str) const
+	{
+		return xltype == xltypeStr
+			&& val.str[0] == static_cast<xchar>(xll::traits<X>::strlen(str))
+			&& 0 == xll::traits<X>::strnicmp(val.str + 1, str, val.str[0]);
+	}
+	operator double() const
+	{
+		return xll::to_double<X>(*this); // ???
+	}
+/*
 	// Return xlret types if not xlretSuccess
 	LXOPER(xlret type)
 	{
 		xltype = xltypeInt; // not used elsewhere
 		val.w = static_cast<xll::traits<X>::xint>(type);
 	}
-	bool operator!(void) const
+	operator XOPER<X>()
 	{
-		return !static_cast<const XOPER<X>&>(*this);
+		return *this;
 	}
-	operator bool() const
-	{
-		return !!*this;
-	}
-	bool operator==(double num) const
-	{
-		return xltype == xltypeNum && val.num == num;
-	}
-
+*/
 	// For thread-safe functions:
 	// LPXLOPERX WINAPI foo(...) { static LOPERX o; ... ; return o.XLFree() }
 	X* XLFree()

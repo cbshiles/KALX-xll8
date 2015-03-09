@@ -26,7 +26,6 @@
 
 #endif
 
-#pragma warning(disable: 4996)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
@@ -41,7 +40,7 @@ extern "C" {
 extern HMODULE xll_Instance;
 
 /// Excel window handle.
-HWND xll_GetHwnd(void);
+//HWND xll_GetHwnd(void);
 
 // include chain to AddIn class
 #include "defines.h"
@@ -50,21 +49,21 @@ HWND xll_GetHwnd(void);
 // try { ... ensure(...); ... } catch (const std::exception& ex) { XLL_ERROR|WARNING|INFO(ex.what()); }
 #include "error.h"
 
+// extras
 #include "entities.h"
 //#include "enum.h"
 #include "fp.h"
 #include "handle.h"
 #include "on.h"
 #include "range/range.h"
+#include "locus.h"
 
-#pragma comment(linker, "/include:" XLL_DECORATE("xll_caller", 0))
-#pragma comment(linker, "/include:" XLL_DECORATE("xll_caller12", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_this", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_this12", 0))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_throttle", 4))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_throttle12", 4))
-#pragma comment(linker, "/include:" XLL_DECORATE("xll_eval", 4))
-#pragma comment(linker, "/include:" XLL_DECORATE("xll_eval12", 4))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_eval", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_eval12", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_depends", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_depends12", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_set", 4))
@@ -80,3 +79,4 @@ HWND xll_GetHwnd(void);
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim12", 8))
 
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_paste_basic", 0))

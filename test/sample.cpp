@@ -8,7 +8,7 @@ using namespace xll;
 
 static AddIn xai_sqrt(
 	Function(XLL_LPOPER, "?xll_sqrt", "XLL.SQRT")
-	.Num("Number", "is a floating point number.")
+	.Num("Number", "is a floating point number.", "=1+2")
 	.Category("XLL")
 	.FunctionHelp("Return the square root of Number or #NUM! if less than 0.")
 );
@@ -34,12 +34,12 @@ LPOPER WINAPI xll_sqrt(double num)
 // Illustrate OPER types
 static AddIn xai_xltype(
 	Function(XLL_LPOPER, "?xll_xltype", "XLTYPE")
-	.Arg(XLL_LPXLOPER, "Type", "is an xltype value.")
+	.Arg(XLL_LPOPER, "Type", "is an xltype value.")
 	.Arg(XLL_BOOL, "_Coerce", "is an optional Boolean value indicating Type should be coerced.")
 	.Category("XLL")
 	.FunctionHelp("Return an example with xltype Type.")
 );
-LPOPER WINAPI xll_xltype(LPXLOPER pType, BOOL coerce)
+LPOPER WINAPI xll_xltype(LPOPER pType, BOOL coerce)
 {
 #pragma XLLEXPORT
 	static OPER o;

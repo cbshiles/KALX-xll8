@@ -1,6 +1,7 @@
 // inet.h - Wininet wrappers
 #pragma once
 #include "../ensure.h"
+#include "scoped_handle.h"
 #include <initializer_list>
 #include <memory>
 #include <Windows.h>
@@ -9,72 +10,23 @@
 
 #pragma comment(lib, "wininet.lib")
 
-namespace handle {
-
-	template<class H>
-	struct traits {
-		static H invalid_handle(void);
-		static void close(H& h);
-	};
-
-	template<class H>
-	class base {
-	protected:
-		H h_;
-	public:
-		base()
-			: h_(traits<H>::invalid_handle())
-		{ }
-		explicit base(H h)
-			: h_(h)
-		{
-			ensure (h_ != traits<H>::invalid_handle());
-		}
-		base(const base& h) = delete;
-		base(base&& h)
-			: h_(h.h_)
-		{
-			h.h_ = traits<H>::invalid_handle();
-		}
-		base& operator=(const base&) = delete;
-		base& operator=(base&& h)
-		{
-			if (this != &h) {
-				h_ = h.h_;
-				h.h_ = traits<H>::invalid_handle();			
-			}
-
-			return *this;
-		}
-		virtual ~base()
-		{
-			if (h_ != traits<H>::invalid_handle())
-				traits<H>::close(h_);
-		}
-		operator const H&() const
-		{
-			return h_;
-		}
-	};
-
-};
-
 template<>
-struct ::handle::traits<HINTERNET> {
-	static HINTERNET invalid_handle(void) 
+struct ::scoped_handle::traits<HINTERNET> {
+	static HINTERNET invalid(void) 
 		{ return nullptr; }
 	static void close(HINTERNET h) 
 		{ InternetCloseHandle(h); }
 };
 
+
 namespace Inet {
 
-	using handle = ::handle::base<HINTERNET>;
+	using handle = ::scoped_handle::base<HINTERNET>;
 
 	struct Open : public handle {
 //		Open() : handle() { }
-		Open(LPCTSTR lpszAgent)
-			: handle(InternetOpen(lpszAgent, INTERNET_OPEN_TYPE_DIRECT, nullptr, nullptr, 0))
+		Open(LPCTSTR lpszAgent = _T("WinInet"), DWORD access = INTERNET_OPEN_TYPE_DIRECT)
+			: handle(InternetOpen(lpszAgent, access, nullptr, nullptr, 0))
 		{
 			ensure (h_);
 		}
@@ -97,7 +49,7 @@ namespace Inet {
 			{ }
 			struct Request : public handle {
 //				Request() : handle() { }
-				Request(const Connection& h, LPCTSTR lpszVerb = _T("/"), LPCTSTR lpszObjectName = _T("GET"),
+				Request(const Connection& h, LPCTSTR lpszVerb = _T("GET"), LPCTSTR lpszObjectName = _T("/"),
 					LPCTSTR lpszVersion = nullptr, LPCTSTR lpszReferer = nullptr, 
 					LPCTSTR *lplpszAcceptTypes = nullptr, DWORD dwFlags = 0, DWORD_PTR dwContext = 0)
 					: handle(HttpOpenRequest(h, lpszVerb, lpszObjectName, lpszVersion, lpszReferer, lplpszAcceptTypes, dwFlags, dwContext))
@@ -108,22 +60,25 @@ namespace Inet {
 				Request operator=(const Request&) = delete;
 				~Request()
 				{ }
-				BOOL AddHeader(LPCTSTR header) const
+				BOOL AddHeader(LPCTSTR header, DWORD flags = 0) const
 				{
-					return HttpAddRequestHeaders(*this, header, _tcsclen(header), 0);
+					return HttpAddRequestHeaders(*this, header, _tcsclen(header), flags);
 				}
-				BOOL AddHeader(LPCTSTR key, LPCTSTR value)
+				BOOL AddHeader(LPCTSTR key, LPCTSTR value, DWORD flags = 0)
 				{
-					return HttpAddRequestHeaders(*this, key, _tcsclen(key), 0)
-						&& HttpAddRequestHeaders(*this, _T(": "), 2, 0)
-						&& HttpAddRequestHeaders(*this, value, _tcsclen(value), 0);
+					std::basic_string<TCHAR> header(key);
+
+					header.append(_T(" "));
+					header.append(value);
+
+					return HttpAddRequestHeaders(*this, header.c_str(), header.length(), flags);
 				}
 			};
-			Request OpenRequest(LPCTSTR lpszVerb = _T("GET"), LPCTSTR lpszObjectName = _T("/"),
+			Request&& OpenRequest(LPCTSTR lpszVerb = _T("GET"), LPCTSTR lpszObjectName = _T("/"),
 					LPCTSTR lpszVersion = _T("HTTP/1.1"), LPCTSTR lpszReferer = nullptr, 
 					LPCTSTR *lplpszAcceptTypes = nullptr, DWORD dwFlags = 0, DWORD_PTR dwContext = 0) const
 			{
-				return Request(*this, lpszVerb, lpszObjectName, lpszVersion, lpszReferer, lplpszAcceptTypes, dwFlags, dwContext);
+				return std::move(Request(*this, lpszVerb, lpszObjectName, lpszVersion, lpszReferer, lplpszAcceptTypes, dwFlags, dwContext));
 			}
 		};
 		struct URL : public handle {
@@ -134,7 +89,7 @@ namespace Inet {
 				DWORD dwFlags = 0, DWORD_PTR dwContext = 0)
 				: handle(InternetOpenUrl(h, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext))
 			{
-				ensure (h_);
+				ensure (h_ || !"InternetOpenUrl failed");
 			}
 			URL(const URL&) = delete;
 			URL& operator=(const URL&) = delete;
@@ -144,30 +99,29 @@ namespace Inet {
 			// read all bytes from InternetOpenUrl
 			std::string Read(DWORD bufsiz = 1024)
 			{
-				std::string buf;
-				buf.resize(bufsiz);
+				std::string buf, read;
+				buf.reserve(bufsiz);
 
-				for (DWORD n = bufsiz, off = 0; n == bufsiz || n == 0; off += bufsiz) {
-					buf.reserve(off + bufsiz);
-					ensure (InternetReadFile(*this, &buf[off], bufsiz, &n));
-					buf.resize(off + n);
+				DWORD n;
+				while (InternetReadFile(*this, &buf[0], bufsiz, &n) && n != 0) {
+					read.append(&buf[0], n);
 				}
 
-				return buf;
+				return read;
 			}
 
 		};
 
-		Connection Connect(LPCTSTR lpszServerName, INTERNET_PORT nServerPort = INTERNET_DEFAULT_HTTP_PORT,
+		Connection&& Connect(LPCTSTR lpszServerName, INTERNET_PORT nServerPort = INTERNET_DEFAULT_HTTP_PORT,
 				LPCTSTR lpszUsername = nullptr, LPCTSTR lpszPassword = nullptr,
 				DWORD dwService = INTERNET_SERVICE_HTTP, DWORD dwFlags = 0, DWORD dwContext = 0) const
 		{
-			return Connection(*this, lpszServerName, nServerPort, lpszUsername, lpszPassword, dwService, dwFlags, dwContext);
+			return std::move(Connection(*this, lpszServerName, nServerPort, lpszUsername, lpszPassword, dwService, dwFlags, dwContext));
 		}
-		URL OpenUrl(LPCTSTR lpszUrl, LPCTSTR lpszHeaders = nullptr, DWORD dwHeadersLength = 0,
+		URL&& OpenUrl(LPCTSTR lpszUrl, LPCTSTR lpszHeaders = nullptr, DWORD dwHeadersLength = 0,
 				DWORD dwFlags = 0, DWORD_PTR dwContext = 0) const
 		{
-			return URL(*this, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext);
+			return std::move(URL(*this, lpszUrl, lpszHeaders, dwHeadersLength, dwFlags, dwContext));
 		}
 		/*
 		handle FtpFile(Connection c, LPCTSTR lpszFilename, DWORD dwAccess = GENERIC_READ, 
@@ -178,4 +132,4 @@ namespace Inet {
 		*/
 	};
 
-} // inet
+} // Inet

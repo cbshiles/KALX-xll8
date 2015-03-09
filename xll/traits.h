@@ -18,7 +18,7 @@ namespace xll {
 		typedef LPSTR xstr;
 		typedef LPCSTR xcstr;
 		typedef std::basic_string<xchar> xstring;
-		typedef xrw xword; // use for array indices
+		typedef unsigned short xword; // use for array indices
 		typedef short int xint;
 		typedef _FP xfp;
 
@@ -38,6 +38,11 @@ namespace xll {
 		//Maximum number of arguments to a function
 		static const int argmax = 30;
 
+		static double strtod(xcstr s, xcstr* e)
+		{
+			return ::strtod(s, (xchar**)e);
+		}
+
 		static std::string string(xcstr s, xchar n = 0)
 		{
 			return std::string(s, s + (n ? n : strlen(s)));
@@ -46,8 +51,23 @@ namespace xll {
 		{
 			ensure (s.xltype == xltypeStr);
 			
-			return string(s.val.str + 1, s.val.str[0]);
+			return std::string(s.val.str + 1, s.val.str + 1 + s.val.str[0]);
 		}
+		/*
+		template<typename T>
+		static std::string to_string(T t)
+		{
+			return std::to_string(t);
+		}
+		template<>
+		static std::string to_string<double>(double t)
+		{
+			xchar buf[32];
+			sprintf(buf, "%.17g", t); // guaranteed round trip
+
+			return std::string(buf);
+		}
+		*/
 		static int strnicmp(xcstr a, xcstr b, size_t n) 
 		{ 
 			return ::_strnicmp(a, b, n);
@@ -66,11 +86,6 @@ namespace xll {
 		static int Excelv(int f, LPXLOPER res, int n, LPXLOPER args[])
 		{
 			return ::Excel4v(f, res, n, args);
-		}
-		template<typename T>
-		static std::string to_string(T t)
-		{
-			return std::to_string(t);
 		}
 		static int Excel(int f, LPXLOPER res, int n, ...) 
 		{
@@ -99,7 +114,7 @@ namespace xll {
 		typedef XCHAR* xstr;
 		typedef const XCHAR* xcstr;
 		typedef std::basic_string<xchar> xstring;
-		typedef xrw xword; // use for array indices
+		typedef unsigned int xword; // use for array indices
 		typedef int xint;
 		typedef _FP12 xfp;
 
@@ -119,6 +134,10 @@ namespace xll {
 		//Maximum number of arguments to a function
 		static const int argmax = 255;
 
+		static double strtod(xcstr s, xcstr* e)
+		{
+			return ::wcstod(s, (xchar**)e);
+		}
 		static std::string string(xcstr s, int n = 0)
 		{
 			if (n == 0)
@@ -127,6 +146,18 @@ namespace xll {
 			int n_ = WideCharToMultiByte(CP_ACP, 0, s, n, 0, 0, 0, 0);
 			std::string s_(n_, 0);
 			WideCharToMultiByte(CP_ACP, 0, s, n, &s_[0], n_, 0, 0);
+
+			return s_;
+		}
+		static std::basic_string<wchar_t> string(const char* s, int n = 0)
+		{
+
+			if (n == 0)
+				n = static_cast<int>(::strlen(s));
+		
+			int n_ = MultiByteToWideChar(CP_ACP, 0, s, n, 0, 0);
+			std::basic_string<wchar_t> s_(n, 0);
+			MultiByteToWideChar(CP_ACP, 0, s, n, &s_[0], n_);
 
 			return s_;
 		}
@@ -156,6 +187,14 @@ namespace xll {
 		{
 			return std::to_wstring(t);
 		}
+		template<>
+		static std::wstring to_string<double>(double t)
+		{
+			xchar buf[32];
+			swprintf(buf, 32, L"%.17g", t);
+
+			return std::wstring(buf);
+		}
 		static int Excelv(int f, LPXLOPER12 res, int n, LPXLOPER12 args[])
 		{
 			return ::Excel12v(f, res, n, args);
@@ -176,6 +215,7 @@ namespace xll {
 			return Excelv(f, res, n, &args[0]);
 		}
 	};
+
 /*
 	WideCharToMultiByte();
 	MultiByteToWideChar();

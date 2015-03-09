@@ -1,6 +1,4 @@
 // range.h - universal range functions
-//XLL_DLLIMPEXP xll::handle<OPER> handle_oper;
-//XLL_DLLIMPEXP xll::handle<OPER12> handle_oper12;
 #pragma once
 #include <algorithm>
 #include "../xll.h"

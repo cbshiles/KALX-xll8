@@ -99,9 +99,6 @@
     <ClInclude Include="xll\utility\inet.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="utility\google.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="xll\utility\environment.h">
       <Filter>utility</Filter>
     </ClInclude>
@@ -113,6 +110,18 @@
     </ClInclude>
     <ClInclude Include="xll\range\range.h">
       <Filter>range</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\utility\message.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\locus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\utility\scoped_resource.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\utility\scoped_handle.h">
+      <Filter>utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -128,9 +137,6 @@
     <ClCompile Include="xll\error.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xll\hwnd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xll\XLCALL.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -138,9 +144,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xll\this.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="xll\caller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xll\eval.cpp">
@@ -166,6 +169,12 @@
     </ClCompile>
     <ClCompile Include="xll\range\remove.cpp">
       <Filter>range</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\paste.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\handle.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
