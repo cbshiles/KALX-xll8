@@ -145,9 +145,9 @@ extern "C"
 void __declspec(dllexport) WINAPI
 xlAutoFree(LPXLOPER px)
 {
-	if ((px->xltype)&xlbitDLLFree)
+	if (px->xltype == (xltypeStr|xlbitDLLFree) || px->xltype == (xltypeMulti|xlbitDLLFree))
 		delete px;
-	else if ((px->xltype)&xlbitXLFree)
+	else if (px->xltype == (xltypeStr|xlbitXLFree) || px->xltype == (xltypeMulti|xlbitXLFree))
 		Excel4(xlFree, 0, 1, px);
 }
 
@@ -155,9 +155,9 @@ extern "C"
 void __declspec(dllexport) WINAPI
 xlAutoFree12(LPXLOPER12 px)
 {
-	if ((px->xltype)&xlbitDLLFree)
+	if (px->xltype == (xltypeStr|xlbitDLLFree) || px->xltype == (xltypeMulti|xlbitDLLFree))
 		delete px;
-	else if ((px->xltype)&xlbitXLFree)
+	else if (px->xltype == (xltypeStr|xlbitXLFree) || px->xltype == (xltypeMulti|xlbitXLFree))
 		Excel12(xlFree, 0, 1, px);
 }
 

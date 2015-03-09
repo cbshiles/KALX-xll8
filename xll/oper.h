@@ -727,11 +727,13 @@ inline OPER12 to_OPER(LPWSTR s, WCHAR len = 0)
 }
 */
 template<class X>
-inline XOPER<X> to_XOPER(typename xll::traits<X>::xcstr s, typename xll::traits<X>::xchar len = 0)
+inline XOPER<X> to_XOPER(typename xll::traits<X>::xcstr s)
 {
-	if (!len)
-		len = xll::traits<X>::strlen(s);
-
+	return to_XOPER(s, xll::traits<X>::strlen(s));
+}
+template<class X>
+inline XOPER<X> to_XOPER(typename xll::traits<X>::xcstr s, typename xll::traits<X>::xchar len)
+{
 	XOPER<X> o(s, len);
 
 	XOPER<X> v = Excel<X>(xlfValue, o);
