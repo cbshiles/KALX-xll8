@@ -5,6 +5,22 @@
 
 typedef xll::traits<XLOPERX>::xword xword;
 
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_set", 4))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_get", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_set12", 4))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_get12", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_mask", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_mask12", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_take", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_take12", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_drop", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_drop12", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim12", 8))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_reshape", 12))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_reshape12", 12))
+
+
 namespace range {
 
 	template<class X>
@@ -145,6 +161,7 @@ namespace range {
 		return o_;
 	}
 
+	// remove xltypes in mask
 	template<class X>
 	inline XOPER<X> remove(const XOPER<X>& o, int mask)
 	{

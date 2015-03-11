@@ -179,6 +179,9 @@
     <ClCompile Include="xll\handle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="xll\range\reshape.cpp">
+      <Filter>range</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="xll\oper.natvis">

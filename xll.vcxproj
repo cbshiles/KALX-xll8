@@ -229,6 +229,7 @@
     <ClCompile Include="xll\range\mask.cpp" />
     <ClCompile Include="xll\range\range.cpp" />
     <ClCompile Include="xll\range\remove.cpp" />
+    <ClCompile Include="xll\range\reshape.cpp" />
     <ClCompile Include="xll\range\take.cpp" />
     <ClCompile Include="xll\range\trim.cpp" />
     <ClCompile Include="xll\this.cpp">

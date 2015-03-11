@@ -53,21 +53,19 @@ namespace xll {
 			
 			return std::string(s.val.str + 1, s.val.str + 1 + s.val.str[0]);
 		}
-		/*
-		template<typename T>
+/*		template<typename T>
 		static std::string to_string(T t)
 		{
 			return std::to_string(t);
 		}
 		template<>
-		static std::string to_string<double>(double t)
+*/		static std::string to_string(double t)
 		{
 			xchar buf[32];
 			sprintf(buf, "%.17g", t); // guaranteed round trip
 
 			return std::string(buf);
 		}
-		*/
 		static int strnicmp(xcstr a, xcstr b, size_t n) 
 		{ 
 			return ::_strnicmp(a, b, n);
@@ -168,13 +166,13 @@ namespace xll {
 		{ 
 			return wcsncpy(s, t, n); 
 		}
-		template<typename T>
+/*		template<typename T>
 		static std::wstring to_string(T t)
 		{
 			return std::to_wstring(t);
 		}
 		template<>
-		static std::wstring to_string<double>(double t)
+*/		static std::wstring to_string(double t)
 		{
 			xchar buf[32];
 			swprintf(buf, 32, L"%.17g", t);
