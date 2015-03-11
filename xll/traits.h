@@ -2,6 +2,7 @@
 // Copyright (c) KALX, LLC. All rights reserved. No warranty made.
 // included by defines.h
 // Permit a single xll to use either old or new types.
+#include "utility/string.h"
 
 namespace xll {
 
@@ -42,7 +43,6 @@ namespace xll {
 		{
 			return ::strtod(s, (xchar**)e);
 		}
-
 		static std::string string(xcstr s, xchar n = 0)
 		{
 			return std::string(s, s + (n ? n : strlen(s)));
@@ -138,28 +138,14 @@ namespace xll {
 		{
 			return ::wcstod(s, (xchar**)e);
 		}
+		// convert wide char string to char string
 		static std::string string(xcstr s, int n = 0)
 		{
-			if (n == 0)
-				n = static_cast<int>(wcslen(s));
-		
-			int n_ = WideCharToMultiByte(CP_ACP, 0, s, n, 0, 0, 0, 0);
-			std::string s_(n_, 0);
-			WideCharToMultiByte(CP_ACP, 0, s, n, &s_[0], n_, 0, 0);
-
-			return s_;
+			return WideCharToMultiByte(s, n);
 		}
 		static std::basic_string<wchar_t> string(const char* s, int n = 0)
 		{
-
-			if (n == 0)
-				n = static_cast<int>(::strlen(s));
-		
-			int n_ = MultiByteToWideChar(CP_ACP, 0, s, n, 0, 0);
-			std::basic_string<wchar_t> s_(n, 0);
-			MultiByteToWideChar(CP_ACP, 0, s, n, &s_[0], n_);
-
-			return s_;
+			return MultiByteToWideChar(s, n);
 		}
 		static std::string string(const XLOPER12& s)
 		{

@@ -3,6 +3,7 @@
 // included by args.h
 #include <sstream>
 #include <vector>
+#include "utility/string.h"
 
 namespace xll {
 

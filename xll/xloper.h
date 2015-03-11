@@ -95,7 +95,10 @@ namespace xll {
 		if (x.xltype == xltypeNil)
 			return xll::traits<X>::string("=\"\""); // Evaluates to ""
 
-		static XOPER<X> xName(xll::traits<X>::string("__NaMe__")); // hopefully unique
+		XOPER<X> xName(nullptr, 16);
+		for (int i = 0; i < 16; ++i)
+			xName.val.str[i+1] = Excel<X>(xlfChar, Excel<X>(xlfRandbetween, XOPER<X>(65), XOPER<X>(90))).val.str[1];
+
 		Excel<X>(xlfSetName, xName, x);
 		XOPER<X> y = Excel<X>(xlfGetName, xName);
 		Excel<X>(xlfSetName, xName); // unset

@@ -575,7 +575,7 @@ private:
 		ensure (xltype == xltypeStr);
 
 		ensure (0 != (val.str = static_cast<xchar*>(::realloc(val.str, sizeof(xchar)*(1 + str0)))));
-		if (str0)
+		if (str0 && str)
 			xll::traits<X>::strncpy(val.str + 1, str, str0);
 		val.str[0] = str0;
 	}
@@ -729,7 +729,7 @@ inline OPER12 to_OPER(LPWSTR s, WCHAR len = 0)
 template<class X>
 inline XOPER<X> to_XOPER(typename xll::traits<X>::xcstr s)
 {
-	return to_XOPER(s, xll::traits<X>::strlen(s));
+	return to_XOPER<X>(s, xll::traits<X>::strlen(s));
 }
 template<class X>
 inline XOPER<X> to_XOPER(typename xll::traits<X>::xcstr s, typename xll::traits<X>::xchar len)
