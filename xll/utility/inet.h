@@ -62,7 +62,9 @@ namespace Inet {
 				{ }
 				BOOL AddHeader(LPCTSTR header, DWORD flags = 0) const
 				{
-					return HttpAddRequestHeaders(*this, header, _tcsclen(header), flags);
+					DWORD len = static_cast<DWORD>(_tcsclen(header));
+
+					return HttpAddRequestHeaders(*this, header, len, flags);
 				}
 				BOOL AddHeader(LPCTSTR key, LPCTSTR value, DWORD flags = 0)
 				{
@@ -70,8 +72,9 @@ namespace Inet {
 
 					header.append(_T(" "));
 					header.append(value);
+					DWORD len = static_cast<DWORD>(header.length());
 
-					return HttpAddRequestHeaders(*this, header.c_str(), header.length(), flags);
+					return HttpAddRequestHeaders(*this, header.c_str(), len, flags);
 				}
 			};
 			Request&& OpenRequest(LPCTSTR lpszVerb = _T("GET"), LPCTSTR lpszObjectName = _T("/"),
