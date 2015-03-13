@@ -63,7 +63,7 @@ int xll_test_range_take()
 		OPERX o {OPERX(1.23), OPERX(_T("abc")), OPERX(true)};
 	
 		OPERX o2 = range::take(o, 0);
-		ensure (o2 == OPERX());
+		ensure (o2 == OPERX(xlerr::Null));
 	
 		OPERX o3 = range::take(o, 1);
 		ensure (o3.size() == 1);

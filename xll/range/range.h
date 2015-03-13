@@ -56,7 +56,7 @@ namespace range {
 				o_.resize(o_.size(), 1);
 		}
 		else {
-			o_ = XOPER<X>(xlerr::NA);
+			o_ = XOPER<X>(xlerr::Null);
 		}
 
 		return o_;
@@ -91,7 +91,7 @@ namespace range {
 			std::copy(o.end() - n, o.end(), o_.begin());
 		}
 		else {
-			o_ = XOPER<X>();
+			o_ = XOPER<X>(xlerr::Null);
 		}
 
 		return o_;
@@ -104,28 +104,35 @@ namespace range {
 		XOPER<X> o_;
 
 		if (n > 0) {
-			n = (std::min<long>)(n, o.size());
+			if (n >= static_cast<long>(o.size())) {
+				o_ = XOPER<X>(xlerr::Null);
+			}
+			else {
+				if (o.rows() == 1)
+					o_.resize(1, o.size() - n);
+				else
+					o_.resize(o.size() - n, 1);
 
-			if (o.rows() == 1)
-				o_.resize(1, o.size() - n);
-			else
-				o_.resize(o.size() - n, 1);
-
-			std::copy(o.begin() + n, o.end(), o_.begin());
+				std::copy(o.begin() + n, o.end(), o_.begin());
+			}
 		}
 		else if (n < 0) {
-			n = (std::min<long>)(-n, o.size());
+			if (-n >= static_cast<long>(o.size())) {
+				o_ = XOPER<X>(xlerr::Null);
+			}
+			else {
+				if (o.rows() == 1)
+					o_.resize(1, o.size() + n);
+				else
+					o_.resize(o.size() + n, 1);
 
-			if (o.rows() == 1)
-				o_.resize(1, o.size() - n);
-			else
-				o_.resize(o.size() - n, 1);
-
-			std::copy(o.begin(), o.end() - n, o_.begin());
+				std::copy(o.begin(), o.end() + n, o_.begin());
+			}
 		}
 		else {
 			o_ = o;
 		}
+
 
 		return o_;
 	}

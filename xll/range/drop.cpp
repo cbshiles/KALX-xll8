@@ -70,7 +70,7 @@ int xll_test_range_drop()
 		ensure (o3[1] == o[2]);
 
 		OPERX o4 = range::drop(o, 3);
-		ensure (o4 == OPERX());
+		ensure (o4 == OPERX(xlerr::Null));
 
 		OPERX o5 = range::drop(o, -2);
 		ensure (o5.size() == 1);

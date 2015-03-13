@@ -63,18 +63,18 @@ void xll_test_range_mask_(void)
 {
 	XOPER<X> zero(0);
 	XOPER<X> one(1);
-	XOPER<X> o { XOPER<X>(1.23), XOPER<X>(xlerr::NA), XOPER<X>(true) };
+	XOPER<X> o { XOPER<X>(1.23), XOPER<X>(xlerr::Null), XOPER<X>(true) };
 
 	XOPER<X> o2 = range::mask(o, XOPER<X>{one,one,zero});
 	ensure (o2.size() == 2);
 	ensure (o2[0] == 1.23);
-	ensure (o2[1] == XOPER<X>(xlerr::NA));
+	ensure (o2[1] == XOPER<X>(xlerr::Null));
 
 	XOPER<X> o3 = range::mask(o, XOPER<X>{one,one,one});
 	ensure (o == o3);
 
 	XOPER<X> o4 = range::mask(o, XOPER<X>{zero,zero,zero});
-	ensure (o4 == XOPER<X>(xlerr::NA));
+	ensure (o4 == XOPER<X>(xlerr::Null));
 }
 int xll_test_range_mask(void)
 {
