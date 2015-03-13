@@ -592,7 +592,7 @@ private:
 	}
 	void realloc(xword r, xword c)
 	{
-		if (r*c == 0) {
+		if (r == 0 && c == 0) {
 			free();
 
 			return;
@@ -607,6 +607,12 @@ private:
 		}
 
 		if (xltype != xltypeMulti) {
+			if (r*c == 0) {
+				free();
+
+				return;
+			}
+
 			XOPER<X> this_ = *this;
 
 			free();
@@ -621,12 +627,23 @@ private:
 
 			return;
 		}
-	
+
+		ensure (xltype == xltypeMulti);
 		xword n = size();
-		if (r*c != n || val.array.lparray == 0) {
-			val.array.lparray = static_cast<X*>(::realloc(val.array.lparray, r*c*sizeof(X)));
-			ensure (val.array.lparray);
+		if (r == 0) {
+			ensure (c != 0);
+			r = n/c;
+			if (n%c != 0)
+				++r;
 		}
+		if (c == 0) {
+			ensure (r != 0);
+			c = n/r;
+			if (n%r != 0)
+				++c;
+		}
+		val.array.lparray = static_cast<X*>(::realloc(val.array.lparray, r*c*sizeof(X)));
+		ensure (val.array.lparray);
 
 		xltype = xltypeMulti;
 		val.array.rows = r;

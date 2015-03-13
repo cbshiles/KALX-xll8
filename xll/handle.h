@@ -140,8 +140,11 @@ namespace xll {
 			if (find(p_) == handles().end()) {
 				p_ = 0;
 
-				if (throw_)
+				if (throw_) {
+//					OPER ac = Excel<XLOPER>(xlfActiveCell);
+					// convert to reference !!!
 					throw std::runtime_error("xll::handle lookup failed");
+				}
 			}
 		}
 		~handle()

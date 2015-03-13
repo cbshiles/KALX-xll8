@@ -182,9 +182,8 @@ namespace Reg {
 			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, 0, &size));
 			sz.resize(size/sizeof(X));
 			if (ERROR_SUCCESS != RegQueryValueEx_<X>(h_, name, 0, &type, reinterpret_cast<LPBYTE>(&sz[0]), &size))
-				throw std::runtime_error("");
+				throw std::runtime_error("Reg::Key<X>::QueryValue: failed");
 			
-
 			return sz;
 		}
 
