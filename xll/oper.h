@@ -419,6 +419,9 @@ public:
 	
 		if (xltype != xltypeMulti) {
 			resize(1,1);
+			ensure (xltype == xltypeMulti);
+			ensure (rows() == 1);
+			ensure (columns() == 1);
 		}
 
 		if (x.columns() == 1 || (columns() == x.columns())) { // favor columns

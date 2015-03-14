@@ -19,6 +19,8 @@ typedef xll::traits<XLOPERX>::xword xword;
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_trim12", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_reshape", 12))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_range_reshape12", 12))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_slice", 16))
+#pragma comment(linker, "/include:" XLL_DECORATE("xll_range_slice12", 16))
 
 
 namespace range {
@@ -49,15 +51,10 @@ namespace range {
 			}
 		}
 
-		if (o_.size()) {
-			if (o.rows() == 1)
-				o_.resize(1, o_.size());
-			else
-				o_.resize(o_.size(), 1);
-		}
-		else {
+		if (o_.size() == 0)
 			o_ = XOPER<X>(xlerr::Null);
-		}
+		else if (o.rows() == 1)
+			o_.resize(1, o_.size());
 
 		return o_;
 	}
@@ -133,7 +130,6 @@ namespace range {
 			o_ = o;
 		}
 
-
 		return o_;
 	}
 
@@ -174,17 +170,44 @@ namespace range {
 	{
 		XOPER<X> o_;
 
-		for (const auto& i : o) {
-			if (!(i.xltype&mask))
-				o_.push_back(i);
+		for (xword i = 0; i < o.size(); ++i) {
+			if (!(o[i].xltype&mask))
+				o_.push_back(o[i]);
 		}
 
-		if (o.rows() == 1)
+		if (o_.size() == 0)
+			o_ = XOPER<X>(xlerr::Null);
+		else if (o.rows() == 1)
 			o_.resize(1, o_.size());
-		else if (o.columns() == 1)
-			o_.resize(o_.size(), 1);
-		else
-			o_ = XOPER<X>(xlerr::NA);
+
+		return o_;
+	}
+
+	template<class X>
+	inline XOPER<X> slice(const XOPER<X>& o, int start, int size, int stride)
+	{
+		XOPER<X> o_;
+
+		int osize = static_cast<int>(o.size());
+
+		if (start < 0)
+			start = osize + start;
+		if (start < 0 || start >= osize)
+			return XOPER<X>(xlerr::Value);
+
+		if (stride == 0)
+			stride = 1;
+
+		if (size < 0 || size > 0 && start + (size - 1)*stride >= osize)
+			return XOPER<X>(xlerr::Value);
+
+		for (int i = start; size ? i < start + size*stride : (0 <= i && i < osize); i += stride)
+			o_.push_back(o[i]);
+
+		if (o_.size() == 0)
+			o_ = XOPER<X>(xlerr::Null);
+		else if (o.rows() == 1)
+			o_.resize(1, o_.size());
 
 		return o_;
 	}

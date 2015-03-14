@@ -182,6 +182,9 @@
     <ClCompile Include="xll\range\reshape.cpp">
       <Filter>range</Filter>
     </ClCompile>
+    <ClCompile Include="xll\range\slice.cpp">
+      <Filter>range</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="xll\oper.natvis">
