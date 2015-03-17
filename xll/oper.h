@@ -610,11 +610,7 @@ private:
 		}
 
 		if (xltype != xltypeMulti) {
-			if (r*c == 0) {
-				free();
-
-				return;
-			}
+			ensure (r*c != 0);
 
 			XOPER<X> this_ = *this;
 

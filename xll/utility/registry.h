@@ -163,8 +163,7 @@ namespace Reg {
 			T t;
 			DWORD type, size(traits<T>::size(T()));
 
-			if (ERROR_SUCCESS != RegQueryValueEx_<X>(h_, name, 0, &type, traits<T>::data(t), &size))
-				throw std::runtime_error("");
+			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, traits<T>::data(t), &size))
 			ensure (traits<T>::type == type);
 
 			return t;
@@ -176,14 +175,16 @@ namespace Reg {
 		template<>
 		std::basic_string<X> QueryValue(const X* name)
 		{
-			DWORD type, size;
 			std::basic_string<X> sz;
-
+			DWORD type, size;
 			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, 0, &size));
-			sz.resize(size/sizeof(X));
-			if (ERROR_SUCCESS != RegQueryValueEx_<X>(h_, name, 0, &type, reinterpret_cast<LPBYTE>(&sz[0]), &size))
-				throw std::runtime_error("Reg::Key<X>::QueryValue: failed");
-			
+			sz.resize(size);
+			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, reinterpret_cast<LPBYTE>(&sz[0]), &size));
+
+			// REG_SZ are null terminated
+			while (sz.back() == 0)
+				sz.pop_back();
+
 			return sz;
 		}
 
@@ -247,16 +248,15 @@ namespace Reg {
 		Object(const Object&);
 		Object& operator=(const Object&);
 	public:
-		Object(HKEY h, const X* k, const X* name, const T& init = 0)
+		Object(HKEY h, const X* k, const X* name, const T& t)
+			: h_(h, k, KEY_ALL_ACCESS), name_(name), t_(t)
+		{
+			h_.SetValue(name, t_);
+		}
+		Object(HKEY h, const X* k, const X* name)
 			: h_(h, k, KEY_ALL_ACCESS), name_(name)
 		{
-			try {
-				t_ = h_.QueryValue<T>(name);
-			}
-			catch (const std::exception&) {
-				t_ = init;
-				h_.SetValue(name, t_);
-			}
+			t_ = h_.QueryValue<T>(name);
 		}
 		~Object()
 		{ }
