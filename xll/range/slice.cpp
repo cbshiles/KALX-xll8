@@ -7,12 +7,12 @@ static AddIn xai_range_slice(
 	Function(XLL_LPOPER, XLL_DECORATE("xll_range_slice",16), "RANGE.SLICE")
 	.Arg(XLL_LPOPER, "Range", "is a range or handle to a range.")
 	.Arg(XLL_LONG, "Start", "is the 0-based first element.")
-	.Arg(XLL_LONG, "_Size", "is the optional number of elements to slice. Default is all.")
 	.Arg(XLL_LONG, "_Stride", "is the optional step increment. Default is 1.")
+	.Arg(XLL_LONG, "_Size", "is the optional number of elements to slice. Default is all.")
 	.Category("XLL")
 	.FunctionHelp("Slice elements from a Range.")
 );
-extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_slice(const LPOPER pr, LONG start, LONG size, LONG stride)
+extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_slice(const LPOPER pr, LONG start, LONG stride, LONG size)
 {
 	static OPER o;
 

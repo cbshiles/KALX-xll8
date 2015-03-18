@@ -23,6 +23,10 @@ public:
 	{
 		alloc(o);
 	}
+	XOPER(typename const xll::traits<X>::type& o)
+	{
+		alloc(o);
+	}
 	XOPER(XOPER&& o)
 	{
 		xltype = o.xltype;
@@ -55,6 +59,10 @@ public:
 
 		return *this;
 	}
+	XOPER& operator=(typename const xll::traits<X>::type& o)
+	{
+		return operator=(reinterpret_cast<const XOPER&>(o));
+	}
 	XOPER& operator=(XOPER&& o)
 	{
 		if (this != &o) {
@@ -71,18 +79,6 @@ public:
 	~XOPER()
 	{
 		free();
-	}
-
-	XOPER(const typename xll::traits<X>::type& x)
-	{
-		alloc(x);
-	}
-	XOPER& operator=(const typename xll::traits<X>::type& x)
-	{
-		free();
-		alloc(x);
-
-		return *this;
 	}
 
 	friend void swap(XOPER& x, XOPER& y)
@@ -526,6 +522,7 @@ private:
 	}
 
 	void alloc(const typename xll::traits<X>::type& o)
+//	void alloc(const XOPER& o)
 	{
 		xltype = o.xltype;
 
@@ -548,7 +545,8 @@ private:
 			val = o.val;
 		}
 	}
-	void realloc(const typename xll::traits<X>::type& x)
+	void realloc(const XOPER& x)
+//void realloc(typename xll::traits<X>::type& x)
 	{
 		ensure (xltype == x.xltype);
 
