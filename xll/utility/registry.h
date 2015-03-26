@@ -146,7 +146,7 @@ namespace Reg {
 			return &h_;
 		}
 
-		// Type of registy entry value.
+		// Type of registry entry value.
 		DWORD Type(const X* name)
 		{
 			DWORD type;
@@ -223,6 +223,7 @@ namespace Reg {
 		}
 	};
 
+	// Create or Open key if it already exists
 	template<class X>
 	class CreateKey : public Key<X> {
 		CreateKey(const CreateKey&);
@@ -256,7 +257,12 @@ namespace Reg {
 		Object(HKEY h, const X* k, const X* name)
 			: h_(h, k, KEY_ALL_ACCESS), name_(name)
 		{
-			t_ = h_.QueryValue<T>(name);
+			try {
+				t_ = h_.QueryValue<T>(name);
+			}
+			catch (...) {
+				; // default value
+			}
 		}
 		~Object()
 		{ }

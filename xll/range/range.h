@@ -184,7 +184,7 @@ namespace range {
 	}
 
 	template<class X>
-	inline XOPER<X> slice(const XOPER<X>& o, int start, int size, int stride)
+	inline XOPER<X> slice(const XOPER<X>& o, int start, int stride, int size)
 	{
 		XOPER<X> o_;
 
