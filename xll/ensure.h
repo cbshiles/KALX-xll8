@@ -1,6 +1,7 @@
 // ensure.h - assert replacement that throws instead of calling abort()
 // #define NENSURE before including to turn ensure checking off
 #pragma once
+#include <limits>
 #include <stdexcept>
 
 #ifdef NENSURE
