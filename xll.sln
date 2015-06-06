@@ -14,6 +14,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple", "simple\simple.vcx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ribbon", "ribbon\ribbon.csproj", "{104B03CC-2E73-4F96-9190-CD06B510BFBF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "socket\server\server.vcxproj", "{436E0162-32CA-45BB-9BC5-EE499F28E151}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,24 @@ Global
 		{104B03CC-2E73-4F96-9190-CD06B510BFBF}.Release|Win32.ActiveCfg = Release|Any CPU
 		{104B03CC-2E73-4F96-9190-CD06B510BFBF}.Release|x64.ActiveCfg = Release|Any CPU
 		{104B03CC-2E73-4F96-9190-CD06B510BFBF}.Release|x86.ActiveCfg = Release|Any CPU
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Debug|ARM.ActiveCfg = Debug|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Debug|Win32.ActiveCfg = Debug|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Debug|Win32.Build.0 = Debug|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Debug|x64.ActiveCfg = Debug|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Debug|x86.ActiveCfg = Debug|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Debug|x86.Build.0 = Debug|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Release|Any CPU.ActiveCfg = Release|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Release|ARM.ActiveCfg = Release|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Release|Win32.ActiveCfg = Release|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Release|Win32.Build.0 = Release|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Release|x64.ActiveCfg = Release|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Release|x86.ActiveCfg = Release|Win32
+		{436E0162-32CA-45BB-9BC5-EE499F28E151}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

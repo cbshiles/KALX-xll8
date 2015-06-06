@@ -143,9 +143,10 @@ typedef X_(XLREF)* LPXLREFX;
 #endif
 
 #define XLL_TEST_BEGIN(f) int test_ ## f(void) { try {
-#define XLL_ENSURE(e) ensure(XLL_XLF(Evaluate, OPERX(_T(e))))
+#define XLL_EVALUATE(e) XLL_XLF(Evaluate, OPERX(e))
+#define XLL_ENSURE(e) ensure(XLL_EVALUATE(e))
 // ensure (...)
 #define XLL_TEST_END(f) } catch (const std::exception& ex) { XLL_ERROR(ex.what()); return 0; } return 1; } \
-	static xll::Auto<OpenAfter> xao_ ## f(test_ ## f);
+	static xll::Auto<OpenAfterX> xao_ ## f(test_ ## f);
 
 #include "traits.h"

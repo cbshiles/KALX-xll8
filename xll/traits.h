@@ -22,6 +22,8 @@ namespace xll {
 		typedef unsigned short xword; // use for array indices
 		typedef short int xint;
 		typedef _FP xfp;
+		typedef XLREF xlref;
+		typedef XLMREF xlmref;
 
 		static xcstr UNCALCED() { return XLL_UNCALCED; }
 		static xcstr VOLATILE() { return XLL_VOLATILE; }
@@ -115,6 +117,8 @@ namespace xll {
 		typedef unsigned int xword; // use for array indices
 		typedef int xint;
 		typedef _FP12 xfp;
+		typedef XLREF12 xlref;
+		typedef XLMREF12 xlmref;
 
 		static xcstr UNCALCED() { return XLL_UNCALCED12; }
 		static xcstr VOLATILE() { return XLL_VOLATILE12; }

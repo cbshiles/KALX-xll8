@@ -199,10 +199,3 @@ namespace xll {
 
 } // namespace xll
 
-extern "C" int xyz_foo(int);
-//#ifdef XLL_EXPORTS
-//#pragma comment(linker, "/include:_xyz_foo@4")
-//#endif 
-//template<> static XLL_DLLIMPEXP std::vector<std::unique_ptr<XLOPER>>& xll::handle<XLOPER>::handles(void);
-//template<> static XLL_DLLIMPEXP std::vector<std::unique_ptr<XLOPER12>>& xll::handle<XLOPER12>::handles(void);
-

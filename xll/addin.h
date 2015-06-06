@@ -165,12 +165,12 @@ namespace xll {
 #endif
 
 #define XLL_ENUM_DOC(value, name, cat, desc, doc) static xll::AddIn xai_##name(   \
-	FunctionX(XLL_LPOPERX, XLL_DECORATE("xll_" #name, 0), #name) \
+	Function(XLL_LPOPERX, XLL_DECORATE("xll_" #name, 0), #name) \
 	.Category(cat).FunctionHelp(desc).Documentation(doc)); \
     extern "C" __declspec(dllexport) LPOPER WINAPI xll_##name(void)      \
 	{ static OPER o(value); return &o; }
 #define XLL_ENUM_DOC12(value, name, cat, desc, doc) static xll::AddIn12 xai_##name##12(   \
-	FunctionX(XLL_LPOPER12, XLL_DECORATE12(L"xll_" #name L"12", 0), L#name) \
+	Function12(XLL_LPOPER12, XLL_DECORATE12(L"xll_" L#name L"12", 0), L#name) \
 	.Category(L#cat).FunctionHelp(L#desc).Documentation(L#doc)); \
 	extern "C" __declspec(dllexport) LPOPER12 WINAPI xll_##name##12(void)      \
 	{ static OPER12 o(value); return &o; }

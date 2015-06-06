@@ -95,3 +95,26 @@ xll_echow(LPVOID arg)
 
 	return 0;
 }
+
+typedef xll::traits<XLOPER12> xcstr;
+
+struct s {
+	std::wstring str;
+	OPER12 handle;
+};
+
+static AddIn12 xai_volatile_async(
+	Function12(XLL_VOID12 XLL_CSTRING12 XLL_LPXLOPER12, L"?xll_volatile_async", L"V.ASYNC")
+	.Arg(XLL_CSTRING12, L"A string", L"to be sent")
+	.ThreadSafe()
+	.Asynchronous()
+	.Volatile()
+	.FunctionHelp(L"Return a volatile async thingy.")
+	.Category(L"XLL")
+);
+void WINAPI xll_volatile_async(xcstr s, LPXLOPER12 ph)
+{
+#pragma XLLEXPORT
+
+	return;
+}

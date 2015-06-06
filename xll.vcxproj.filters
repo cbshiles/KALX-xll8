@@ -185,6 +185,9 @@
     <ClCompile Include="xll\range\slice.cpp">
       <Filter>range</Filter>
     </ClCompile>
+    <ClCompile Include="xll\hwnd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="xll\oper.natvis">

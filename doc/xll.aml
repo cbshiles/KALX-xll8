@@ -12,7 +12,11 @@
            a specific number of sub-topics when creating the outline.  Specify
            zero (0) to limit it to top-level sections only.  -->
       <!-- <autoOutline /> -->
-      <para>Extending Excel</para>
+      <para>The <externalLink>
+      	<linkText>xll</linkText>
+      	<linkUri>https://xll8.codeplex.com</linkUri>
+      	<linkTarget>_blank</linkTarget> 
+      	</externalLink> add-in library for Microsoft Excel</para>
     </introduction>
     <!-- Add one or more top-level section elements.  These are collapsible.
          If using <autoOutline />, add an address attribute to identify it
@@ -46,9 +50,9 @@
         </para>
         <para>
           The xll library works with all versions of Windows since XP and
-          all versions of Excel since 97. You can write single source add-ins to
-          also run in Excel 2007 and above that take advantage of the big grid,
-          wide character strings, thread safe, cluster safe, and asynchronous functions.
+          all versions of Excel since 97. Excel 2007 and above features
+          include the big grid, wide character strings, thread safe and 
+          asynchronous functions are supported.
         </para>
         <para>
           You can also generate documentation integrated

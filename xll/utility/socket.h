@@ -1,5 +1,6 @@
 // socket.h - socket wrappers
 #pragma once
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <string>
 #include <WinSock2.h>
 #include <ws2tcpip.h>
@@ -9,14 +10,27 @@
 namespace wsa {
 
 	// Windows only
+	class Startup {
+		int result;
+		WSADATA wsaData;
+	public:
+		Startup()
+			: result(WSAStartup(MAKEWORD(2,2), &wsaData))
+		{ }
+		Startup(const Startup&) = delete;
+		Startup& operator=(const Startup&) = delete;
+		~Startup()
+		{
+			WSACleanup();
+		}
+		operator int() const
+		{
+			return result;
+		}
+	};
 	int startup()
 	{
-		static int result(-1);
-		static WSADATA wsaData;
-
-		if (-1 == result) {
-			result = WSAStartup(MAKEWORD(2,2), &wsaData);
-		}
+		static Startup result;
 
 		return result;
 	}
@@ -29,10 +43,11 @@ namespace wsa {
 		{
 			s_ = (0 != startup()) ? INVALID_SOCKET : ::socket(af, type, proto);
 		}
-		socket(const socket&) = default;
-		socket& operator=(const socket&) = default;
+		socket(const socket&) = delete;
+		socket& operator=(const socket&) = delete;
 		~socket()
 		{
+			::closesocket(s_);
 		}
 		operator const SOCKET&() const
 		{
@@ -63,6 +78,10 @@ namespace wsa {
 		sockaddr operator=(const sockaddr&) = delete;
 		~sockaddr()
 		{ }
+		::sockaddr* operator&()
+		{
+			return reinterpret_cast<::sockaddr*>(this);
+		}
 	};
 
 	struct addrinfo {
@@ -97,7 +116,7 @@ namespace wsa {
 			freeaddrinfo(pai);
 		}
 
-		const ::sockaddr* sock() const
+		::sockaddr* operator&()
 		{
 			return pai->ai_addr;
 		}
@@ -123,7 +142,7 @@ namespace wsa {
 			if (!len)
 				len = static_cast<int>(strlen(buf));
 
-			return ::sendto(s_, buf, len, 0, ai_.sock(), sizeof(::sockaddr));
+			return ::sendto(s_, buf, len, 0, &ai_, sizeof(::sockaddr));
 		}
 	};
 
