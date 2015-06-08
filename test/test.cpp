@@ -8,31 +8,6 @@ using namespace xll;
 
 typedef traits<XLOPERX>::xcstr xcstr;
 
-static AddInX xai_test_foo2(_T("?xll_test_foo2"), XLL_SHORTX XLL_SHORTX, _T("TEST.FOO"), _T("int"));
-SHORT WINAPI xll_test_foo2(SHORT i)
-{
-#pragma XLLEXPORT
-
-	return xyz_foo(i);
-}
-
-struct run {
-	run(const std::function<int(void)>& f)
-	{
-		f();
-	}
-};
-
-static std::function<int(void)> msgbox([](void) -> int { 
-	MessageBoxA(GetActiveWindow(), "text", "caption", MB_OK); 
-	
-	return 1; 
-});
-
-//static run run_msgbox(msgbox);
-
-//static Auto<OpenX> xao_test(msgbox);
-
 inline std::function<int(void)> msg(LPCTSTR what)
 {
 	return [what](void) -> int { MessageBox(GetActiveWindow(), what, _T("Info"), MB_OK); return 1; };

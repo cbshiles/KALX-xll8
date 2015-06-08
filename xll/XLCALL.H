@@ -247,7 +247,7 @@ typedef struct xloper12
 #define xltypeErr        0x0010
 #define xltypeFlow       0x0020
 #define xltypeMulti      0x0040
-#define xltypeMissing    0x0080
+#define xltypeMissing    0x0080	
 #define xltypeNil        0x0100
 #define xltypeSRef       0x0400
 #define xltypeInt        0x0800

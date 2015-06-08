@@ -40,7 +40,7 @@ extern "C" {
 extern HMODULE xll_Instance;
 
 /// Excel window handle.
-//HWND xll_GetHwnd(void);
+HWND xll_GetHwnd(void);
 
 // include chain to AddIn class
 #include "defines.h"

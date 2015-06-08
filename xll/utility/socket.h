@@ -1,6 +1,8 @@
 // socket.h - socket wrappers
 #pragma once
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <string>
+#include <sstream>
 #include <WinSock2.h>
 #include <ws2tcpip.h>
 
@@ -9,14 +11,28 @@
 namespace wsa {
 
 	// Windows only
+	class Startup {
+		int result;
+		WSADATA wsaData;
+	public:
+		Startup()
+			: result(WSAStartup(MAKEWORD(2,2), &wsaData))
+		{ }
+		Startup(const Startup&) = delete;
+		Startup& operator=(const Startup&) = delete;
+		~Startup()
+		{
+			WSACleanup();
+		}
+		operator int() const
+		{
+			return result;
+		}
+	};
+	// singleton
 	int startup()
 	{
-		static int result(-1);
-		static WSADATA wsaData;
-
-		if (-1 == result) {
-			result = WSAStartup(MAKEWORD(2,2), &wsaData);
-		}
+		static Startup result;
 
 		return result;
 	}
@@ -29,10 +45,11 @@ namespace wsa {
 		{
 			s_ = (0 != startup()) ? INVALID_SOCKET : ::socket(af, type, proto);
 		}
-		socket(const socket&) = default;
-		socket& operator=(const socket&) = default;
+		socket(const socket&) = delete;
+		socket& operator=(const socket&) = delete;
 		~socket()
 		{
+			::closesocket(s_);
 		}
 		operator const SOCKET&() const
 		{
@@ -63,6 +80,10 @@ namespace wsa {
 		sockaddr operator=(const sockaddr&) = delete;
 		~sockaddr()
 		{ }
+		::sockaddr* operator&()
+		{
+			return reinterpret_cast<::sockaddr*>(this);
+		}
 	};
 
 	struct addrinfo {
@@ -88,7 +109,7 @@ namespace wsa {
 				hints.ai_protocol = IPPROTO_TCP;
 			}
 			
-			getaddrinfo(host, port, &hints, &pai);
+			::getaddrinfo(host, port, &hints, &pai);
 		}
 		addrinfo(const addrinfo&) = delete;
 		addrinfo& operator=(const addrinfo&) = delete;
@@ -97,7 +118,7 @@ namespace wsa {
 			freeaddrinfo(pai);
 		}
 
-		const ::sockaddr* sock() const
+		::sockaddr* operator&()
 		{
 			return pai->ai_addr;
 		}
@@ -123,7 +144,7 @@ namespace wsa {
 			if (!len)
 				len = static_cast<int>(strlen(buf));
 
-			return ::sendto(s_, buf, len, 0, ai_.sock(), sizeof(::sockaddr));
+			return ::sendto(s_, buf, len, 0, &ai_, sizeof(::sockaddr));
 		}
 	};
 
@@ -131,7 +152,11 @@ namespace wsa {
 	{
 		addrinfo ai(host, port, s);
 
-		return ::connect(s, ai.pai->ai_addr, static_cast<int>(ai.pai->ai_addrlen));
+		int result = ::connect(s, ai.pai->ai_addr, static_cast<int>(ai.pai->ai_addrlen));
+		if (result == SOCKET_ERROR)
+			throw std::runtime_error("wsa::connect: socket error");
+
+		return result;
 	}
 
 	inline int send(SOCKET s, const char* buf, int len = 0, int flags = 0)
@@ -148,17 +173,91 @@ namespace wsa {
 
 	inline std::string recv(SOCKET s, int bufsiz = 4096)
 	{
-		std::string buf;
-		buf.resize(bufsiz);
+		std::ostringstream oss{};
+		char* buf = static_cast<char*>(_alloca(bufsiz));
 
-		for (int n = bufsiz, off = 0; n == bufsiz || n == 0; off += bufsiz) {
-			buf.reserve(off + bufsiz);
-			n = ::recv(s, &buf[off], bufsiz, 0);
-			buf.resize(off + n);
+		int n;
+		do {
+			n = ::recv(s, buf, bufsiz, 0);
+			if (n > 0)
+				oss.write(buf, n);
+		} while (n == bufsiz);
+
+		if (n == SOCKET_ERROR)
+			throw std::runtime_error("wsa::recv: socket error");
+
+		return oss.str();
+	}
+	
+	struct socketbuf : std::streambuf
+	{
+		typedef std::streambuf::int_type int_type;
+		typedef std::streambuf::traits_type traits_type;
+		typedef std::streambuf::char_type char_type;
+
+		static size_t const buffer_size = 0x80;
+
+		socketbuf(SOCKET socket)
+			: socket_(socket)
+		{
+			this->setg(read_buffer_, read_buffer_ + buffer_size,
+				read_buffer_ + buffer_size);
+			this->setp(write_buffer_, write_buffer_ + buffer_size);
 		}
 
-		return buf;
-	}
+		int_type underflow()
+		{
+			size_t read;
+			if (0 < (read = ::recv(socket_, this->eback(), buffer_size, 0)))
+			{
+				this->setg(this->eback(), this->eback(), this->eback()
+					+ read);
+				return traits_type::to_int_type(*this->eback());
+			}
+			else
+			{
+				return traits_type::eof();
+			}
+		}
+
+		int sync()
+		{
+			this->overflow(traits_type::eof());
+			return 0;
+		}
+
+		int_type overflow(int_type c)
+		{
+			if (const int_type chars = this->pptr() - this->pbase())
+			{
+				::send(socket_, this->pbase(), chars, 0);
+				this->setp(this->pbase(), this->epptr());
+			}
+
+			if (!traits_type::eq_int_type(c, traits_type::eof()))
+			{
+				char_type e = traits_type::to_char_type(c);
+				::send(socket_, &e, sizeof(char_type), 0);
+			}
+
+			return !traits_type::eof();
+		}
+
+		SOCKET socket_;
+		char read_buffer_[buffer_size];
+		char write_buffer_[buffer_size];
+	};
+
+
+	struct socketstream : std::iostream
+	{
+		socketstream(SOCKET socket)
+			: std::iostream(&buffer_)
+			, buffer_(socket)
+		{}
+
+		socketbuf buffer_;
+	};
 
 
 } // winsock2

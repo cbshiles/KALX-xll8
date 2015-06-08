@@ -111,13 +111,12 @@ namespace xll {
 		switch (x.xltype) {
 		case xltypeMulti:
 			return x.val.array.rows;
-			break;
 		case xltypeSRef:
 			return x.val.sref.ref.rwLast - x.val.sref.ref.rwFirst + 1;
-			break;
+		case xltypeRef:
+			return x.val.mref.lpmref->reftbl[0].rwLast - x.val.mref.lpmref->reftbl[0].rwFirst + 1;
 		case xltypeNil:
 			return 0;
-			break;
 		default:
 			return 1;
 		}
@@ -128,13 +127,12 @@ namespace xll {
 		switch (x.xltype) {
 		case xltypeMulti:
 			return x.val.array.columns;
-			break;
 		case xltypeSRef:
 			return x.val.sref.ref.colLast - x.val.sref.ref.colFirst + 1;
-			break;
+		case xltypeRef:
+			return x.val.mref.lpmref->reftbl[0].colLast - x.val.mref.lpmref->reftbl[0].colFirst + 1;
 		case xltypeNil:
 			return 0;
-			break;
 		default:
 			return 1;
 		}
@@ -337,5 +335,65 @@ inline bool operator>(const XLOPER& x, const XLOPER& y)
 {
 	return !operator<=(x, y);
 }
+
+template<class X>
+class XMREF : public X {
+	typename xll::traits<X>::xlmref ref; // only one reference allowed
+public:
+	XMREF()
+	{
+		xltype = xltypeRef;
+		ref.count = 1;
+		val.mref.lpmref = &ref;
+	}
+	XMREF(const X& x)
+	{
+		if (type(x) == xltypeRef) {
+			xltype = x.xltype;
+			val.mref.idSheet = x.val.mref.idSheet;
+			ref.count = 1;
+			val.mref.lpmref = &ref;
+			val.mref.lpmref->reftbl[0] = x.val.mref.lpmref->reftbl[0];
+		}
+		else {
+			xltype = x.xltype;
+			val = x.val;
+		}
+	}
+	XMREF operator=(const X& x)
+	{
+		if (this != &x) {
+			if (x.xltype == xltypeRef) {
+				xltype = x.xltype;
+				val.mref.idSheet = x.val.mref.idSheet;
+				ref.count = 1;
+				val.mref.lpmref = &ref;
+				val.mref.lpmref->reftbl[0] = x.val.mref.lpmref->reftbl[0];
+			}
+			else {
+				xltype = x.xltype;
+				val = x.val;
+			}
+		}
+
+		return *this;
+	}
+	~XMREF()
+	{ }
+	typename xll::traits<X>::xlref& operator[](typename xll::traits<X>::xword i)
+	{
+		ensure (i == 0);
+		return val.mref.lpmref->reftbl[0];
+	}
+	const typename xll::traits<X>::xlref& operator[](typename xll::traits<X>::xword i) const
+	{
+		ensure (i == 0);
+		return val.mref.lpmref->reftbl[0];
+	}
+};
+typedef XMREF<XLOPER>   MREF;
+typedef XMREF<XLOPER12> MREF12;
+typedef XMREF<XLOPERX>  MREFX;
+
 
 #include "auto.h"

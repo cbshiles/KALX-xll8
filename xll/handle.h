@@ -30,6 +30,22 @@ namespace xll {
 			return h_ = h;
 		}
 	};
+	// double that defaults to an Excel error value
+	struct doublex {
+		double h_;
+	public:
+		doublex()
+			: h_(std::numeric_limits<HANDLEX>::quiet_NaN())
+		{ }
+		double operator=(double x)
+		{
+			return h_ = x;
+		}
+		operator double()
+		{
+			return h_;
+		}
+	};
 
 	template<class T>
 	inline HANDLEX p2h(T* p)
@@ -198,11 +214,4 @@ namespace xll {
 	};
 
 } // namespace xll
-
-extern "C" int xyz_foo(int);
-//#ifdef XLL_EXPORTS
-//#pragma comment(linker, "/include:_xyz_foo@4")
-//#endif 
-//template<> static XLL_DLLIMPEXP std::vector<std::unique_ptr<XLOPER>>& xll::handle<XLOPER>::handles(void);
-//template<> static XLL_DLLIMPEXP std::vector<std::unique_ptr<XLOPER12>>& xll::handle<XLOPER12>::handles(void);
 

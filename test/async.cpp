@@ -95,3 +95,46 @@ xll_echow(LPVOID arg)
 
 	return 0;
 }
+
+#include <thread>
+#include "../xll/utility/socket.h"
+typedef xll::traits<XLOPER12>::xstr xstr;
+
+struct sh {
+	std::wstring str;
+	OPER12 handle;
+};
+
+void call_server(const sh& sh)
+{
+	wsa::socket s{};
+	wsa::connect(s, "localhost", "3456");
+	wsa::send(s, "hi");
+	std::string r = wsa::recv(s);
+	Excel<XLOPER12>(xlAsyncReturn, sh.handle, OPER12(L"foo")); // note handle, then data
+}
+
+static AddIn12 xai_volatile_async(
+	Function12(XLL_VOID12, L"?xll_volatile_async", L"V.ASYNC")
+	.Arg(XLL_CSTRING12, L"A string", L"to be sent")
+	.ThreadSafe()
+	.Asynchronous()
+	.Volatile()
+	.FunctionHelp(L"Return a volatile async thingy.")
+	.Category(L"XLL")
+);
+void WINAPI xll_volatile_async(xstr s, LPXLOPER12 ph)
+{
+#pragma XLLEXPORT
+	sh sh{ s,*ph };
+
+	wsa::socket s_{};
+	wsa::connect(s_, "localhost", "3456");
+	wsa::send(s_, "hi");
+	std::string r = wsa::recv(s_);
+	ensure(r == "hi");
+
+	std::thread t(call_server, sh);
+
+	return;
+}
