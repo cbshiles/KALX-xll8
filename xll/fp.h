@@ -319,6 +319,49 @@ namespace xll {
 			return *this;
 		}
 
+		// buffer n rows
+		template<class I>
+		XFP& buffer(I b, I e, int n)
+		{
+			xword c = static_cast<xword>(std::distance(b, e));
+
+			if (is_empty() || n == -1) {
+				push_back(b, e, true);
+			}
+			// push_front
+			else if (n == 0) {
+				xword sz = size();
+				ensure (c == columns());
+				resize(rows() + 1, columns());
+				memmove(begin() + c, pf->array, sz*sizeof(double));
+				memcpy(begin(), b, c*sizeof(double));
+			}
+			else if (n < -1) {
+				if (rows() == static_cast<xword>(-n)) {
+					memmove(begin(), begin() + c, (size() - c)*sizeof(double));
+					memcpy(end() - c, b, c*sizeof(double));
+				}
+				else {
+					push_back(b, e, true);
+				}
+			}
+			else {
+				ensure (n > 0);
+				if (rows() == static_cast<xword>(n)) {
+					memmove(begin() + c, begin(), (size() - c)*sizeof(double));
+					memcpy(begin(), b, c*sizeof(double));
+				}
+				else {
+					xword sz = size();
+					resize(rows() + 1, columns());
+					memmove(begin() + c, begin(), sz*sizeof(double));
+					memcpy(begin(), b, c*sizeof(double));
+				}
+			}
+
+			return *this;
+		}
+
 		bool is_empty(void) const
 		{
 			return xll::is_empty(*pf);
