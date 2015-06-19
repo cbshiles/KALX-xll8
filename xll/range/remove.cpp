@@ -8,7 +8,7 @@ XLL_ENUM(xltypeStr, XLTYPE_STR, "XLL", "Enumeration for strings")
 XLL_ENUM(xltypeBool, XLTYPE_BOOL, "XLL", "Enumeration for booleans")
 XLL_ENUM(xltypeErr, XLTYPE_ERR, "XLL", "Enumeration for errors")
 XLL_ENUM(xltypeMissing, XLTYPE_MISSING, "XLL", "Enumeration for missing elements")
-XLL_ENUM(xltypeNil, XLTYPE_NIL, "XLL", "Enumeration for floating point numbers")
+XLL_ENUM(xltypeNil, XLTYPE_NIL, "XLL", "Enumeration for empty range")
 XLL_ENUM(xltypeInt, XLTYPE_INT, "XLL", "Enumeration for integers")
 
 static AddIn xai_range_remove(

@@ -35,6 +35,11 @@ namespace range {
 	{
 		return o.xltype == xltypeMulti && (o.rows() == 1 || o.columns() == 1);
 	}
+	template<class X>
+	inline xll::handle<XOPER<X>> handle(const XOPER<X>& o)
+	{
+		return xll::handle<XOPER<X>>(o[0].val.num, false);
+	}
 
 	// select elements of o based on mask
 	template<class X>

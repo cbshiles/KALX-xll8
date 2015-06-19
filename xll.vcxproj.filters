@@ -22,6 +22,9 @@
     <Filter Include="range">
       <UniqueIdentifier>{ce3723c1-43bf-4539-bfa0-6f41302b704f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="array">
+      <UniqueIdentifier>{75ef664e-8101-4a75-b393-98c9b4c95a3a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="xll\addin.h">
@@ -117,14 +120,14 @@
     <ClInclude Include="xll\locus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="xll\utility\scoped_resource.h">
-      <Filter>utility</Filter>
-    </ClInclude>
     <ClInclude Include="xll\utility\scoped_handle.h">
       <Filter>utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\string.h">
       <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="xll\array\array.h">
+      <Filter>array</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +188,9 @@
     <ClCompile Include="xll\range\slice.cpp">
       <Filter>range</Filter>
     </ClCompile>
+    <ClCompile Include="xll\array\array_mask.cpp">
+      <Filter>array</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="xll\oper.natvis">
@@ -193,5 +199,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Visualizers\oper.natvis" />
   </ItemGroup>
 </Project>

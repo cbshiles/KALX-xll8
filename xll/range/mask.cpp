@@ -1,14 +1,13 @@
-// mask.cpp - mask ranges
+ // mask.cpp - mask ranges
 #include "range.h"
 
 using namespace xll;
-
 
 static AddIn xai_range_mask(
 	Function(XLL_LPOPER, XLL_DECORATE("xll_range_mask",8), "RANGE.MASK")
 	.Arg(XLL_LPOPER, "Mask", "is a range.")
 	.Arg(XLL_LPOPER, "Range", "is a range or handle to a range.")
-	.Category("XL")
+	.Category("XLL")
 	.FunctionHelp("Mask elements of Range.")
 );
 extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_mask(LPOPER pm, const LPOPER pr)

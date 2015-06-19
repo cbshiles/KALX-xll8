@@ -55,6 +55,7 @@ HWND xll_GetHwnd(void);
 #include "fp.h"
 #include "handle.h"
 #include "on.h"
+#include "array/array.h"
 #include "range/range.h"
 #include "locus.h"
 

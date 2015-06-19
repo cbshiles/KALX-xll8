@@ -25,6 +25,30 @@ namespace xll {
 	}
 
 	inline traits<XLOPER>::xword
+	rows(const _FP& fp)
+	{
+		return is_empty(fp) ? 0 : fp.rows;
+	}
+	inline traits<XLOPER12>::xword
+	rows(const _FP12& fp)
+	{
+		return is_empty(fp) ? 0 : fp.rows;
+	}
+
+	inline traits<XLOPER>::xword
+	columns(const _FP& fp)
+	{
+		return is_empty(fp) ? 0 : fp.columns;
+	}
+	inline traits<XLOPER12>::xword
+	columns(const _FP12& fp)
+	{
+		return is_empty(fp) ? 0 : fp.columns;
+	}
+
+
+
+	inline traits<XLOPER>::xword
 	size(const _FP& fp)
 	{
 		return is_empty(fp) ? 0 : fp.rows * fp.columns;
@@ -35,7 +59,6 @@ namespace xll {
 		return is_empty(fp) ? 0 : fp.rows * fp.columns;
 	}
 
-	// cyclic index never throws
 	inline double
 	index(const _FP& fp, traits<XLOPER>::xword i)
 	{
@@ -198,10 +221,30 @@ namespace xll {
 
 		XFP& operator=(double x)
 		{
-			std::fill(pf->array, pf->array + size(), x);
+			resize(1,1);
+
+			operator[](0) = x;
 
 			return *this;
 		}
+		bool operator==(const xfp& x) const
+		{
+			return rows() == x.rows && columns() == x.columns
+				&& std::equal(begin(), end(), &x.array[0]);
+		}
+		bool operator==(const XFP& x) const
+		{
+			return operator==(*x.pf);
+		}
+		bool operator!=(const xfp& x) const
+		{
+			return !operator==(x);
+		}
+		bool operator!=(const XFP& x) const
+		{
+			return !operator==(x);
+		}
+
 /*		XFP& set(xword r, xword c, const double* pa)
 		{
 			realloc(r, c);
