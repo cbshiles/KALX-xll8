@@ -5,17 +5,18 @@ using namespace xll;
 
 static AddIn xai_range_drop(
 	Function(XLL_LPOPER, XLL_DECORATE("xll_range_drop",8), "RANGE.DROP")
-	.Arg(XLL_LONG, "Count", "is the number of elements to drop.")
-	.Arg(XLL_LPOPER, "Range", "is a range or handle to a range.")
+	.Arg(XLL_LONG, "count", "is the number of elements to drop.")
+	.Arg(XLL_LPOPER, "range", "is a range or handle to a range.")
 	.Category("XLL")
-	.FunctionHelp("drop elements of Range.")
+	.FunctionHelp("Drop elements of front (count > 0) or back (count < 0) of range.")
+	.Documentation()
 );
 extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_drop(LONG n, const LPOPER pr)
 {
 	static OPER o;
 
 	try {
-		handle<OPER> po(o = *pr, false);
+		handle<OPER> po(o = (*pr)[0], false);
 
 		if (po)
 			*po = range::drop(*po, n);
@@ -30,10 +31,11 @@ extern "C" LPOPER __declspec(dllexport) WINAPI xll_range_drop(LONG n, const LPOP
 }
 static AddIn12 xai_range_drop12(
 	Function12(XLL_LPOPER12, XLL_DECORATE12(L"xll_range_drop12",8), L"RANGE.DROP")
-	.Arg(XLL_LONG12, L"Count", L"is the number of elements to drop.")
-	.Arg(XLL_LPOPER12, L"Range", L"is a range or handle to a range.")
+	.Arg(XLL_LONG12, L"count", L"is the number of elements to drop.", -1)
+	.Arg(XLL_LPOPER12, L"range", L"is a range or handle to a range.", L"={1.23,TRUE,#N/A}")
 	.Category(L"XLL")
-	.FunctionHelp(L"drop elements of Range.")
+	.FunctionHelp(L"Drop elements of front (count > 0) or back (count < 0) of range.")
+	.Documentation()
 );
 extern "C" LPOPER12 __declspec(dllexport) WINAPI xll_range_drop12(LONG n, const LPOPER12 pr)
 {
