@@ -286,9 +286,9 @@ public:
 		if (o.xltype == xltypeNil)
 			return *this;
 
-		ensure (o.xltype == xltypeStr);
+		XOPER o_ = xll::to_string<X>(o);
 
-		return append(o.val.str + 1, o.val.str[0]);
+		return append(o_.val.str + 1, o_.val.str[0]);
 	}
 
 	bool operator==(xcstr str) const

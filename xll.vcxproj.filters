@@ -191,6 +191,12 @@
     <ClCompile Include="xll\array\array_mask.cpp">
       <Filter>array</Filter>
     </ClCompile>
+    <ClCompile Include="xll\array\array.cpp">
+      <Filter>array</Filter>
+    </ClCompile>
+    <ClCompile Include="xll\array\array_sequence.cpp">
+      <Filter>array</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="xll\oper.natvis">

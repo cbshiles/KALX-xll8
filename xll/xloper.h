@@ -81,7 +81,7 @@ namespace xll {
 		case xltypeNum:
 			return xll::traits<X>::to_string(x.val.num);
 		case xltypeBool:
-			return x.val.xbool ? _T("TRUE") : _T("FALSE"); // !!! parameterize by X
+			return xll::traits<X>::string(x.val.xbool ? "TRUE" : "FALSE");
 		}
 
 		return xll::traits<X>::xstring{};

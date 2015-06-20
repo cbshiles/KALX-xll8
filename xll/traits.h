@@ -114,7 +114,7 @@ namespace xll {
 		typedef XCHAR* xstr;
 		typedef const XCHAR* xcstr;
 		typedef std::basic_string<xchar> xstring;
-		typedef unsigned int xword; // use for array indices
+		typedef INT32 xword; // use for array indices
 		typedef int xint;
 		typedef _FP12 xfp;
 		typedef XLREF12 xlref;
