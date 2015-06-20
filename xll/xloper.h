@@ -76,12 +76,17 @@ namespace xll {
 	inline typename xll::traits<X>::xstring to_string(const typename xll::traits<X>::type& x)
 	{
 		switch (x.xltype) {
+		case xltypeStr:
+			return xll::traits<X>::xstring(x.val.str + 1, x.val.str[0]);
 		case xltypeNil: case xltypeMissing:
 			return xll::traits<X>::xstring{};
 		case xltypeNum:
 			return xll::traits<X>::to_string(x.val.num);
+		case xltypeInt:
+			return xll::traits<X>::to_string(x.val.w);
 		case xltypeBool:
 			return xll::traits<X>::string(x.val.xbool ? "TRUE" : "FALSE");
+		//case xltypeErr:
 		}
 
 		return xll::traits<X>::xstring{};
