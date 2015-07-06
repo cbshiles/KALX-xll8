@@ -1,1 +1,2 @@
 Have ensure fail when arg is NaN, but avoid double evaluation.
+

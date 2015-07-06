@@ -7,8 +7,7 @@ using System.Xml.Linq;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
-
-//using System.Windows.Forms;
+using System.Windows.Forms;
 
 
 namespace ribbon
@@ -34,7 +33,7 @@ namespace ribbon
             string cwd = Directory.GetCurrentDirectory();
             try
             {
- //               MessageBox.Show(dir);
+                MessageBox.Show(dir);
 
                 Directory.SetCurrentDirectory(dir);
                 foreach (string xll in Directory.EnumerateFiles(".", "*.xll", System.IO.SearchOption.AllDirectories))

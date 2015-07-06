@@ -47,6 +47,7 @@
             this.tab1.SuspendLayout();
             this.alert.SuspendLayout();
             this.monte.SuspendLayout();
+            this.SuspendLayout();
             // 
             // tab1
             // 
@@ -123,6 +124,7 @@
             this.alert.PerformLayout();
             this.monte.ResumeLayout(false);
             this.monte.PerformLayout();
+            this.ResumeLayout(false);
 
         }
 

@@ -26,7 +26,7 @@ namespace Base64 {
 		std::vector<BYTE> dec;
 
 		if (!len)
-			len = strlen(src);
+			len = static_cast<int>(strlen(src));
 
 		int n = Base64DecodeGetRequiredLength(len);
 		dec.resize(n);

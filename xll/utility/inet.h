@@ -23,6 +23,22 @@ namespace Inet {
 
 	using handle = ::scoped_handle::base<HINTERNET>;
 
+	// read all bytes from InternetOpenUrl
+	std::basic_string<TCHAR> ReadFile(HINTERNET h)
+	{
+		DWORD n;
+		
+		ensure (InternetQueryDataAvailable(h, &n, 0, 0));
+
+		std::basic_string<TCHAR> buf;
+		buf.reserve(n + 1);
+
+		ensure (InternetReadFile(h, &buf[0], n, &n));
+
+		return buf;
+	}
+
+
 	struct Open : public handle {
 //		Open() : handle() { }
 		Open(LPCTSTR lpszAgent = _T("WinInet"), DWORD access = INTERNET_OPEN_TYPE_DIRECT)
@@ -44,6 +60,10 @@ namespace Inet {
 				ensure (h_);
 			}
 			Connection(const Connection&) = delete;
+			Connection(Connection&& c)
+			{
+				h_ = c.h_;
+			}
 			Connection operator=(const Connection&) = delete;
 			~Connection()
 			{ }
@@ -57,6 +77,10 @@ namespace Inet {
 					ensure (h_);
 				}
 				Request(const Request&) = delete;
+				Request(Request&& r)
+				{
+					h_ = r.h_;
+				}
 				Request operator=(const Request&) = delete;
 				~Request()
 				{ }
@@ -75,6 +99,17 @@ namespace Inet {
 					DWORD len = static_cast<DWORD>(header.length());
 
 					return HttpAddRequestHeaders(*this, header.c_str(), len, flags);
+				}
+				BOOL Send(LPCTSTR data, DWORD ndata = 0)
+				{
+					if (!ndata)
+						ndata = static_cast<DWORD>(_tcslen(data));
+
+					return HttpSendRequest(h_, 0, 0, (LPVOID)data, ndata);
+				}
+				std::basic_string<TCHAR> Read()
+				{
+					return ReadFile(h_);
 				}
 			};
 			Request&& OpenRequest(LPCTSTR lpszVerb = _T("GET"), LPCTSTR lpszObjectName = _T("/"),
@@ -95,22 +130,18 @@ namespace Inet {
 				ensure (h_ || !"InternetOpenUrl failed");
 			}
 			URL(const URL&) = delete;
+			URL(URL&& u)
+			{
+				h_ = u.h_;
+			}
 			URL& operator=(const URL&) = delete;
 			~URL()
 			{ }
 
 			// read all bytes from InternetOpenUrl
-			std::string Read(DWORD bufsiz = 1024)
+			std::basic_string<TCHAR> Read()
 			{
-				std::string buf, read;
-				buf.reserve(bufsiz);
-
-				DWORD n;
-				while (InternetReadFile(*this, &buf[0], bufsiz, &n) && n != 0) {
-					read.append(&buf[0], n);
-				}
-
-				return read;
+				return ReadFile(h_);
 			}
 
 		};
