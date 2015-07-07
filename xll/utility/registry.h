@@ -130,20 +130,20 @@ namespace Reg {
 	template<class X>
 	class Key {
 	protected:
-		HKEY h_;
-		Key(const Key&);
-		Key& operator=(const Key&);
+		HKEY h;
 	public:
-		explicit Key(HKEY h) : h_(h) { }
+		explicit Key(HKEY h) : h(h) { }
+		Key(const Key&) = delete;
+		Key& operator=(const Key&) = delete;
 		~Key()
 		{ }
 		operator HKEY()
 		{
-			return h_;
+			return h;
 		}
 		HKEY* operator&()
 		{
-			return &h_;
+			return &h;
 		}
 
 		// Type of registry entry value.
@@ -151,7 +151,7 @@ namespace Reg {
 		{
 			DWORD type;
 
-			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, 0, 0));
+			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h, name, 0, &type, 0, 0));
 
 			return type;
 		}
@@ -163,7 +163,7 @@ namespace Reg {
 			T t;
 			DWORD type, size(traits<T>::size(T()));
 
-			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, traits<T>::data(t), &size))
+			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h, name, 0, &type, traits<T>::data(t), &size))
 			ensure (traits<T>::type == type);
 
 			return t;
@@ -177,9 +177,9 @@ namespace Reg {
 		{
 			std::basic_string<X> sz;
 			DWORD type, size;
-			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, 0, &size));
+			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h, name, 0, &type, 0, &size));
 			sz.resize(size);
-			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h_, name, 0, &type, reinterpret_cast<LPBYTE>(&sz[0]), &size));
+			ensure (ERROR_SUCCESS == RegQueryValueEx_<X>(h, name, 0, &type, reinterpret_cast<LPBYTE>(&sz[0]), &size));
 
 			// REG_SZ are null terminated
 			while (sz.back() == 0)
@@ -193,7 +193,7 @@ namespace Reg {
 		{
 			LONG result;
 
-			result = RegSetValueEx_<X>(h_, name, traits<T>::type, traits<T>::data(t), traits<T>::size(t));
+			result = RegSetValueEx_<X>(h, name, traits<T>::type, traits<T>::data(t), traits<T>::size(t));
 
 			return result;
 		}
@@ -201,7 +201,7 @@ namespace Reg {
 		{
 			LONG result;
 
-			result = RegSetValueEx_<X>(h_, name, REG_SZ, reinterpret_cast<const BYTE*>(value), static_cast<DWORD>(_tcslen(value)*sizeof(X)));
+			result = RegSetValueEx_<X>(h, name, REG_SZ, reinterpret_cast<const BYTE*>(value), static_cast<DWORD>(_tcslen(value)*sizeof(X)));
 
 			return result;
 		}
@@ -209,61 +209,61 @@ namespace Reg {
 
 	template<class X>
 	class OpenKey : public Key<X> {
-		OpenKey(const OpenKey&);
-		OpenKey& operator=(const OpenKey&);
 	public:
 		OpenKey(HKEY h, const X* k = 0, REGSAM r = KEY_READ )
 			: Key(h)
 		{
-			ensure (ERROR_SUCCESS == RegOpenKeyEx_<X>(h, k, 0, r, &h_));			
+			ensure (ERROR_SUCCESS == RegOpenKeyEx_<X>(h, k, 0, r, &h));			
 		}
+		OpenKey(const OpenKey&) = delete;
+		OpenKey& operator=(const OpenKey&) = delete;
 		~OpenKey()
 		{
-			RegCloseKey(h_);
+			RegCloseKey(h);
 		}
 	};
 
 	// Create or Open key if it already exists
 	template<class X>
 	class CreateKey : public Key<X> {
-		CreateKey(const CreateKey&);
-		CreateKey& operator=(const CreateKey&);
 	public:
 		CreateKey(HKEY h, const X* k, REGSAM r = KEY_ALL_ACCESS)
 			: Key(h)
 		{
-			ensure (ERROR_SUCCESS == RegCreateKeyEx_<X>(h, k, NULL, REG_OPTION_VOLATILE, r, NULL, &h_, 0));
+			ensure (ERROR_SUCCESS == RegCreateKeyEx_<X>(h, k, NULL, REG_OPTION_VOLATILE, r, NULL, &h, 0));
 		}
+		CreateKey(const CreateKey&) = delete;
+		CreateKey& operator=(const CreateKey&) = delete;
 		~CreateKey()
 		{
-			RegCloseKey(h_);
+			RegCloseKey(h);
 		}
 	};
 
 	// registry object of type T
 	template<class X, class T>
 	class Object {
-		CreateKey<X> h_;
+		CreateKey<X> h;
 		std::basic_string<X> name_;
 		T t_;
-		Object(const Object&);
-		Object& operator=(const Object&);
 	public:
 		Object(HKEY h, const X* k, const X* name, const T& t)
-			: h_(h, k, KEY_ALL_ACCESS), name_(name), t_(t)
+			: h(h, k, KEY_ALL_ACCESS), name_(name), t_(t)
 		{
-			h_.SetValue(name, t_);
+			this->h.SetValue(name, t_);
 		}
 		Object(HKEY h, const X* k, const X* name)
-			: h_(h, k, KEY_ALL_ACCESS), name_(name)
+			: h(h, k, KEY_ALL_ACCESS), name_(name)
 		{
 			try {
-				t_ = h_.QueryValue<T>(name);
+				t_ = this->h.QueryValue<T>(name);
 			}
 			catch (...) {
 				; // default value
 			}
 		}
+		Object(const Object&) = delete;
+		Object& operator=(const Object&) = delete;
 		~Object()
 		{ }
 
@@ -298,7 +298,7 @@ namespace Reg {
 			}
 			~ProxyObject()
 			{
-				o_.h_.SetValue(o_.name_.c_str(), o_.t_);
+				o_.h.SetValue(o_.name_.c_str(), o_.t_);
 			}
 			operator T&()
 			{
