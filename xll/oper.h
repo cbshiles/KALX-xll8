@@ -419,7 +419,7 @@ public:
 			ensure (rows() == 1);
 			ensure (columns() == 1);
 		}
-
+//??? not working !!! push_back one item
 		if (x.columns() == 1 || (columns() == x.columns())) { // favor columns
 			resize(rows() + x.rows(), x.columns());
 			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(end() - x.size(), x.size()));

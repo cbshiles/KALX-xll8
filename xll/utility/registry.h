@@ -227,10 +227,10 @@ namespace Reg {
 	template<class X>
 	class CreateKey : public Key<X> {
 	public:
-		CreateKey(HKEY h, const X* k, REGSAM r = KEY_ALL_ACCESS)
+		CreateKey(HKEY h, const X* k, X* name = nullptr, REGSAM r = KEY_ALL_ACCESS)
 			: Key(h)
 		{
-			ensure (ERROR_SUCCESS == RegCreateKeyEx_<X>(h, k, NULL, REG_OPTION_VOLATILE, r, NULL, &h, 0));
+			ensure (ERROR_SUCCESS == RegCreateKeyEx_<X>(h, k, name, REG_OPTION_VOLATILE, r, NULL, &h, 0));
 		}
 		CreateKey(const CreateKey&) = delete;
 		CreateKey& operator=(const CreateKey&) = delete;
@@ -247,13 +247,13 @@ namespace Reg {
 		std::basic_string<X> name_;
 		T t_;
 	public:
-		Object(HKEY h, const X* k, const X* name, const T& t)
-			: h(h, k, KEY_ALL_ACCESS), name_(name), t_(t)
+		Object(HKEY h, const X* k, X* name, const T& t)
+			: h(h, k, name, KEY_ALL_ACCESS), name_(name), t_(t)
 		{
 			this->h.SetValue(name, t_);
 		}
-		Object(HKEY h, const X* k, const X* name)
-			: h(h, k, KEY_ALL_ACCESS), name_(name)
+		Object(HKEY h, const X* k, X* name)
+			: h(h, k, name, KEY_ALL_ACCESS), name_(name)
 		{
 			try {
 				t_ = this->h.QueryValue<T>(name);
