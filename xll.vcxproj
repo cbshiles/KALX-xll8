@@ -199,9 +199,8 @@
     <ClInclude Include="xll\oper.h" />
     <ClInclude Include="xll\range\range.h" />
     <ClInclude Include="xll\shfb.h" />
-    <ClInclude Include="xll\struct.h" />
     <ClInclude Include="xll\traits.h" />
-    <ClInclude Include="xll\types.h" />
+    <ClInclude Include="xll\udp.h" />
     <ClInclude Include="xll\utility\codec.h" />
     <ClInclude Include="xll\utility\environment.h" />
     <ClInclude Include="xll\utility\inet.h" />

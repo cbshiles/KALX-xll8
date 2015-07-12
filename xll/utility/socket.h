@@ -1,23 +1,38 @@
 // socket.h - socket wrappers
+// Throws int that can be fed to gai_strerror().
 #pragma once
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <string>
 #include <sstream>
+#include <tchar.h>
 #include <WinSock2.h>
 #include <ws2tcpip.h>
 
 #pragma comment(lib, "Ws2_32.lib")
 
-namespace wsa {
+namespace WSA {
 
-	// Windows only
+	// Must be called before any other socket functions.
 	class Startup {
+		static int init()
+		{
+			static int result = -1;
+			static WSADATA wsaData;
+
+			if (-1 == result) {
+				result = WSAStartup(WINSOCK_VERSION, &wsaData);
+			}
+
+			return result;
+		}
 		int result;
-		WSADATA wsaData;
 	public:
 		Startup()
-			: result(WSAStartup(MAKEWORD(2,2), &wsaData))
-		{ }
+			: result(init())
+		{
+			if (0 != result)
+				throw result;
+		}
 		Startup(const Startup&) = delete;
 		Startup& operator=(const Startup&) = delete;
 		~Startup()
@@ -29,135 +44,122 @@ namespace wsa {
 			return result;
 		}
 	};
-	// singleton
-	int startup()
-	{
-		static Startup result;
 
-		return result;
-	}
+	// used for hints
+	struct ADDRINFO : public ::ADDRINFOT {
+		ADDRINFO(int flags = 0, int family = AF_INET, int socktype = SOCK_STREAM, int protocol = IPPROTO_TCP)
+		{
+			ZeroMemory(this, sizeof(*this));
 
-	class socket {
-		SOCKET s_;
-	public:
-		// default to IPv4 TCP
-		socket(int af = AF_INET, int type = SOCK_STREAM, int proto = IPPROTO_TCP)
-		{
-			s_ = (0 != startup()) ? INVALID_SOCKET : ::socket(af, type, proto);
-		}
-		socket(const socket&) = delete;
-		socket& operator=(const socket&) = delete;
-		~socket()
-		{
-			::closesocket(s_);
-		}
-		operator const SOCKET&() const
-		{
-			return s_;
+			ai_flags = flags;
+			ai_family = family;
+			ai_socktype = socktype;
+			ai_protocol = protocol;
 		}
 	};
 
-	struct sockaddr : ::sockaddr_in {
-		sockaddr(ADDRESS_FAMILY family = AF_UNSPEC, USHORT port = 0, const char* host = 0)
+	class AddrInfo {
+		::ADDRINFOT* pai;
+	public:
+		AddrInfo(LPCTSTR host, LPCTSTR port, const ADDRINFO& hints = ADDRINFO())
 		{
-			sin_family = family;
-			sin_port = htons(port);
-			if (host && *host) {
-				if (isdigit(host[0])) {
-					sin_addr.s_addr = inet_addr(host); 
-				}
-				else {
-					hostent* ph = gethostbyname(host);
-					if (ph)
-						memcpy(&sin_addr, ph->h_addr, ph->h_length);
-				}
-			}
-			else {
-				sin_addr.s_addr = INADDR_ANY;
-			}
+			int status = ::GetAddrInfo(host, port, &hints, &pai);
+			if (0 != status)
+				throw WSAGetLastError();
 		}
-		sockaddr(const sockaddr&) = delete;
-		sockaddr operator=(const sockaddr&) = delete;
-		~sockaddr()
+		AddrInfo(const AddrInfo&) = delete;
+		AddrInfo& operator=(const AddrInfo&) = delete;
+		~AddrInfo()
+		{
+			FreeAddrInfo(pai);
+		}
+		::ADDRINFOT* operator&()
+		{
+			return pai;
+		}
+	};
+
+	class Socket {
+	protected:
+		SOCKET s;
+	public:
+		Socket(int af = AF_INET, int type = SOCK_STREAM, int proto = IPPROTO_TCP)
+			: s(::socket(af, type, proto))
 		{ }
-		::sockaddr* operator&()
+		Socket(const ::ADDRINFOT& ai)
+			: Socket(ai.ai_family, ai.ai_socktype, ai.ai_protocol)
+		{ }
+		Socket(const Socket&) = default;
+		Socket& operator=(const Socket&) = default;
+		// must call closesocket() explicitly
+		~Socket()
+		{ }
+		// act like a SOCKET
+		explicit Socket(SOCKET s)
+			: s(s)
+		{ }
+		operator SOCKET()
 		{
-			return reinterpret_cast<::sockaddr*>(this);
+			return s;
 		}
 	};
 
-	struct addrinfo {
-		::addrinfo* pai;
-		addrinfo(const char* host, const char* port, SOCKET s = INVALID_SOCKET)
+	struct Bind : public Socket {
+		Bind(LPCTSTR host, LPCTSTR port, const ADDRINFO& hints = ADDRINFO(AI_PASSIVE))
+			: Socket(INVALID_SOCKET)
 		{
-			::addrinfo hints;
+			AddrInfo ai(host, port, hints);
 
-			memset(&hints, 0, sizeof(hints));
-			if (INVALID_SOCKET != s) {
-				WSAPROTOCOL_INFO pi;
+			ADDRINFOT* pai{0};
+			for (pai = &ai; pai; pai = pai->ai_next) {
+				s = Socket(*pai);
+				if (s == INVALID_SOCKET)
+					continue;
+				
+				int yes = 1;
+				if (-1 == setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (const char*)&yes, sizeof(yes))) {
+					closesocket(s);
+					continue;
+				}
+				
+				if (-1 == bind(s, pai->ai_addr, pai->ai_addrlen)) {
+					closesocket(s);
+					continue;
+				}
 
-				int npi(sizeof(pi));
-				if (0 != getsockopt(s, SOL_SOCKET, SO_PROTOCOL_INFO, (char*)&pi, &npi)) {
-					hints.ai_family = pi.iAddressFamily;
-					hints.ai_socktype = pi.iSocketType;
-					hints.ai_protocol = pi.iProtocol;
+				break;
+			}
+
+			if (!pai || s == INVALID_SOCKET)
+				throw WSAGetLastError();
+		}
+		operator ::SOCKET()
+		{
+			return s;
+		}
+	};
+	struct Connect : public Socket {
+		Connect(LPCTSTR host, LPCTSTR port)
+		{
+			AddrInfo ai(host, port, ADDRINFO{});
+			ADDRINFOT* pai{0};
+			for (pai = &ai; pai; pai = pai->ai_next) {
+				s = Socket(*pai);
+				if (s == INVALID_SOCKET)
+					continue;
+				if (-1 == connect(s, pai->ai_addr, pai->ai_addrlen)) {
+					closesocket(s);
+					continue;
 				}
 			}
-			else {
-				hints.ai_family = AF_UNSPEC;
-				hints.ai_socktype = SOCK_STREAM;
-				hints.ai_protocol = IPPROTO_TCP;
-			}
-			
-			::getaddrinfo(host, port, &hints, &pai);
-		}
-		addrinfo(const addrinfo&) = delete;
-		addrinfo& operator=(const addrinfo&) = delete;
-		~addrinfo()
-		{
-			freeaddrinfo(pai);
-		}
 
-		::sockaddr* operator&()
-		{
-			return pai->ai_addr;
+			if (!pai || s == INVALID_SOCKET)
+				throw WSAGetLastError();
 		}
 	};
-
-	class dgram  {
-		SOCKET s_;
-		addrinfo ai_;
-	public:
-		dgram(const char* host, const char* port)
-			: s_(socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)), ai_(host, port, s_)
-		{
-		}
-		dgram(const dgram&) = delete;
-		dgram& operator=(const dgram&) = delete;
-		~dgram()
-		{ 
-			closesocket(s_);
-		}
-
-		int sendto(const char* buf, int len = 0)
-		{
-			if (!len)
-				len = static_cast<int>(strlen(buf));
-
-			return ::sendto(s_, buf, len, 0, &ai_, sizeof(::sockaddr));
-		}
+	class Dgram : public Socket {
 	};
 
-	inline int connect(SOCKET s, const char* host, const char* port)
-	{
-		addrinfo ai(host, port, s);
-
-		int result = ::connect(s, ai.pai->ai_addr, static_cast<int>(ai.pai->ai_addrlen));
-		if (result == SOCKET_ERROR)
-			throw std::runtime_error("wsa::connect: socket error");
-
-		return result;
-	}
 
 	inline int send(SOCKET s, const char* buf, int len = 0, int flags = 0)
 	{
@@ -184,31 +186,31 @@ namespace wsa {
 		} while (n == bufsiz);
 
 		if (n == SOCKET_ERROR)
-			throw std::runtime_error("wsa::recv: socket error");
+			throw std::runtime_error("WSA::recv: socket error");
 
 		return oss.str();
 	}
-	
+
 	struct socketbuf : std::streambuf
 	{
 		typedef std::streambuf::int_type int_type;
 		typedef std::streambuf::traits_type traits_type;
 		typedef std::streambuf::char_type char_type;
 
-		static size_t const buffer_size = 0x80;
+		static size_t const nbuf = 0x80;
 
 		socketbuf(SOCKET socket)
 			: socket_(socket)
 		{
-			this->setg(read_buffer_, read_buffer_ + buffer_size,
-				read_buffer_ + buffer_size);
-			this->setp(write_buffer_, write_buffer_ + buffer_size);
+			this->setg(rbuf, rbuf + nbuf,
+				rbuf + nbuf);
+			this->setp(wbuf, wbuf + nbuf);
 		}
 
 		int_type underflow()
 		{
 			size_t read;
-			if (0 < (read = ::recv(socket_, this->eback(), buffer_size, 0)))
+			if (0 < (read = ::recv(socket_, this->eback(), nbuf, 0)))
 			{
 				this->setg(this->eback(), this->eback(), this->eback()
 					+ read);
@@ -244,19 +246,19 @@ namespace wsa {
 		}
 
 		SOCKET socket_;
-		char read_buffer_[buffer_size];
-		char write_buffer_[buffer_size];
+		char rbuf[nbuf];
+		char wbuf[nbuf];
 	};
 
-
+	// operator<<() and operator>>() for sockets
 	struct socketstream : std::iostream
 	{
 		socketstream(SOCKET socket)
-			: std::iostream(&buffer_)
-			, buffer_(socket)
+			: std::iostream(&buf)
+			, buf(socket)
 		{}
 
-		socketbuf buffer_;
+		socketbuf buf;
 	};
 
 

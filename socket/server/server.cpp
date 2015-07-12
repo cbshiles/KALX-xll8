@@ -2,24 +2,35 @@
 #include <iostream>
 #include "../../xll/utility/socket.h"
 
+using namespace WSA;
+
 int main()
 {
-	wsa::socket s{};
-	wsa::sockaddr sa(AF_INET, 3456, "localhost");
+	try {
+		int err;
+		Startup wsa;
+		Bind s(_T("localhost"), _T("3456"), WSA::ADDRINFO(AI_PASSIVE, AF_UNSPEC));
 
-	bind(s, &sa, sizeof(sa));
-	listen(s, 3);
+		err = listen(s, 10);
+		if (err) {
+			err = WSAGetLastError();
+			throw err;
+		}
 
-	int san =sizeof(sa);
-	SOCKET si = accept(s, &sa, &san);
+		sockaddr_storage ss;
+		socklen_t nss = sizeof(ss);
+		SOCKET si = accept(s, (sockaddr*)&ss, &nss);
 
-	std::string str;
-	do {
-		str = wsa::recv(si);
-		std::cout << str << std::endl;
-		wsa::send(si, str);
-	} while (str != "q\r\n");
-
+		std::string str;
+		do {
+			str = WSA::recv(si);
+			std::cout << str << std::endl;
+			WSA::send(si, str);
+		} while (str != "q\r\n");
+	}
+	catch (int err) {
+		return err;
+	}
 
 	return 0;
 }

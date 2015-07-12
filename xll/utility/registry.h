@@ -230,7 +230,7 @@ namespace Reg {
 		CreateKey(HKEY h, const X* k, X* name = nullptr, REGSAM r = KEY_ALL_ACCESS)
 			: Key(h)
 		{
-			ensure (ERROR_SUCCESS == RegCreateKeyEx_<X>(h, k, name, REG_OPTION_VOLATILE, r, NULL, &h, 0));
+			ensure (ERROR_SUCCESS == RegCreateKeyEx_<X>(*this, k, name, REG_OPTION_VOLATILE, r, NULL, &h, 0));
 		}
 		CreateKey(const CreateKey&) = delete;
 		CreateKey& operator=(const CreateKey&) = delete;

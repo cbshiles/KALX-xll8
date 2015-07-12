@@ -234,4 +234,4 @@ namespace xll {
 	*/
 }
 
-#include "types.h"
+#include "xloper.h"
