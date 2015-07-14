@@ -1,17 +1,24 @@
-// udp.h - send message to udplogger
+// udp.h - send message to logger
 #pragma once
 #include "ensure.h"
 #include "utility/socket.h"
 
-#define UDP_HOST "web69.webfaction.com"
-#define UDP_PORT 26211
+#ifndef UDP_HOST
+#define UDP_HOST _T("108.168.134.126")
+#endif
+#ifndef UDP_PORT
+#define UDP_PORT _T("26211")
+#endif
 
 namespace udp {
-	inline WSA::dgram& dgram()
+	
+	inline int sendto(const char* msg, int len = 0)
 	{
-		static WSA::dgram s(UDP_HOST, ENSURE_STRZ_(UDP_PORT));
+		static WSA::Startup init;
+		static WSA::Socket s(AF_INET, SOCK_DGRAM, 0);
+		static WSA::AddrInfo ai(UDP_HOST, UDP_PORT, WSA::ADDRINFO(0, AF_INET, SOCK_DGRAM, IPPROTO_UDP));
 
-		return s;
+		return ai.sendto(s, msg, len);
 	}
 
 }

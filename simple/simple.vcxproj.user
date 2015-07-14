@@ -6,7 +6,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommand>$(ProgramFiles)\Microsoft Office\Office15\EXCEL.EXE</LocalDebuggerCommand>
+    <LocalDebuggerCommand>$(ProgramW6432)\Microsoft Office\Office15\EXCEL.EXE</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>"$(TargetPath)"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>

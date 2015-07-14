@@ -555,8 +555,8 @@ private:
 		}
 		else if (xltype == xltypeMulti) {
 			realloc(xll::rows<X>(x), xll::columns<X>(x));
-//			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(begin(), size()));
-			std::copy(xll::begin<X>(x), xll::end<X>(x), begin());
+			std::copy(x.begin(), x.end(), stdext::checked_array_iterator<XOPER<X>*>(begin(), size()));
+//			std::copy(xll::begin<X>(x), xll::end<X>(x), begin());
 		}
 		else {
 			val = x.val;

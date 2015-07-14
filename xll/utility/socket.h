@@ -4,6 +4,7 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <string>
 #include <sstream>
+#include <vector>
 #include <tchar.h>
 #include <WinSock2.h>
 #include <ws2tcpip.h>
@@ -56,6 +57,19 @@ namespace WSA {
 			ai_socktype = socktype;
 			ai_protocol = protocol;
 		}
+		ADDRINFO(SOCKET s)
+		{
+			WSAPROTOCOL_INFO pi;
+			int npi = sizeof(pi);
+
+			if (::getsockopt(s, SOL_SOCKET, SO_PROTOCOL_INFO, (char*)&pi, &npi))
+				throw WSAGetLastError();
+
+			ai_flags = 0;
+			ai_family = pi.iAddressFamily;
+			ai_socktype = pi.iSocketType;
+			ai_protocol = pi.iProtocol;
+		}
 	};
 
 	class AddrInfo {
@@ -76,6 +90,19 @@ namespace WSA {
 		::ADDRINFOT* operator&()
 		{
 			return pai;
+		}
+		int sendto(SOCKET s, const char* msg, size_t len = 0, int flags = 0)
+		{
+			if (!len)
+				len = strlen(msg);
+
+			return ::sendto(s, msg, (int)len, flags, pai->ai_addr, (int)pai->ai_addrlen);
+		}
+		int recvfrom(SOCKET s, char* buf, int len, int flags = 0)
+		{
+			int addrlen = (int)pai->ai_addrlen;
+
+			return ::recvfrom(s, buf, len, flags, pai->ai_addr, &addrlen);
 		}
 	};
 
@@ -122,7 +149,7 @@ namespace WSA {
 					continue;
 				}
 				
-				if (-1 == bind(s, pai->ai_addr, pai->ai_addrlen)) {
+				if (-1 == bind(s, pai->ai_addr, (int)pai->ai_addrlen)) {
 					closesocket(s);
 					continue;
 				}
@@ -147,19 +174,18 @@ namespace WSA {
 				s = Socket(*pai);
 				if (s == INVALID_SOCKET)
 					continue;
-				if (-1 == connect(s, pai->ai_addr, pai->ai_addrlen)) {
+				if (-1 == connect(s, pai->ai_addr, (int)pai->ai_addrlen)) {
 					closesocket(s);
 					continue;
 				}
+
+				break;
 			}
 
 			if (!pai || s == INVALID_SOCKET)
 				throw WSAGetLastError();
 		}
 	};
-	class Dgram : public Socket {
-	};
-
 
 	inline int send(SOCKET s, const char* buf, int len = 0, int flags = 0)
 	{
@@ -173,58 +199,59 @@ namespace WSA {
 		return ::send(s, buf.c_str(), static_cast<int>(buf.length()), flags);
 	}
 
-	inline std::string recv(SOCKET s, int bufsiz = 4096)
+	inline std::vector<char> recv(SOCKET s, int nbuf = 4096)
 	{
-		std::ostringstream oss{};
-		char* buf = static_cast<char*>(_alloca(bufsiz));
+		std::vector<char> buf;
+		buf.resize(nbuf);
 
-		int n;
+		int off = 0, n;
 		do {
-			n = ::recv(s, buf, bufsiz, 0);
-			if (n > 0)
-				oss.write(buf, n);
-		} while (n == bufsiz);
+			n = ::recv(s, &buf[off], nbuf, 0);
+			if (n > 0) {
+				off += n;
+				buf.resize(off + nbuf);
+			}
+		} while (n == nbuf); //!!! recv blocks if data is muliple of nbuf
 
 		if (n == SOCKET_ERROR)
-			throw std::runtime_error("WSA::recv: socket error");
+			throw WSAGetLastError();
+		else
+			buf.resize(off);
 
-		return oss.str();
+		return buf;
 	}
 
+	template<size_t nbuf = 0x80>
 	struct socketbuf : std::streambuf
 	{
 		typedef std::streambuf::int_type int_type;
 		typedef std::streambuf::traits_type traits_type;
 		typedef std::streambuf::char_type char_type;
 
-		static size_t const nbuf = 0x80;
-
-		socketbuf(SOCKET socket)
-			: socket_(socket)
+		socketbuf(SOCKET s)
+			: s(s)
 		{
-			this->setg(rbuf, rbuf + nbuf,
-				rbuf + nbuf);
+			this->setg(rbuf, rbuf + nbuf, rbuf + nbuf);
 			this->setp(wbuf, wbuf + nbuf);
 		}
 
 		int_type underflow()
 		{
 			size_t read;
-			if (0 < (read = ::recv(socket_, this->eback(), nbuf, 0)))
+			if (0 < (read = ::recv(s, this->eback(), nbuf, 0)))
 			{
-				this->setg(this->eback(), this->eback(), this->eback()
-					+ read);
+				this->setg(this->eback(), this->eback(), this->eback() + read);
+
 				return traits_type::to_int_type(*this->eback());
 			}
-			else
-			{
-				return traits_type::eof();
-			}
+
+			return traits_type::eof();
 		}
 
 		int sync()
 		{
 			this->overflow(traits_type::eof());
+
 			return 0;
 		}
 
@@ -232,33 +259,33 @@ namespace WSA {
 		{
 			if (const int_type chars = this->pptr() - this->pbase())
 			{
-				::send(socket_, this->pbase(), chars, 0);
+				::send(s, this->pbase(), chars, 0);
 				this->setp(this->pbase(), this->epptr());
 			}
 
 			if (!traits_type::eq_int_type(c, traits_type::eof()))
 			{
 				char_type e = traits_type::to_char_type(c);
-				::send(socket_, &e, sizeof(char_type), 0);
+				::send(s, &e, sizeof(char_type), 0);
 			}
 
 			return !traits_type::eof();
 		}
 
-		SOCKET socket_;
+		SOCKET s;
 		char rbuf[nbuf];
 		char wbuf[nbuf];
 	};
 
 	// operator<<() and operator>>() for sockets
+	template<size_t nbuf = 0x80>
 	struct socketstream : std::iostream
 	{
 		socketstream(SOCKET socket)
-			: std::iostream(&buf)
-			, buf(socket)
+			: std::iostream(&buf), buf(socket)
 		{}
 
-		socketbuf buf;
+		socketbuf<nbuf> buf;
 	};
 
 
