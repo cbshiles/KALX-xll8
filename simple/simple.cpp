@@ -12,7 +12,7 @@ AddIn12 xai_foo(
 double WINAPI xll_foo(double x)
 {
 #pragma XLLEXPORT
-	udp::sendto(__FUNCTION__);
+	UDP_SEND
 
 	return 2*x;
 }

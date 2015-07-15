@@ -171,7 +171,7 @@ namespace xll {
 	{ static OPER o(value); return &o; }
 #define XLL_ENUM_DOC12(value, name, cat, desc, doc) static xll::AddIn12 xai_##name##12(   \
 	Function12(XLL_LPOPER12, XLL_DECORATE12(L"xll_" L#name L"12", 0), L#name) \
-	.Category(L#cat).FunctionHelp(L#desc).Documentation(L#doc)); \
+	.Category(cat).FunctionHelp(desc).Documentation(doc)); \
 	extern "C" __declspec(dllexport) LPOPER12 WINAPI xll_##name##12(void)      \
 	{ static OPER12 o(value); return &o; }
 #ifdef EXCEL12
