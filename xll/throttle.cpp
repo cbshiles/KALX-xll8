@@ -10,13 +10,13 @@ static AddIn xai_throttle(
 );
 extern "C" LPXLOPER __declspec(dllexport) WINAPI xll_throttle(LPXLOPER po)
 {
-	static LOPER x;
+	static OPER x;
 
 	x = Excel<XLOPER>(xlCoerce, Excel<XLOPER>(xlfCaller));
-	if (x.xltype == xltypeNum && x.val.num == 0)
+	if (x[0].xltype == xltypeNum && x[0].val.num == 0)
 		x = Excel<XLOPER>(xlCoerce, *po);
 
-	return x.XLFree();
+	return &x;
 }
 static AddIn12 xai_throttle12(
 	XLL_DECORATE12(L"xll_throttle12",4), XLL_LPXLOPER12 XLL_LPXLOPER12 XLL_UNCALCED12, 
@@ -24,12 +24,12 @@ static AddIn12 xai_throttle12(
 	L"XLL", L"Only call Cell on F2-Enter.");
 extern "C" LPXLOPER12 __declspec(dllexport) WINAPI xll_throttle12(LPXLOPER12 po)
 {
-	static LOPER12 x;
+	static OPER12 x;
 
 	x = Excel<XLOPER12>(xlCoerce, Excel<XLOPER12>(xlfCaller));
-	if (x.xltype == xltypeNum && x.val.num == 0)
+	if (x[0].xltype == xltypeNum && x[0].val.num == 0)
 		x = Excel<XLOPER12>(xlCoerce, *po);
 
-	return x.XLFree();
+	return &x;
 }
 
