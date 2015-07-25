@@ -14,13 +14,22 @@
 
 namespace udp {
 	
-	inline int sendto(const char* msg, int len = 0)
+	inline const WSA::AddrInfo& host()
 	{
 		static int result = WSA::Startup{};
-		static WSA::Socket s(AF_INET, SOCK_DGRAM, 0);
 		static WSA::AddrInfo ai(UDP_HOST, UDP_PORT, WSA::ADDRINFO(0, AF_INET, SOCK_DGRAM, IPPROTO_UDP));
 
-		return ai.sendto(s, msg, len);
+		return ai;
+	}
+
+	inline int sendto(SOCKET s, const char* msg, int len = 0)
+	{
+		return host().sendto(s, msg, len);
+	}
+
+	inline int recvfrom(SOCKET s, char* buf, int len)
+	{
+		return host().recvfrom(s, buf, len);
 	}
 }
 

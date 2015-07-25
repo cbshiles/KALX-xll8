@@ -91,14 +91,14 @@ namespace WSA {
 		{
 			return pai;
 		}
-		int sendto(SOCKET s, const char* msg, size_t len = 0, int flags = 0)
+		int sendto(SOCKET s, const char* msg, size_t len = 0, int flags = 0) const
 		{
 			if (!len)
 				len = strlen(msg);
 
 			return ::sendto(s, msg, (int)len, flags, pai->ai_addr, (int)pai->ai_addrlen);
 		}
-		int recvfrom(SOCKET s, char* buf, int len, int flags = 0)
+		int recvfrom(SOCKET s, char* buf, int len, int flags = 0) const
 		{
 			int addrlen = (int)pai->ai_addrlen;
 
