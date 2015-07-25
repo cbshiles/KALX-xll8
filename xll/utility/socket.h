@@ -173,7 +173,7 @@ namespace WSA {
 			for (pai = &ai; pai; pai = pai->ai_next) {
 				s = Socket(*pai);
 				if (s == INVALID_SOCKET)
-					continue;
+n					continue;
 				if (-1 == connect(s, pai->ai_addr, (int)pai->ai_addrlen)) {
 					closesocket(s);
 					continue;

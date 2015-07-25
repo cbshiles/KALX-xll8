@@ -29,7 +29,7 @@
         <para>
           If you want to use VBA or C# to extend Excel you don't need this library.
           If you know C++ and want a simple way to get the highest possible 
-          performance from Excel, this is the library for you.
+          performance from Excel, this library is for you.
         </para>
         <para>
           The

@@ -240,6 +240,7 @@
     <ClCompile Include="xll\range\slice.cpp" />
     <ClCompile Include="xll\range\take.cpp" />
     <ClCompile Include="xll\range\trim.cpp" />
+    <ClCompile Include="xll\shfb\shfb.cpp" />
     <ClCompile Include="xll\this.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
