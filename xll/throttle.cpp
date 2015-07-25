@@ -13,6 +13,8 @@ extern "C" LPXLOPER __declspec(dllexport) WINAPI xll_throttle(LPXLOPER po)
 	static LOPER x;
 
 	x = Excel<XLOPER>(xlCoerce, Excel<XLOPER>(xlfCaller));
+	if (x.xltype == xltypeNum && x.val.num == 0)
+		x = Excel<XLOPER>(xlCoerce, *po);
 
 	return x.XLFree();
 }
@@ -25,6 +27,8 @@ extern "C" LPXLOPER12 __declspec(dllexport) WINAPI xll_throttle12(LPXLOPER12 po)
 	static LOPER12 x;
 
 	x = Excel<XLOPER12>(xlCoerce, Excel<XLOPER12>(xlfCaller));
+	if (x.xltype == xltypeNum && x.val.num == 0)
+		x = Excel<XLOPER12>(xlCoerce, *po);
 
 	return x.XLFree();
 }

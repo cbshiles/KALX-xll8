@@ -16,9 +16,9 @@ int xll_xll(void)
 		hostent* phe = gethostbyname(buf);
 		char* hostip = inet_ntoa(*(struct in_addr*)phe->h_addr_list[0]);
 
-		strcpy(buf, "ping");
-		i = udp::sendto(s, buf, 4);
-		i = udp::recvfrom(s, buf, 255);
+//		strcpy(buf, "ping");
+//		i = udp::sendto(s, buf, 4);
+//		i = udp::recvfrom(s, buf, 255);
 
 		OPERX ret;
 		while (ret.xltype != xltypeStr)
@@ -43,7 +43,7 @@ int xll_xll(void)
 
 	return TRUE;
 }
-static Auto<Open12> xao_xll(xll_xll);
+//static Auto<Open12> xao_xll(xll_xll);
 
 AddIn12 xai_foo(
 	L"?xll_foo", XLL_DOUBLE12 XLL_DOUBLE12,

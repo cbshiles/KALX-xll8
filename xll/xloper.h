@@ -221,7 +221,7 @@ namespace xll {
 			return x.val.err == y.val.err;
 		case xltypeMulti:
 			return x.val.array.rows == y.val.array.rows && x.val.array.columns == y.val.array.columns
-				&& std::equal(begin<X>(x), end<X>(x), begin<X>(y));
+				&& std::equal(begin<X>(x), end<X>(x), begin<X>(y), end<X>(y));
 		//case xltypeSRef:
 		case xltypeInt:
 			return x.val.w == y.val.w;
