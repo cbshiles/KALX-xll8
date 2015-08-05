@@ -25,10 +25,11 @@ namespace shfb {
 
 } // shfb
 
-using namespace xll;
+template<class X>
+using cat_fun_map = map<string,map<string,const XAddIn<X>*>> cat_fun_map;
 
 template<class X>
-void xll_make_one(const XAddIn<X>* pai)
+void xll_make_cfm(const cat_fun_map& cfm)
 {
 
 }
@@ -36,15 +37,19 @@ void xll_make_one(const XAddIn<X>* pai)
 extern "C" int __declspec(dllexport) WINAPI xll_make_doc()
 {
 	try {
-		map<string,map<string,const XAddIn<XLOPER>*>> cat_fun_map;
+		cat_fun_map<XLOPER> cfm;
 		// get list of all addins
 		for (const auto& i : XAddIn<XLOPER>::List()) {
-			cat_fun_map[i->Args().Category().string()][i->Args().FunctionText().string()] = i;
+			cfm[i->Args().Category().string()][i->Args().FunctionText().string()] = i;
 		}
+		xll_make_cfm<XLOPER>(cfm);
 
-		auto list12 = XAddIn<XLOPER12>::List();
-		for (const auto& i : list12)
-			xll_make_one<XLOPER12>(i);
+		cat_fun_map<XLOPER12> cfm12;
+		// get list of all addins
+		for (const auto& i : XAddIn<XLOPER12>::List()) {
+			cfm[i->Args().Category().string()][i->Args().FunctionText().string()] = i;
+		}
+		xll_make_cfm<XLOPER12>(cfm12);
 
 		// generate shfbproj file
 	}
