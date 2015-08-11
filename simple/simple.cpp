@@ -6,7 +6,7 @@
 using namespace xll;
 
 static WSA::Startup start{};
-
+#if 0
 int xll_xll(void)
 {
 	try {
@@ -14,6 +14,7 @@ int xll_xll(void)
 		char buf[255];
 		int i = gethostname(buf, 255);
 		hostent* phe = gethostbyname(buf);
+		for (const auto& p = 
 		char* hostip = inet_ntoa(*(struct in_addr*)phe->h_addr_list[0]);
 
 //		strcpy(buf, "ping");
@@ -44,6 +45,7 @@ int xll_xll(void)
 	return TRUE;
 }
 //static Auto<Open12> xao_xll(xll_xll);
+#endif
 
 AddIn12 xai_foo(
 	L"?xll_foo", XLL_DOUBLE12 XLL_DOUBLE12,

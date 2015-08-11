@@ -130,6 +130,7 @@
     <Lib>
       <AdditionalDependencies>x64/xlcall32.lib</AdditionalDependencies>
       <Verbose>true</Verbose>
+      <TreatLibWarningAsErrors>true</TreatLibWarningAsErrors>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
