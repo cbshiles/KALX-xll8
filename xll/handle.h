@@ -47,6 +47,7 @@ namespace xll {
 		}
 	};
 
+	// pointer to handle
 	template<class T>
 	inline HANDLEX p2h(T* p)
 	{
@@ -67,6 +68,8 @@ namespace xll {
 
 		return u.h;
 	}
+
+	// handle to pointer
 	template<class T>
 	inline T* h2p(HANDLEX h)
 	{
