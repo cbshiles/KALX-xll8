@@ -4,6 +4,7 @@
 
 typedef xll::traits<XLOPER>::xfp xfp;
 typedef xll::traits<XLOPER12>::xfp xfp12;
+typedef xll::traits<XLOPERX>::xfp xfpx;
 
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_array_mask", 8))
 #pragma comment(linker, "/include:" XLL_DECORATE("xll_array_mask12", 8))
