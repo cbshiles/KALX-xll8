@@ -37,13 +37,13 @@ namespace xll {
 		doublex()
 			: h_(std::numeric_limits<HANDLEX>::quiet_NaN())
 		{ }
-		double operator=(double x)
-		{
-			return h_ = x;
-		}
 		operator double()
 		{
 			return h_;
+		}
+		double operator=(double x)
+		{
+			return h_ = x;
 		}
 	};
 
@@ -89,11 +89,11 @@ namespace xll {
 	template<class T>
 	class handle_container {
 		std::vector<std::unique_ptr<T>> hc_;
-		handle_container(const handle_container&);
-		handle_container& operator=(const handle_container&);
 	public:
 		handle_container()
 		{ }
+		handle_container(const handle_container&) = delete;
+		handle_container& operator=(const handle_container&) = delete;
 		~handle_container()
 		{
 			for (auto& p : hc_)
@@ -139,16 +139,15 @@ namespace xll {
 		handle(T* p)
 			: p_(p)
 		{
-			handles().push_back(std::unique_ptr<T>(p));
+			auto& h = handles();
+			h.push_back(std::unique_ptr<T>(p));
 
 			OPERX o = XLL_XL_(Coerce, XLL_XLF(Caller));
-			for (const auto& oh : o) {
-				if (oh.xltype == xltypeNum && oh.val.num != 0) {
-					auto pi = find(h2p<T>(oh.val.num));
-					if (pi != handles().end()) {
-						pi->release();
-						handles().erase(pi);
-					}
+			if (o.xltype == xltypeNum && o.val.num != 0) {
+				auto pi = find(h2p<T>(o.val.num));
+				if (pi != h.end()) {
+					pi->reset(nullptr);
+					h.erase(pi);
 				}
 			}
 		}
@@ -204,11 +203,11 @@ namespace xll {
 
 		static size_t gc()
 		{
-			auto p(handles());
+			auto& p= handles();
 			size_t n = p.size();
 
-			for (auto pi in p) {
-				delete *pi;
+			for (auto& pi in p) {
+				pi->reset(nullptr);
 			}
 			p.clear();
 
