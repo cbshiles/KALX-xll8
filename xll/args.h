@@ -192,21 +192,18 @@ namespace xll {
 		// add an argument
 		XArgs& Arg(xcstr type, xcstr name, xcstr help)
 		{
-			Arg(RegisterArg::TypeText).append(type);
-			if (Arg(RegisterArg::ArgumentText))
-				Arg(RegisterArg::ArgumentText).append(traits<X>::COMMA());
-			Arg(RegisterArg::ArgumentText).append(name);
-			args_.push_back(help); // individual argument help
-			default_.push_back(xltype::Missing);
-//			type_.push_back(XOPER<X>(type));
-
-			return *this;
+			return Arg(type, name, help, XOPER<X>(xltype::Missing));
 		}
 
 		template<class T>
 		XArgs& Arg(xcstr type, xcstr name, xcstr help, const T& t)
 		{
-			Arg(type, name, help);
+			Arg(RegisterArg::TypeText).append(type);
+			if (Arg(RegisterArg::ArgumentText))
+				Arg(RegisterArg::ArgumentText).append(traits<X>::COMMA());
+			Arg(RegisterArg::ArgumentText).append(name);
+			args_.push_back(help); // individual argument help
+
 			default_.push_back(XOPER<X>(t));
 
 			return *this;
