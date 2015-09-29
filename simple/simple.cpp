@@ -58,3 +58,16 @@ double WINAPI xll_foo(double x)
 
 	return 2*x;
 }
+
+static AddInX xai_expm1(
+	FunctionX(XLL_DOUBLEX, _T("?xll_expm1"), _T("XLL.EXPM1"))
+	.Arg(XLL_DOUBLEX, _T("x"), _T("is a number"))
+	.Category(_T("XLL"))
+	.FunctionHelp(_T("Return exp(x) - 1"))
+);
+double WINAPI xll_expm1(double x)
+{
+#pragma XLLEXPORT
+
+	return expm1(x);
+}

@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="utility">
-      <UniqueIdentifier>{b885a580-cc47-4adb-85d9-01dc8c8597dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="shfb">
       <UniqueIdentifier>{ed9dfdb6-9741-42c7-8a18-6761c52f1e0d}</UniqueIdentifier>
     </Filter>
@@ -24,6 +21,9 @@
     </Filter>
     <Filter Include="array">
       <UniqueIdentifier>{75ef664e-8101-4a75-b393-98c9b4c95a3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\utility">
+      <UniqueIdentifier>{b885a580-cc47-4adb-85d9-01dc8c8597dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +73,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\registry.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\handle.h">
       <Filter>Header Files</Filter>
@@ -85,40 +85,40 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\sendkeys.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\log.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\shfb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\inet.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\environment.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\socket.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\codec.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\range\range.h">
       <Filter>range</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\message.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\locus.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\scoped_handle.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\utility\string.h">
-      <Filter>utility</Filter>
+      <Filter>Resource Files\utility</Filter>
     </ClInclude>
     <ClInclude Include="xll\array\array.h">
       <Filter>array</Filter>
