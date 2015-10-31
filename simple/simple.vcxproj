@@ -156,7 +156,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="expm1.cpp" />
     <ClCompile Include="simple.cpp" />
   </ItemGroup>
   <ItemGroup>
